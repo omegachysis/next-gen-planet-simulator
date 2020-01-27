@@ -8,3 +8,11 @@ user, external system -> actor
 **verb-verb**: controller - controller  
 **actor-boundary**  
 **noun-noun**: should not ever happen  
+
+# Elements of a Robustness diagram
+
+Ex.
+Customer (Actor) --- Book detail page (Boundary)
+Book detail page --> (click write review button) display (Controller)
+display --> Write review page (Boundary)
+Customer (Actor) --- (enter review and click button) Write review page
