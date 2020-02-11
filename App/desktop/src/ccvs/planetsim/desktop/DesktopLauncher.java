@@ -1,12 +1,12 @@
-package com.mygdx.game.desktop;
+package ccvs.planetsim.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.mygdx.game.PlanetSimulator;
+import ccvs.planetsim.NextGenPlanetSim;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new PlanetSimulator(), config);
+		new LwjglApplication(new NextGenPlanetSim(), config);
 	}
 }
