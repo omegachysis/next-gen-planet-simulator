@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class GravitySimulation {
     private ArrayList<IMass> _masses;
-    private float G = 1.0f;
+    public static float G = 1.0f;
 
     public GravitySimulation() {
         _masses = new ArrayList<>();
@@ -31,7 +31,7 @@ public class GravitySimulation {
                 IMass b = _masses.get(j);
 
                 // Calculate the displacement vector from mass A to mass B.
-                Vector3 r = b.getPosition().add(a.getPosition().scl(-1));
+                Vector3 r = b.getPosition().sub(a.getPosition());
 
                 // Calculate the vector force gravity by taking the scaled normalized
                 // vector from mass A to mass B by Newton's Law of Universal Gravitation.
