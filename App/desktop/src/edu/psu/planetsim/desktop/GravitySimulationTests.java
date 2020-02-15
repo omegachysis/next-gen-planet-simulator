@@ -22,7 +22,7 @@ class TestMass implements IMass {
         _netForces.add(force);
     }
 
-    public Vector3 getNetForces() { return _netForces; }
+    public Vector3 getNetForces() { return _netForces.cpy(); }
     public void reset() {
         _netForces.setZero();
     }
