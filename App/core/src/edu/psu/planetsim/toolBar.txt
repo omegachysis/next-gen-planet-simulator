@@ -1,0 +1,63 @@
+package edu.psu.planetsim;
+
+public class toolBar {
+
+
+    private void rebuildStage() {
+        VerticalGroup toolBar = buildToolBar();
+
+        VerticalGroup vGroup = new VerticalGroup();
+        vGroup.fill().setFillParent(true);
+        vGroup.addActor(toolBar);
+
+        clear();
+        addActor(vGroup);
+    }
+
+    private VerticalGroup buildToolBar() {
+        ImageButton btnFile = new ImageButton(Assets.instance.btn_skin, "file");
+        ImageButton btnArrangement = new ImageButton(Assets.instance.btn_skin, "arrangement");
+        ImageButton btnCollision = new ImageButton(Assets.instance.btn_skin, "collision");
+
+        ButtonGroup<ImageButton> buttonGroup = new ButtonGroup<ImageButton>(btnFile, btnArrangement, btnCollision);
+        buttonGroup.setMinCheckCount(0);
+
+        Container<Table> tableFile = new Container<Table>(buildTableFile());
+        tableFile.top().left();
+        Container<Table> tableArrangement = new Container<Table>(buildTableArrangement());
+        tableArrangement.top();
+        Container<Table> tableCollision = new Container<Table>(buildTableCollision());
+        tableArrangement.top();
+
+        Stack stack = new Stack();
+        stack.add(tableFile);
+        stack.add(tableArrangement);
+        stack.add(tableCollision);
+
+        Table layer = new Table(Assets.instance.bg_skin);
+        layer.setBackground("bg_table");
+        layer.left();
+        layer.add(btnFile).padLeft(10);
+        layer.add(btnArrangement).padLeft(10);
+        layer.add(btnCollision).padLeft(10);
+
+        VerticalGroup vGroup = new VerticalGroup();
+        vGroup.fill();
+        vGroup.addActor(layer);
+        vGroup.addActor(stack);
+        return vGroup;
+    }
+
+    private Table buildTableFile() {
+        ImageButton button1 = new ImageButton(Assets.instance.btn_skin, "load");
+        ImageButton button2 = new ImageButton(Assets.instance.btn_skin, "save");
+        ImageButton button3 = new ImageButton(Assets.instance.btn_skin, "new");
+
+        Table layer = new Table(Assets.instance.bg_skin);
+        layer.setBackground("bg_table");
+        layer.add(button1).pad(10, 10, 0, 10).row();
+        layer.add(button2).pad(10, 10, 0, 10).row();
+        layer.add(button3).pad(10, 10, 10, 10).row();
+        return layer;
+    }
+}
