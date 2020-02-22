@@ -21,4 +21,13 @@ public class MenuBar{
 
         table.setDebug(true);
     }
+
+    public void render() {
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
+    }
+
+    public void dispose() {
+        stage.dispose();
+    }
 }
