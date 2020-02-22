@@ -1,5 +1,5 @@
 #version 110
-in vec3 f_color;
+varying vec3 f_color;
 
 void main()
 {
