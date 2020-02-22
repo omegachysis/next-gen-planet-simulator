@@ -22,6 +22,8 @@ public class PlanetSim extends ApplicationAdapter {
 	public void create () {
 //		batch = new SpriteBatch();
 
+		System.out.println("OPENGL VERSION " + Gdx.app.getGraphics().getGLVersion().getMajorVersion());
+
 		testShader = new ShaderProgram(Gdx.files.getFileHandle("vert.vert", Files.FileType.Internal),
 				Gdx.files.getFileHandle("frag.frag", Files.FileType.Internal));
 		if (!testShader.isCompiled())

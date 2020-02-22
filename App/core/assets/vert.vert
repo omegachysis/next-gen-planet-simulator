@@ -1,7 +1,7 @@
-#version 330 core
-in vec2 a_position;
-in vec3 a_color;
-out vec3 f_color;
+#version 110
+attribute vec2 a_position;
+attribute vec3 a_color;
+varying vec3 f_color;
 
 void main()
 {
