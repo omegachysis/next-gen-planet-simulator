@@ -6,9 +6,10 @@ import java.util.ArrayList;
 
 public class GravitySimulation {
     private ArrayList<IMass> _masses;
-    public static float G = 1.0f;
+    public final float G;
 
-    public GravitySimulation() {
+    public GravitySimulation(float G) {
+        this.G = G;
         _masses = new ArrayList<>();
     }
 
