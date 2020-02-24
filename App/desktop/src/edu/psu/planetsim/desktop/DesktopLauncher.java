@@ -2,6 +2,8 @@ package edu.psu.planetsim.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+
+import edu.psu.planetsim.PlanetRenderTest;
 import edu.psu.planetsim.PlanetSim;
 
 public class DesktopLauncher {
@@ -16,5 +18,6 @@ public class DesktopLauncher {
 		config.width = 1280;
 		config.height = 720;
 		new LwjglApplication(new PlanetSim(), config);
+		//new LwjglApplication(new PlanetRenderTest(), config);
 	}
 }
