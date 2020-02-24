@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
 public class PlanetRenderTest implements ApplicationListener {
@@ -19,6 +21,7 @@ public class PlanetRenderTest implements ApplicationListener {
 	public Model model;
     public ModelInstance instance;
     public ModelBatch modelBatch;
+    public Environment environment;
 
     @Override
     public void create () {
@@ -32,9 +35,13 @@ public class PlanetRenderTest implements ApplicationListener {
         cam.far = 200f;
         cam.update();
         
+        environment = new Environment();
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.2f, 0.2f, 0.2f, 1f));
+        environment.add(new DirectionalLight().set(0.7f, 0.3f, 0.9f, -1f, -0.8f, -0.2f));
+ 
         ModelBuilder modelBuilder = new ModelBuilder();
         model = modelBuilder.createBox(5f, 5f, 5f, 
-            new Material(ColorAttribute.createDiffuse(Color.GREEN)),
+            new Material(ColorAttribute.createDiffuse(Color.WHITE)),
             Usage.Position | Usage.Normal);
         instance = new ModelInstance(model);
     }
@@ -45,7 +52,7 @@ public class PlanetRenderTest implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         modelBatch.begin(cam);
-        modelBatch.render(instance);
+        modelBatch.render(instance, environment);
         modelBatch.end();
     }
 
