@@ -1,33 +1,112 @@
 package edu.psu.planetsim;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+//import com.badlogic.gdx.scenes.scene2d.ui.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.Gdx;
+
+import java.awt.*;
+
+public class MenuBar {
+
+    public Stage mainTable;
+    public Table menuItems;
+    public Menu currentMenu;
+    public Array<Menu> menus = new Array<Menu>();
+    public MenuBarListener menuListener;
+
+    public TextButton button1;
+    public TextButton button2;
+    public TextButton button3;
+    public TextButton button4;
+
+    public TextButton.TextButtonStyle textButtonStyle;
+    BitmapFont font;
+
+    public void create () {
+
+        mainTable = new Stage();
+        Gdx.input.setInputProcessor(mainTable);
+
+        menuItems = new Table();
+        menuItems.setSize(350, 675);
+        menuItems.setPosition(16, 25);
+        mainTable.addActor(menuItems);
+        menuItems.setDebug(true);
+
+        font = new BitmapFont();
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+
+        button1 = new TextButton("New", textButtonStyle);
+        button2 = new TextButton("Save", textButtonStyle);
+        button3 = new TextButton("Undo", textButtonStyle);
+        button4 = new TextButton("Redo", textButtonStyle);
+        mainTable.addActor(button1);
+        mainTable.addActor(button2);
+        mainTable.addActor(button3);
+        mainTable.addActor(button4);
 
 
-public class MenuBar{
-    private Stage stage;
-    private Table table;
+        button1.setSize(200, 20);
+        button1.setPosition(0, 675);
 
-    public void create() {
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
+        button2.setSize(200, 20);
+        button2.setPosition(75, 675);
 
-        table = new Table();
-        table.setFillParent(true);
-        stage.addActor(table);
+        button3.setSize(200, 20);
+        button3.setPosition(150, 675);
 
-        table.setDebug(true);
+        button4.setSize(200, 20);
+        button4.setPosition(225, 675);
+
+    }
+
+    private void setMenuListener(MenuBarListener menuListener) {
+        this.menuListener = menuListener;
+    }
+
+    public Stage getTable () {
+        return mainTable;
+    }
+
+    public static class MenuBarStyle {
+        public Drawable background;
+
+        public MenuBarStyle () {
+        }
+
+        public MenuBarStyle (MenuBarStyle style) {
+            this.background = style.background;
+        }
+
+        public MenuBarStyle (Drawable background) {
+            this.background = background;
+        }
+    }
+
+    public interface MenuBarListener {
+        void menuOpened (Menu menu);
+
+        void menuClosed (Menu menu);
     }
 
     public void render() {
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
+        mainTable.act(Gdx.graphics.getDeltaTime());
+        mainTable.draw();
+
     }
 
     public void dispose() {
-        stage.dispose();
+
+        mainTable.dispose();
     }
 }

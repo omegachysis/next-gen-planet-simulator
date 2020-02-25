@@ -46,11 +46,12 @@ public class PlanetSim extends ApplicationAdapter {
 
 		menuBar = new MenuBar();
 		menuBar.create();
+
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		testShader.begin();
 		testMesh.render(testShader, GL20.GL_TRIANGLES, 0, 3);
