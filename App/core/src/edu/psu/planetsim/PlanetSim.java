@@ -14,6 +14,8 @@ public class PlanetSim extends ApplicationAdapter {
 	Mesh testMesh;
 	ShaderProgram testShader;
 	MenuBar menuBar;
+	SidePanel sidePanel;
+
 
 	public static ShaderProgram loadShader(String name) {
 		ShaderProgram res = new ShaderProgram(
@@ -47,6 +49,9 @@ public class PlanetSim extends ApplicationAdapter {
 		menuBar = new MenuBar();
 		menuBar.create();
 
+		sidePanel = new SidePanel();
+		sidePanel.create();
+
 	}
 
 	@Override
@@ -57,10 +62,12 @@ public class PlanetSim extends ApplicationAdapter {
 		testMesh.render(testShader, GL20.GL_TRIANGLES, 0, 3);
 		testShader.end();
 		menuBar.render();
+		sidePanel.render();
 	}
 	
 	@Override
 	public void dispose () {
 		menuBar.dispose();
+		sidePanel.dispose();
 	}
 }

@@ -37,8 +37,8 @@ public class MenuBar {
         Gdx.input.setInputProcessor(mainTable);
 
         menuItems = new Table();
-        menuItems.setSize(350, 675);
-        menuItems.setPosition(16, 25);
+        menuItems.setSize(1200, 25);
+        menuItems.setPosition(16, 675);
         mainTable.addActor(menuItems);
         menuItems.setDebug(true);
 
@@ -46,10 +46,10 @@ public class MenuBar {
         textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = font;
 
-        button1 = new TextButton("New", textButtonStyle);
-        button2 = new TextButton("Save", textButtonStyle);
-        button3 = new TextButton("Undo", textButtonStyle);
-        button4 = new TextButton("Redo", textButtonStyle);
+        button1 = new TextButton("File", textButtonStyle);
+        button2 = new TextButton("Edit", textButtonStyle);
+        button3 = new TextButton("View", textButtonStyle);
+        button4 = new TextButton("Tools", textButtonStyle);
         mainTable.addActor(button1);
         mainTable.addActor(button2);
         mainTable.addActor(button3);
@@ -57,16 +57,16 @@ public class MenuBar {
 
 
         button1.setSize(200, 20);
-        button1.setPosition(0, 675);
+        button1.setPosition(-50, 675);
 
         button2.setSize(200, 20);
-        button2.setPosition(75, 675);
+        button2.setPosition(25, 675);
 
         button3.setSize(200, 20);
-        button3.setPosition(150, 675);
+        button3.setPosition(100, 675);
 
         button4.setSize(200, 20);
-        button4.setPosition(225, 675);
+        button4.setPosition(175, 675);
 
     }
 
