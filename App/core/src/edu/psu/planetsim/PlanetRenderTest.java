@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -28,6 +29,7 @@ public class PlanetRenderTest implements ApplicationListener {
     public ModelInstance instance2;
     public ModelBatch modelBatch;
     public Environment environment;
+    public Mesh mesh1;
 
     @Override
     public void create () {
@@ -45,23 +47,39 @@ public class PlanetRenderTest implements ApplicationListener {
         
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.2f, 0.2f, 0.2f, 1f));
-        environment.add(new DirectionalLight().set(0.7f, 0.3f, 0.9f, -1f, -0.8f, -0.2f));
+        environment.add(new DirectionalLight().set(0.7f, 0.5f, 0.5f, -1f, -0.8f, -0.2f));
  
         ModelBuilder modelBuilder = new ModelBuilder();
+        /*
         model = modelBuilder.createBox(5f, 5f, 5f, 
             new Material(ColorAttribute.createDiffuse(Color.WHITE)),
             Usage.Position | Usage.Normal);
         instance = new ModelInstance(model);
+        */
         
         model1 = modelBuilder.createSphere(6f, 6f, 6f, 10, 10,
-                new Material(ColorAttribute.createDiffuse(Color.BLUE)),
+                new Material(ColorAttribute.createDiffuse(Color.WHITE)),
                 Usage.Position | Usage.Normal);
-        instance1 = new ModelInstance(model1, 6f, 6f, 0f);
+        System.out.println(model1.meshes.size);
+        mesh1 = model1.meshes.first();
+        float[] verticesHolder = new float[mesh1.getNumVertices()-1];
+        mesh1.getVertices(verticesHolder);
+        for (int i = 0; i < verticesHolder.length; i++)
+        {
+        	System.out.println(verticesHolder[i]);
+        	verticesHolder[i] = verticesHolder[i] + 0.1f;
+        }
+        mesh1.setVertices(verticesHolder);
+        model1.meshes.set(0, mesh1);
         
+        instance1 = new ModelInstance(model1, 0f, 0f, 0f);
+        
+        /*
         model2 = modelBuilder.createCone(4f, 3f, 4f, 10,
                 new Material(ColorAttribute.createDiffuse(Color.RED)),
                 Usage.Position | Usage.Normal);
         instance2 = new ModelInstance(model2, 0f, 5f, 0f);
+        */
     }
     
     @Override
@@ -72,16 +90,18 @@ public class PlanetRenderTest implements ApplicationListener {
         camController.update();
 
         modelBatch.begin(cam);
-        modelBatch.render(instance, environment);
+        //modelBatch.render(instance, environment);
         modelBatch.render(instance1, environment);
-        modelBatch.render(instance2, environment);
+        //modelBatch.render(instance2, environment);
         modelBatch.end();
     }
 
     @Override
     public void dispose () {
     	modelBatch.dispose();
-    	model.dispose();
+    	//model.dispose();
+    	model1.dispose();
+    	//model2.dispose();
     }
 
     @Override
