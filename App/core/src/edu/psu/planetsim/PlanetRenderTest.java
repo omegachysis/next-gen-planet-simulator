@@ -59,7 +59,7 @@ public class PlanetRenderTest implements ApplicationListener {
         instance = new ModelInstance(model);
         */
         
-        model1 = modelBuilder.createSphere(1f, 1f, 1f, 40, 40,
+        model1 = modelBuilder.createSphere(1f, 1f, 1f, 64, 64,
                 new Material(ColorAttribute.createDiffuse(Color.WHITE)),
                 Usage.Position | Usage.Normal);
 
@@ -67,10 +67,11 @@ public class PlanetRenderTest implements ApplicationListener {
 
         mesh1 = model1.meshes.first();
 
-        // The size of the array needs to be the number of bytes per vertex times the number 
-        // of vertices. Since floats are 32-bit, we get how many floats we need by dividing
-        // the needed bytes by four.
-        float[] verticesHolder = new float[mesh1.getNumVertices() * mesh1.getVertexSize() / 4];
+        // Our model1 usage flags are Usage.Position and Usage.Normal,
+        // thus every vertex has a Position vector and a Normal vector.
+        // Each of these has three float components, thus the whole vertex array 
+        // has 6 floats for every vertex:
+        float[] verticesHolder = new float[mesh1.getNumVertices() * 6];
         mesh1.getVertices(verticesHolder);
 
         // We'll get some input map of elevations by latitude/longitude:
