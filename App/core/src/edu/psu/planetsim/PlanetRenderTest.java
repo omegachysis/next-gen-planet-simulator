@@ -1,5 +1,7 @@
 package edu.psu.planetsim;
 
+import java.util.Random;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -46,8 +48,8 @@ public class PlanetRenderTest implements ApplicationListener {
         Gdx.input.setInputProcessor(camController);
         
         environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.2f, 0.2f, 0.2f, 1f));
-        environment.add(new DirectionalLight().set(0.7f, 0.5f, 0.5f, -1f, -0.8f, -0.2f));
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.1f, 0.1f, 0.1f, 1f));
+        environment.add(new DirectionalLight().set(1f, 1f, 1f, -1f, -0.8f, -0.2f));
  
         ModelBuilder modelBuilder = new ModelBuilder();
         /*
@@ -57,20 +59,43 @@ public class PlanetRenderTest implements ApplicationListener {
         instance = new ModelInstance(model);
         */
         
-        model1 = modelBuilder.createSphere(6f, 6f, 6f, 10, 10,
+        model1 = modelBuilder.createSphere(1f, 1f, 1f, 40, 40,
                 new Material(ColorAttribute.createDiffuse(Color.WHITE)),
                 Usage.Position | Usage.Normal);
-        System.out.println(model1.meshes.size);
+
+        Random rand = new Random();
+
         mesh1 = model1.meshes.first();
-        float[] verticesHolder = new float[mesh1.getNumVertices()-1];
+
+        // The size of the array needs to be the number of bytes per vertex times the number 
+        // of vertices. Since floats are 32-bit, we get how many floats we need by dividing
+        // the needed bytes by four.
+        float[] verticesHolder = new float[mesh1.getNumVertices() * mesh1.getVertexSize() / 4];
         mesh1.getVertices(verticesHolder);
-        for (int i = 0; i < verticesHolder.length; i++)
+
+        // We'll get some input map of elevations by latitude/longitude:
+        float[] elevationMap;
+
+        for (int i = 0; i < verticesHolder.length / 6; i++)
         {
-        	System.out.println(verticesHolder[i]);
-        	verticesHolder[i] = verticesHolder[i] + 0.1f;
+            // Vertex format goes like pppnnnpppnnn...
+            // where p are position components, n are normal components.
+            float px = verticesHolder[i * 6 + 0];
+            float py = verticesHolder[i * 6 + 1];
+            float pz = verticesHolder[i * 6 + 2];
+            float nx = verticesHolder[i * 6 + 3];
+            float ny = verticesHolder[i * 6 + 4];
+            float nz = verticesHolder[i * 6 + 5];
+
+            // Don't worry about the normal vectors yet... it gets pretty complicated 
+            // and it only affects lighting.
+            verticesHolder[i * 6 + 0] *= 5f + rand.nextDouble();
+            verticesHolder[i * 6 + 1] *= 5f + rand.nextDouble();
+            verticesHolder[i * 6 + 2] *= 5f + rand.nextDouble();
         }
         mesh1.setVertices(verticesHolder);
-        model1.meshes.set(0, mesh1);
+
+        // model1.meshes.set(0, mesh1);
         
         instance1 = new ModelInstance(model1, 0f, 0f, 0f);
         
