@@ -6,10 +6,8 @@ import java.util.ArrayList;
 
 public class GravitySimulation {
     private ArrayList<IMass> _masses;
-    public final float G;
 
-    public GravitySimulation(float G) {
-        this.G = G;
+    public GravitySimulation() {
         _masses = new ArrayList<>();
     }
 
@@ -36,7 +34,7 @@ public class GravitySimulation {
 
                 // Calculate the vector force gravity by taking the scaled normalized
                 // vector from mass A to mass B by Newton's Law of Universal Gravitation.
-                float m = G * a.getMass() * b.getMass();
+                float m = a.getMass() * b.getMass();
                 Vector3 force =  r.nor().scl(Math.min(m, m / r.len2()));
 
                 // Take advantage of Newton's Third Law of Motion to calculate

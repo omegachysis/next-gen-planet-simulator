@@ -85,7 +85,7 @@ public class GravityDemo extends ApplicationAdapter {
             new Material(ColorAttribute.createDiffuse(Color.WHITE)), 
             Usage.Position | Usage.Normal);
 
-        _sim = new GravitySimulation(0.00005f);
+        _sim = new GravitySimulation();
 
         Random rand = new Random();
         for (int i = 0; i < 40; i++) {

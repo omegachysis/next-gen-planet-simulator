@@ -33,7 +33,7 @@ public class GravitySimulationTests {
 
         // Test that there is no gravity exerted on a single mass.
         TestMass m1 = new TestMass(1, 0, 0, 0);
-        GravitySimulation sim = new GravitySimulation(1.0f);
+        GravitySimulation sim = new GravitySimulation();
         sim.addMass(m1);
 
         Assert.True(m1.getNetForces().epsilonEquals(Vector3.Zero),
@@ -47,9 +47,9 @@ public class GravitySimulationTests {
 
         sim.applyGravityForces(false);
         System.out.println(m1.getNetForces());
-        Assert.True(m1.getNetForces().epsilonEquals(Vector3.X.scl(sim.G)),
+        Assert.True(m1.getNetForces().epsilonEquals(Vector3.X),
                 "Mass 1 is pulled in the positive X direction");
-        Assert.True(m2.getNetForces().epsilonEquals(Vector3.X.scl(-sim.G)),
+        Assert.True(m2.getNetForces().epsilonEquals(Vector3.X.scl(-1)),
                 "Mass 2 is pulled in the negative X direction");
     }
 }
