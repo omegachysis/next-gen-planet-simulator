@@ -25,7 +25,7 @@ public class GravitySimulation {
      * Applies the force of gravity to all masses in the simulation
      * in the current configuration.
      */
-    public void applyGravityForces() {
+    public void applyGravityForces(boolean skipFirstMass) {
         for (int i = 0; i < _masses.size(); i++) {
             for (int j = i + 1; j < _masses.size(); j++) {
                 IMass a = _masses.get(i);
@@ -36,11 +36,13 @@ public class GravitySimulation {
 
                 // Calculate the vector force gravity by taking the scaled normalized
                 // vector from mass A to mass B by Newton's Law of Universal Gravitation.
-                Vector3 force =  r.nor().scl(G * a.getMass() * b.getMass() / r.len2());
+                float m = G * a.getMass() * b.getMass();
+                Vector3 force =  r.nor().scl(Math.min(m, m / r.len2()));
 
                 // Take advantage of Newton's Third Law of Motion to calculate
                 // the mutual attraction of any two bodies once.
-                a.applyForce(force);
+                if (!skipFirstMass || i > 0)
+                    a.applyForce(force);
                 b.applyForce(force.scl(-1));
             }
         }

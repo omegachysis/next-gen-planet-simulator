@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.dynamics.*;
 import com.badlogic.gdx.physics.bullet.linearmath.*;
 
+import edu.psu.planetsim.GravitySimulation;
 import edu.psu.planetsim.KinematicObject;
 
 public class KinematicsDemo extends ApplicationAdapter {
@@ -24,14 +25,17 @@ public class KinematicsDemo extends ApplicationAdapter {
     private Model _model;
     private CameraInputController _camControl;
     private btDynamicsWorld _world;
+    private GravitySimulation _gravitySim;
 
     private ArrayList<KinematicObject> _objects = new ArrayList<>();
 
     static class MyMotionState extends btMotionState {
         private Matrix4 _transform;
+        private float _scale;
 
-        public MyMotionState(Matrix4 transform) {
+        public MyMotionState(Matrix4 transform, float scale) {
             _transform = transform;
+            _scale = scale;
         }
 
         public void getWorldTransform(Matrix4 worldTrans) {
@@ -39,7 +43,7 @@ public class KinematicsDemo extends ApplicationAdapter {
         }
 
         public void setWorldTransform(Matrix4 worldTrans) {
-            _transform.set(worldTrans);
+            _transform.set(worldTrans).scl(_scale);
         }
     }
 
@@ -49,18 +53,16 @@ public class KinematicsDemo extends ApplicationAdapter {
         _modelBatch = new ModelBatch();
 
         _cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        _cam.position.set(10f, 10f, 10f);
-        _cam.lookAt(0,0,0);
-        _cam.near = 0.1f;
-        _cam.far = 30f;
-        _cam.update();
-        _cam.update();
+        _cam.position.set(0, 0, 500);
+        _cam.lookAt(Vector3.Zero);
+        _cam.near = 1;
+        _cam.far = 10000;
 
         _camControl = new CameraInputController(_cam);
         Gdx.input.setInputProcessor(_camControl);
 
         ModelBuilder builder = new ModelBuilder();
-        _model = builder.createSphere(1, 1, 1, 10, 10, 
+        _model = builder.createSphere(2, 2, 2, 20, 20, 
             new Material(ColorAttribute.createDiffuse(Color.WHITE)), 
             Usage.Position | Usage.Normal);
 
@@ -70,21 +72,25 @@ public class KinematicsDemo extends ApplicationAdapter {
             config);
         _world.setGravity(Vector3.Zero);
 
-        Random rand = new Random();
+        _gravitySim = new GravitySimulation(1);
 
-        for (int i = 0; i < 1000; i++) {
-            ModelInstance inst = new ModelInstance(_model);
 
-            float x = rand.nextFloat() * 100f - 50f;
-            float y = rand.nextFloat() * 100f - 50f;
-            float z = rand.nextFloat() * 100f - 50f;
 
-            inst.transform.set(new Vector3(x, y, z), new Quaternion());
-            btRigidBody body = new btRigidBody(1.0f, new MyMotionState(inst.transform),
-            new btSphereShape(0.5f));
-            _world.addRigidBody(body);
-            _objects.add(new KinematicObject(inst, body));
-        }
+        spawnBody(20, 5, Vector3.Zero, Vector3.Zero);
+        spawnBody(3, 2, new Vector3(-100, 0, 0), new Vector3(0, -50, 0));
+        spawnBody(1, 1, new Vector3(200, 0, 0), new Vector3(0, 50, 0));
+    }
+
+    private void spawnBody(float mass, float radius, Vector3 position, Vector3 velocity) {
+        ModelInstance inst = new ModelInstance(_model);
+        inst.transform.set(position.cpy(), new Quaternion());
+        btRigidBody body = new btRigidBody(mass, new MyMotionState(inst.transform, radius),
+            new btSphereShape(radius));
+        _world.addRigidBody(body);
+        KinematicObject obj = new KinematicObject(inst, body, mass);
+        _objects.add(obj);
+        _gravitySim.addMass(obj);
+        body.applyCentralImpulse(velocity.cpy().scl(mass));
     }
 
     public void render() {
@@ -97,20 +103,20 @@ public class KinematicsDemo extends ApplicationAdapter {
         }
         _modelBatch.end();
 
-        _camControl.update();
-
-        for (KinematicObject obj : _objects) {
-            Vector3 pos = new Vector3();
-            obj.model.transform.getTranslation(pos);
-            obj.body.applyCentralForce(
-                pos.scl(-1)
-            );
-        }
+        
+        _gravitySim.applyGravityForces(true);
         _world.stepSimulation(Gdx.graphics.getDeltaTime());
+
+        _cam.update();
+        _camControl.update();
     }
 
     public void dispose() {
         _modelBatch.dispose();
         _model.dispose();
+        _world.dispose();
+        for (KinematicObject obj : _objects) {
+            obj.body.dispose();
+        }
     }
 }

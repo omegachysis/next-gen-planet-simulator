@@ -19,5 +19,7 @@ public class DesktopLauncher {
 		config.height = 720;
 		new LwjglApplication(new PlanetSim(), config);
 		//new LwjglApplication(new PlanetRenderTest(), config);
+		//new LwjglApplication(new KinematicsDemo(), config);
+		//new LwjglApplication(new GravityDemo(), config);
 	}
 }

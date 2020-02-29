@@ -38,14 +38,14 @@ public class GravitySimulationTests {
 
         Assert.True(m1.getNetForces().epsilonEquals(Vector3.Zero),
                 "Mass 1 starts with zero net forces");
-        sim.applyGravityForces();
+        sim.applyGravityForces(false);
         Assert.True(m1.getNetForces().epsilonEquals(Vector3.Zero),
                 "Mass 1 has zero net forces when it is alone");
 
         TestMass m2 = new TestMass(1, 1, 0, 0);
         sim.addMass(m2);
 
-        sim.applyGravityForces();
+        sim.applyGravityForces(false);
         System.out.println(m1.getNetForces());
         Assert.True(m1.getNetForces().epsilonEquals(Vector3.X.scl(sim.G)),
                 "Mass 1 is pulled in the positive X direction");
