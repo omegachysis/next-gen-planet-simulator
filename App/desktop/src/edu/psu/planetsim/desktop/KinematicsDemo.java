@@ -56,22 +56,17 @@ public class KinematicsDemo extends ApplicationAdapter {
         _modelBatch = new ModelBatch();
 
         _cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        _cam.position.set(0, 0, 300);
-        _cam.lookAt(Vector3.Zero);
         _cam.near = 1;
         _cam.far = 10000;
 
         _environment = new Environment();
-        _environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.1f, 0.1f, 0.1f, 1f));
+        _environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.3f, 0.3f, 0.3f, 1f));
         _environment.add(new DirectionalLight().set(1f, 1f, 1f, -1f, -0.8f, -0.2f));
 
         _camControl = new CameraInputController(_cam);
         Gdx.input.setInputProcessor(_camControl);
 
         _builder = new ModelBuilder();
-        // _model = builder.createBox(5, 5, 5,
-        //     new Material(ColorAttribute.createDiffuse(Color.WHITE)), 
-        //     Usage.Position | Usage.Normal);
 
         btCollisionConfiguration config = new btDefaultCollisionConfiguration();
         _dispatcher = new btCollisionDispatcher(config); 
@@ -83,15 +78,24 @@ public class KinematicsDemo extends ApplicationAdapter {
         _gravitySim = new GravitySimulation();
 
         spawnBody(20, 10, Vector3.Zero, Vector3.Zero, new Vector3(0, 0, 10));
-        spawnBody(3, 2, new Vector3(-100, 0, 0), new Vector3(0, -50, 0), new Vector3(0, 0, 0));
-        spawnBody(2, 2, new Vector3(200, 0, 0), new Vector3(0, 50, 0), new Vector3(0, 0, 0));
+        spawnBody(3, 2, new Vector3(-100, 0, 0), new Vector3(0, -50, 0), new Vector3(0, 0, 2));
+        spawnBody(2, 2, new Vector3(200, 0, 0), new Vector3(0, 50, 0), new Vector3(0, 0, 1));
+        spawnBody(5, 4, new Vector3(350, 0, 0), new Vector3(0, 20, 0), new Vector3(0, 0, 1));
+        spawnBody(3, 2, new Vector3(400, 0, 0), new Vector3(0, 10, 0), new Vector3(0, 0, 1));
+        spawnBody(1, 1, new Vector3(300, 300, 0), new Vector3(-60, -20, 0), new Vector3(0, 0, 3));
     }
 
     private void spawnBody(float mass, float radius, Vector3 position, Vector3 velocity,
         Vector3 spin) {
-        Model model = _builder.createSphere(radius * 2, radius * 2, radius * 2, 5, 5,
+
+        Model model = _builder.createBox(
+            radius * 2, radius * 2, radius * 2,
             new Material(ColorAttribute.createDiffuse(Color.WHITE)), 
             Usage.Position | Usage.Normal);
+        // Model model = _builder.createSphere(radius * 2, radius * 2, radius * 2, 5, 5,
+        //     new Material(ColorAttribute.createDiffuse(Color.WHITE)), 
+        //     Usage.Position | Usage.Normal);
+
         ModelInstance inst = new ModelInstance(model);
         inst.transform.set(position.cpy(), new Quaternion());
         btCollisionShape shape = new btBoxShape(new Vector3(radius, radius, radius));
@@ -120,6 +124,10 @@ public class KinematicsDemo extends ApplicationAdapter {
         _gravitySim.applyGravityForces(true);
         _world.stepSimulation(Gdx.graphics.getDeltaTime());
 
+        _cam.position.set(_objects.get(0).getPosition().x, 
+            _objects.get(0).getPosition().y + 300, 
+            _objects.get(0).getPosition().z - 200);
+        _cam.lookAt(_objects.get(0).getPosition());
         _cam.update();
         _camControl.update();
     }
