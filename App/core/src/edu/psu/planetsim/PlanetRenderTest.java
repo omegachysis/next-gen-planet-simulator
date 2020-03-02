@@ -59,7 +59,11 @@ public class PlanetRenderTest implements ApplicationListener {
         instance = new ModelInstance(model);
         */
         
-        model1 = modelBuilder.createSphere(1f, 1f, 1f, 64, 64,
+        int latitude = 64;
+        
+        int longitude = 64;
+        
+        model1 = modelBuilder.createSphere(1f, 1f, 1f, longitude, latitude,
                 new Material(ColorAttribute.createDiffuse(Color.WHITE)),
                 Usage.Position | Usage.Normal);
 
@@ -75,11 +79,13 @@ public class PlanetRenderTest implements ApplicationListener {
         mesh1.getVertices(verticesHolder);
 
         // We'll get some input map of elevations by latitude/longitude:
-        float[] elevationMap;
-
+        float[] elevationMap = new float[latitude * longitude + 2];
+        
+        System.out.println(verticesHolder.length);
+        
         for (int i = 0; i < verticesHolder.length / 6; i++)
         {
-            // Vertex format goes like pppnnnpppnnn...
+        	// Vertex format goes like pppnnnpppnnn...
             // where p are position components, n are normal components.
             float px = verticesHolder[i * 6 + 0];
             float py = verticesHolder[i * 6 + 1];
@@ -87,12 +93,24 @@ public class PlanetRenderTest implements ApplicationListener {
             float nx = verticesHolder[i * 6 + 3];
             float ny = verticesHolder[i * 6 + 4];
             float nz = verticesHolder[i * 6 + 5];
-
-            // Don't worry about the normal vectors yet... it gets pretty complicated 
-            // and it only affects lighting.
-            verticesHolder[i * 6 + 0] *= 5f + rand.nextDouble();
-            verticesHolder[i * 6 + 1] *= 5f + rand.nextDouble();
-            verticesHolder[i * 6 + 2] *= 5f + rand.nextDouble();
+                
+            // Note: this does not work on the pole vertices (e.g. for latitude = 4 and longitude = 4, verticesHolder[0]
+            // actually corresponds to verticesHolder[3], not verticesHolder[4]; likewise verticesHolder[21] corresponds
+            // to verticesHolder[24], not verticesHolder[20].
+        	if ((i+1) % (longitude+1) == 0 && i != 0)
+        	{
+        		verticesHolder[i * 6 + 0] = verticesHolder[(i - longitude) * 6 + 0];
+                verticesHolder[i * 6 + 1] = verticesHolder[(i - longitude) * 6 + 1];
+                verticesHolder[i * 6 + 2] = verticesHolder[(i - longitude) * 6 + 2];
+        	}
+        	else
+        	{
+                // Don't worry about the normal vectors yet... it gets pretty complicated 
+                // and it only affects lighting.
+                verticesHolder[i * 6 + 0] *= 5f + rand.nextDouble();
+                verticesHolder[i * 6 + 1] *= 5f + rand.nextDouble();
+                verticesHolder[i * 6 + 2] *= 5f + rand.nextDouble();	
+        	}
         }
         mesh1.setVertices(verticesHolder);
 
