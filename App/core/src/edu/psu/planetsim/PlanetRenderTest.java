@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector3;
 
 public class PlanetRenderTest implements ApplicationListener {
 	
@@ -81,26 +82,34 @@ public class PlanetRenderTest implements ApplicationListener {
         // We'll get some input map of elevations by latitude/longitude:
         float[] elevationMap = new float[((latitude-1) * longitude) + 2];
         
-        System.out.println(verticesHolder.length);
+        // System.out.println(verticesHolder.length);
+        Vector3 planetCenter = new Vector3();
         
+        int f = 0;
         for (int i = 0; i < verticesHolder.length / 6; i++)
         {
         	    
             // Note: this does not work on the pole vertices (e.g. for latitude = 4 and longitude = 4, verticesHolder[0]
             // actually corresponds to verticesHolder[3], not verticesHolder[4]; likewise verticesHolder[21] corresponds
             // to verticesHolder[24], not verticesHolder[20].
+        	
+        	// This condition connects the last longitude with the first longitude to share the same vertex per latitude.
         	if ((i+1) % (longitude+1) == 0 && i != 0)
         	{
         		verticesHolder[i * 6 + 0] = verticesHolder[(i - longitude) * 6 + 0];
                 verticesHolder[i * 6 + 1] = verticesHolder[(i - longitude) * 6 + 1];
                 verticesHolder[i * 6 + 2] = verticesHolder[(i - longitude) * 6 + 2];
         	}
+        	
+        	// This condition forces north pole vertices to share the same coordinate.
         	else if (i <= longitude && i != 0)
         	{
         		verticesHolder[i * 6 + 0] = verticesHolder[0 * 6 + 0];
                 verticesHolder[i * 6 + 1] = verticesHolder[0 * 6 + 1];
                 verticesHolder[i * 6 + 2] = verticesHolder[0 * 6 + 2];
         	}
+        	
+        	// This condition forces south pole vertices to share the same coordinate.
         	else if (i > (longitude * (latitude + 1)))
         	{
         		verticesHolder[i * 6 + 0] = verticesHolder[(longitude * (latitude + 1)) * 6 + 0];
@@ -125,9 +134,35 @@ public class PlanetRenderTest implements ApplicationListener {
             float ny = verticesHolder[i * 6 + 4];
             float nz = verticesHolder[i * 6 + 5];
             
-            //elevationMap[]
-        	
+            // This if-else passes the result of planetCenter.dst(x, y, z) to the elevationMap[].
+            // I (Danny Ruan) will clean this up at some point because I don't like using empty thens
+            // in if-elses. The first three conditions prevent reassignment of elevations to already-
+            // existing coordinates.
+            if ((i+1) % (longitude+1) == 0 && i != 0)
+        	{
+        	}
+        	else if (i <= longitude && i != 0)
+        	{
+        	}
+        	else if (i > (longitude * (latitude + 1)))
+        	{
+        	}
+        	else
+        	{
+        		elevationMap[f] = planetCenter.dst(px, py, pz);
+        		f++;
+        	}
         }
+        f = 0;
+        
+        // Test code to check that the elevationMap is storing values correctly
+        /*
+        for (int i = 0; i < elevationMap.length; i++)
+        {
+        	System.out.println(elevationMap[i]);
+        }
+        */
+        
         mesh1.setVertices(verticesHolder);
 
         // model1.meshes.set(0, mesh1);
