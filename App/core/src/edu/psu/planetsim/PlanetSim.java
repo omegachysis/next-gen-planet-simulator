@@ -10,26 +10,21 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class PlanetSim extends ApplicationAdapter {
 	Mesh testMesh;
 	ShaderProgram testShader;
 	MenuBar menuBar;
 	SidePanel sidePanel;
-
 	Stage stage;
-    TextButton button;
-    com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle textButtonStyle;
     BitmapFont font;
     Skin skin;
-    TextureAtlas buttonAtlas;
+
 
 	public static ShaderProgram loadShader(String name) {
 		ShaderProgram res = new ShaderProgram(
@@ -56,38 +51,15 @@ public class PlanetSim extends ApplicationAdapter {
 			                               0, 0.1f,   0f, 0f, 1f});
 			testMesh.setIndices(new short[] { 0, 1, 2 });			
 		}
-
-		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
 		
 		font = new BitmapFont();
         skin = new Skin();
-        //buttonAtlas = new TextureAtlas(Gdx.files.internal("buttons/buttons.pack"));
-        //skin.addRegions(buttonAtlas);
-        // textButtonStyle = new com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle();
-        // textButtonStyle.font = font;
-        // textButtonStyle.up = skin.getDrawable("up-button");
-        // textButtonStyle.down = skin.getDrawable("down-button");
-		// textButtonStyle.checked = skin.getDrawable("checked-button");
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
-        button = new TextButton("Button1", skin);
-		stage.addActor(button);
-		
-		button.addListener(new ChangeListener() {
-			@Override
-			public void changed (ChangeEvent event, Actor actor) {
-				System.out.println("Button Pressed");
-			}
-		});
 
-		//Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
-		//Gdx.gl.glDisable(GL20.GL_CULL_FACE);
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
 
-		menuBar = new MenuBar();
-		menuBar.create();
-
-		// sidePanel = new SidePanel();
-		// sidePanel.create();
+        sidePanel = new SidePanel(stage);
+        menuBar = new MenuBar(stage);
 
 	}
 
@@ -99,19 +71,16 @@ public class PlanetSim extends ApplicationAdapter {
 	public void render () {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		// testShader.begin();
-		// testMesh.render(testShader, GL20.GL_TRIANGLES, 0, 3);
-		// testShader.end();
-		menuBar.render();
-		// sidePanel.render();
-		// stage.act(Gdx.graphics.getDeltaTime());
-		// stage.draw();
+		testShader.begin();
+		testMesh.render(testShader, GL20.GL_TRIANGLES, 0, 3);
+		testShader.end();
+
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
 	}
 	
 	@Override
 	public void dispose () {
-		// menuBar.dispose();
-		// sidePanel.dispose();
-		stage.dispose();
-	}
+        stage.dispose();
+    }
 }

@@ -16,17 +16,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.awt.*;
 
-public class MenuBar extends ApplicationAdapter {
+public class MenuBar {
 
-    private Stage mainTable;
     private Skin skin;
 
-    @Override
-    public void create() {
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
-        mainTable = new Stage(new ScreenViewport());
+    public MenuBar(Stage stage) {
 
-        Gdx.input.setInputProcessor(mainTable);
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+
 
         final SelectBox<String> fileSelect= new SelectBox<>(skin);
         fileSelect.setItems("File", "New", "Save As", "Save");
@@ -94,20 +91,9 @@ public class MenuBar extends ApplicationAdapter {
             }
         });
 
-        mainTable.addActor(fileSelect);
-        mainTable.addActor(editSelect);
-        mainTable.addActor(viewSelect);
-        mainTable.addActor(inspecSelect);
-    }
-
-    @Override
-    public void render () {
-        mainTable.act(Gdx.graphics.getDeltaTime());
-        mainTable.draw();
-    }
-
-    @Override
-    public void dispose () {
-        mainTable.dispose();
+        stage.addActor(fileSelect);
+        stage.addActor(editSelect);
+        stage.addActor(viewSelect);
+        stage.addActor(inspecSelect);
     }
 }
