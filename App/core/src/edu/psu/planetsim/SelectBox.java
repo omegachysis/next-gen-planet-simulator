@@ -472,13 +472,13 @@ public class SelectBox<T> extends Widget implements Disableable {
     static public class SelectBoxStyle {
         public BitmapFont font;
         public Color fontColor = new Color(1, 1, 1, 1);
-        /** Optional. */
+
         @Nullable public Color disabledFontColor;
-        /** Optional. */
+
         @Nullable public Drawable background;
         public ScrollPaneStyle scrollStyle;
         public ListStyle listStyle;
-        /** Optional. */
+   
         @Nullable public Drawable backgroundOver, backgroundOpen, backgroundDisabled;
 
         public SelectBoxStyle () {
