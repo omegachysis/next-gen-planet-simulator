@@ -20,7 +20,6 @@ public class PlanetSim extends ApplicationAdapter {
 	Mesh testMesh;
 	ShaderProgram testShader;
 	MenuBar menuBar;
-	SidePanel sidePanel;
 	Stage stage;
     BitmapFont font;
     Skin skin;
@@ -57,8 +56,7 @@ public class PlanetSim extends ApplicationAdapter {
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-
-        sidePanel = new SidePanel(stage);
+        
         menuBar = new MenuBar(stage);
 
 	}

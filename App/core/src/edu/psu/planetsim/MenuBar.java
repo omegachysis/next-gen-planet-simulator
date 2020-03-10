@@ -1,6 +1,7 @@
 package edu.psu.planetsim;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -22,7 +23,7 @@ public class MenuBar {
     private TextButton button1;
     private TextButton button2;
     private TextButton button3;
-    public TextButton.TextButtonStyle textButtonStyle;
+    private TextButton.TextButtonStyle textButtonStyle;
     BitmapFont font;
 
     public MenuBar(Stage stage) {
