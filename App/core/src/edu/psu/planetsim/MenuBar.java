@@ -19,11 +19,15 @@ import java.awt.*;
 public class MenuBar {
 
     private Skin skin;
+    private TextButton button1;
+    private TextButton button2;
+    private TextButton button3;
+    public TextButton.TextButtonStyle textButtonStyle;
+    BitmapFont font;
 
     public MenuBar(Stage stage) {
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
-
 
         final SelectBox<String> fileSelect= new SelectBox<>(skin);
         fileSelect.setItems("File", "New", "Save As", "Save");
@@ -91,6 +95,26 @@ public class MenuBar {
             }
         });
 
+
+        button1 = new TextButton("Play/Pause", skin, "default");
+        button1.setSize(100, 35);
+        button1.setPosition(1170, 680);
+
+        font = new BitmapFont();
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+
+        button2 = new TextButton("Speed", textButtonStyle);
+        button2.setSize(150, 80);
+        button2.setPosition(1000, 655);
+
+        button3 = new TextButton("100", skin, "default");
+        button3.setSize(60, 35);
+        button3.setPosition(1105, 680);
+
+        stage.addActor(button1);
+        stage.addActor(button2);
+        stage.addActor(button3);
         stage.addActor(fileSelect);
         stage.addActor(editSelect);
         stage.addActor(viewSelect);
