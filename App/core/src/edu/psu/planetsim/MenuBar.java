@@ -2,31 +2,33 @@ package edu.psu.planetsim;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import java.awt.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
 public class MenuBar {
 
     private Skin skin;
+    //private Stage stage;
     private TextButton button1;
     private TextButton button2;
     private TextButton button3;
+    private TextButton button4;
+    private TextButton button5;
     private TextButton.TextButtonStyle textButtonStyle;
+    private Dialog endDialog;
     BitmapFont font;
 
-    public MenuBar(Stage stage) {
+    public MenuBar(final Stage stage) {
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -80,8 +82,6 @@ public class MenuBar {
 
         final SelectBox<String> inspecSelect= new SelectBox<>(skin);
         inspecSelect.setItems("Inspection Mode", "Climate", "Thermodynamics", "Magnetism");
-        // First one is the title that'll pop up
-        // There's more that'll be here but the click doesn't listen so does it ,,, matter yet
         inspecSelect.setPosition(260, 680);
         inspecSelect.setWidth(150);
         inspecSelect.addListener(new ClickListener() {
@@ -95,7 +95,6 @@ public class MenuBar {
                 inspecSelect.getSelected();
             }
         });
-
 
         button1 = new TextButton("Play/Pause", skin, "default");
         button1.setSize(100, 35);
@@ -113,9 +112,28 @@ public class MenuBar {
         button3.setSize(60, 35);
         button3.setPosition(1105, 680);
 
+        button4 = new TextButton("Earth", skin, "default");
+        button4.setSize(110, 30);
+        button4.setPosition(30, 635);
+
+        button5 = new TextButton("Luna", skin, "default");
+        button5.setSize(80, 30);
+        button5.setPosition(40, 600);
+
+        Dialog dialog = new Dialog("Description",skin) {
+            public void result(Object obj) {
+                System.out.println("result "+obj);
+            }
+        };
+        dialog.text(" ");
+        dialog.button("OK", true);
+        dialog.show(stage);
+
         stage.addActor(button1);
         stage.addActor(button2);
         stage.addActor(button3);
+        stage.addActor(button4);
+        stage.addActor(button5);
         stage.addActor(fileSelect);
         stage.addActor(editSelect);
         stage.addActor(viewSelect);
