@@ -6,6 +6,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -17,8 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
 public class MenuBar {
 
+    private Stage stage;
     private Skin skin;
-    //private Stage stage;
+    
     private TextButton button1;
     private TextButton button2;
     private TextButton button3;
@@ -27,6 +32,8 @@ public class MenuBar {
     private TextButton.TextButtonStyle textButtonStyle;
     private Dialog endDialog;
     BitmapFont font;
+    Color fontColor;
+
 
     public MenuBar(final Stage stage) {
 
@@ -37,10 +44,12 @@ public class MenuBar {
         fileSelect.setPosition(20, 680);
         fileSelect.setWidth(75);
         fileSelect.addListener(new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y){
-                fileSelect.showList();
+            fileSelect.showList();
             }
         });
+
         fileSelect.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -85,10 +94,19 @@ public class MenuBar {
         inspecSelect.setPosition(260, 680);
         inspecSelect.setWidth(150);
         inspecSelect.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y){
+            public void clicked(InputEvent event, float x, float y) {
                 inspecSelect.showList();
+
+                Dialog dialog = new Dialog("Inspection Mode ", skin);
+                dialog.setPosition(500, 500);
+                dialog.setWidth(250);
+                dialog.text("Discription will come here...");
+                dialog.button("Close", true);
+                stage.addActor(dialog);
+
             }
         });
+
         inspecSelect.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -120,14 +138,6 @@ public class MenuBar {
         button5.setSize(80, 30);
         button5.setPosition(40, 600);
 
-        Dialog dialog = new Dialog("Description",skin) {
-            public void result(Object obj) {
-                System.out.println("result "+obj);
-            }
-        };
-        dialog.text(" ");
-        dialog.button("OK", true);
-        dialog.show(stage);
 
         stage.addActor(button1);
         stage.addActor(button2);

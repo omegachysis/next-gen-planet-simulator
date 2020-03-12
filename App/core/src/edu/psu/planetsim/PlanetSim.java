@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -21,6 +22,8 @@ public class PlanetSim extends ApplicationAdapter {
 	ShaderProgram testShader;
 	MenuBar menuBar;
 	Stage stage;
+	//SelectBox selectBox;
+	//SelectBox.SelectBoxStyle style;
     BitmapFont font;
     Skin skin;
 
@@ -56,8 +59,9 @@ public class PlanetSim extends ApplicationAdapter {
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        
+
         menuBar = new MenuBar(stage);
+        //selectBox = new SelectBox(style);
 
 	}
 

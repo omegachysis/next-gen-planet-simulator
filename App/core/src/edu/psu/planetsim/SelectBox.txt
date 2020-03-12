@@ -55,7 +55,7 @@ public class SelectBox<T> extends Widget implements Disableable {
     }
 
     public SelectBox (SelectBoxStyle style) {
-        setStyle(style);
+        //setStyle(style);
         setSize(getPrefWidth(), getPrefHeight());
 
         selection.setActor(this);
@@ -89,11 +89,11 @@ public class SelectBox<T> extends Widget implements Disableable {
         super.setStage(stage);
     }
 
-    public void setStyle (SelectBoxStyle style) {
+  /*  public void setStyle (SelectBoxStyle style) {
         if (style == null) throw new IllegalArgumentException("style cannot be null.");
         this.style = style;
         if (selectBoxList != null) {
-            selectBoxList.setStyle(style.scrollStyle);
+            //selectBoxList.setStyle(style.scrollStyle);
             selectBoxList.list.setStyle(style.listStyle);
         }
         invalidateHierarchy();
@@ -102,6 +102,7 @@ public class SelectBox<T> extends Widget implements Disableable {
     public SelectBoxStyle getStyle () {
         return style;
     }
+    */
 
     public void setItems (T... newItems) {
         if (newItems == null) throw new IllegalArgumentException("newItems cannot be null.");
