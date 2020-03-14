@@ -34,6 +34,12 @@ and 6,000 K. The phrase “yellow dwarf” isn’t quite right, because not all 
 white. Our sun is one of these; it is actually white. People perceive it as yellow because we view 
 it through our atmosphere, which distorts its color.
 
+## Red Dwarf
+A red dwarf is a small, cool, very faint, main sequence star and are the most common type of star. Red dwarfs include the smallest of the stars, weighing between 7.5% and 50% the mass of the sun. Their reduced size means that they burn at a lower temperature, reaching only 6,380 degrees Fahrenheit (3,500 degrees Celsius). Red dwarfs are also the dimmest stars, with luminosities between about 0.0001 and 0.1 times that of the Sun.
+
+## Brown Dwarf
+A brown dwarf is a "star" whose mass is too small to have nuclear fusion occur at its core (the temperature and pressure at its core are insufficient for fusion). A brown dwarf is not very luminous. It is usually regarded as having a mass between 1028 kg and 84 x 1028. Depending on the mass of the brown dwarf, core temperatures can reach  104 to 6×106 K, while core densities range from 10 to 103 gcm−3.
+
 ## Blue Giant and Blue Supergiant Stars
 Blue supergiant stars are among the brightest, hottest, and most massive stars in the universe. Blue Giants 
 are about 172 times hotter than the Earth, but still quite cool compared to blue supergiant. These stars are 
