@@ -5,14 +5,30 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 
 public class KinematicObject implements IMass {
-    public ModelInstance model;
-    public btRigidBody body;
-    private float _mass;
+    protected ModelInstance _model;
+    protected btRigidBody _body;
+    protected float _mass;
 
     public KinematicObject(ModelInstance model, btRigidBody body, float mass) {
-        this.model = model;
-        this.body = body;
+        _model = model;
+        _body = body;
         _mass = mass;
+    }
+
+    public btRigidBody getBody() {
+        return _body;
+    }
+
+    public void set_body(btRigidBody _body) {
+        this._body = _body;
+    }
+
+    public ModelInstance getModel() {
+        return _model;
+    }
+
+    public void setModel(ModelInstance _model) {
+        this._model = _model;
     }
 
     public float getMass() {
@@ -21,11 +37,11 @@ public class KinematicObject implements IMass {
 
     public Vector3 getPosition() {
         Vector3 res = new Vector3();
-        model.transform.getTranslation(res);
+        _model.transform.getTranslation(res);
         return res;
     }
 
     public void applyForce(Vector3 force) {
-        body.applyCentralForce(force);
+        _body.applyCentralForce(force);
     }
 }
