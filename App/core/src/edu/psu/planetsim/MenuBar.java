@@ -10,20 +10,16 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
 public class MenuBar {
 
     private Stage stage;
     private Skin skin;
-    
+
     private TextButton button1;
     private TextButton button2;
     private TextButton button3;
@@ -46,14 +42,43 @@ public class MenuBar {
         fileSelect.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-            fileSelect.showList();
+                fileSelect.showList();
             }
         });
 
         fileSelect.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                fileSelect.getSelected();
+                String currentSelection = fileSelect.getSelected();
+                switch (currentSelection){
+                    case "New":
+                        Dialog newDialog = new Dialog("New", skin);
+                        newDialog.setResizable(true);
+                        newDialog.setMovable(true);
+                        newDialog.setPosition(500, 500);
+                        newDialog.setWidth(250);
+                        newDialog.text("Create a new celestial body? \n You'll lose all unsaved changes." );
+                        newDialog.button("Yes", true);
+                        newDialog.button("No", true);
+                        stage.addActor(newDialog);
+                        break;
+                    case "Save As":
+                        Dialog saveDialog = new Dialog("Save as", skin);
+                        saveDialog.setMovable(true);
+                        saveDialog.setResizable(true);
+                        saveDialog.setPosition(500, 500);
+                        saveDialog.setWidth(250);
+                        saveDialog.text("Name your file:");
+//                        TextField savetext = new TextField("", skin);
+//                        savetext.setPosition(100, 200);
+//                        saveDialog.add(savetext);
+                        saveDialog.button("Save", true);
+                        saveDialog.button("Cancel", true);
+                        stage.addActor(saveDialog);
+                        break;
+                    case "Save":
+                        break;
+                }
             }
         });
 
@@ -85,7 +110,22 @@ public class MenuBar {
         viewSelect.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                viewSelect.getSelected();
+                String currentSelection = viewSelect.getSelected();
+                switch (currentSelection){
+                    case "Show Side Panel":
+                        CheckBox sidepanel = new CheckBox("Show Side Panel?", skin);
+                        Dialog sideDialog = new Dialog("Side panel", skin);
+                        sideDialog.setMovable(true);
+                        sideDialog.setResizable(true);
+                        sideDialog.setPosition(500, 500);
+                        sideDialog.setWidth(250);
+                        //               sideDialog.add(sidepanel);
+                        sideDialog.button("Close", true);
+                        stage.addActor(sideDialog);
+                        break;
+                    case "Change Celestial Body":
+                        break;
+                }
             }
         });
 
@@ -96,13 +136,12 @@ public class MenuBar {
         inspecSelect.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 inspecSelect.showList();
-
-                Dialog dialog = new Dialog("Inspection Mode ", skin);
-                dialog.setPosition(500, 500);
-                dialog.setWidth(250);
-                dialog.text("Discription will come here...");
-                dialog.button("Close", true);
-                stage.addActor(dialog);
+//                Dialog dialog = new Dialog("Inspection Mode ", skin);
+//                dialog.setPosition(500, 500);
+//                dialog.setWidth(250);
+//                dialog.text("Discription will come here...");
+//                dialog.button("Close", true);
+//                stage.addActor(dialog);
 
             }
         });
@@ -110,7 +149,40 @@ public class MenuBar {
         inspecSelect.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                inspecSelect.getSelected();
+                String currentSelection = inspecSelect.getSelected();
+
+                switch(currentSelection){
+                    case "Climate":
+                        Dialog dialog = new Dialog("Inspection Mode: Climate", skin);
+                        dialog.setMovable(true);
+                        dialog.setResizable(true);
+                        dialog.setPosition(500, 500);
+                        dialog.setWidth(250);
+                        dialog.text("Climate description here...");
+                        dialog.button("Close", true);
+                        stage.addActor(dialog);
+                        break;
+                    case "Thermodynamics":
+                        Dialog thermoDialog = new Dialog("Inspection Mode: Thermodynamics", skin);
+                        thermoDialog.setMovable(true);
+                        thermoDialog.setResizable(true);
+                        thermoDialog.setPosition(500, 500);
+                        thermoDialog.setWidth(250);
+                        thermoDialog.text("Thermodynamics description here...");
+                        thermoDialog.button("Close", true);
+                        stage.addActor(thermoDialog);
+                        break;
+                    case "Magnetism":
+                        Dialog magDialog = new Dialog("Inspection Mode: Magnetism", skin);
+                        magDialog.setMovable(true);
+                        magDialog.setResizable(true);
+                        magDialog.setPosition(500, 500);
+                        magDialog.setWidth(250);
+                        magDialog.text("Magnetism description here...");
+                        magDialog.button("Close", true);
+                        stage.addActor(magDialog);
+                        break;
+                }
             }
         });
 
