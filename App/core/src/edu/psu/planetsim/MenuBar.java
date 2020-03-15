@@ -14,6 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Align;
+
+import static com.badlogic.gdx.utils.Align.center;
 
 public class MenuBar {
 
@@ -113,15 +116,44 @@ public class MenuBar {
                 String currentSelection = viewSelect.getSelected();
                 switch (currentSelection){
                     case "Show Side Panel":
-                        CheckBox sidepanel = new CheckBox("Show Side Panel?", skin);
                         Dialog sideDialog = new Dialog("Side panel", skin);
                         sideDialog.setMovable(true);
                         sideDialog.setResizable(true);
-                        sideDialog.setPosition(500, 500);
-                        sideDialog.setWidth(250);
-                        //               sideDialog.add(sidepanel);
+                        sideDialog.setPosition(10, 250);
+                        sideDialog.setWidth(200);
+                        sideDialog.setHeight(350);
+                        sideDialog.button("Done", true);
                         sideDialog.button("Close", true);
+
+                        sideDialog.row();
+                        Label nameLabel = new Label("Select Physical Properties:", skin);
+                        nameLabel.setPosition(5,300);
+                        CheckBox sidepanel1 = new CheckBox("PhysicalProperty-1", skin);
+                        sidepanel1.setPosition(10, 280);
+                        CheckBox sidepanel2 = new CheckBox("PhysicalProperty-2", skin);
+                        sidepanel2.setPosition(10, 260);
+                        CheckBox sidepanel3 = new CheckBox("PhysicalProperty-3", skin);
+                        sidepanel3.setPosition(10, 240);
+
+                        Table table = new Table(skin);
+                        table.right().top();
+                        table.add(nameLabel);
+                        table.row();
+                        table.add(sidepanel1);
+                        table.row();
+                        table.add(sidepanel2);
+                        table.row();
+                        table.add(sidepanel3);
+                        table.row();
+                        
+                        sideDialog.addActor(sidepanel1);
+                        sideDialog.addActor(sidepanel2);
+                        sideDialog.addActor(sidepanel3);
+                        sideDialog.addActor(table);
+                        sideDialog.addActor(nameLabel);
                         stage.addActor(sideDialog);
+
+
                         break;
                     case "Change Celestial Body":
                         break;
@@ -129,13 +161,13 @@ public class MenuBar {
             }
         });
 
-        final SelectBox<String> inspecSelect= new SelectBox<>(skin);
-        inspecSelect.setItems("Inspection Mode", "Climate", "Thermodynamics", "Magnetism");
-        inspecSelect.setPosition(260, 680);
-        inspecSelect.setWidth(150);
-        inspecSelect.addListener(new ClickListener() {
+        final SelectBox<String> inspectSelect= new SelectBox<>(skin);
+        inspectSelect.setItems("Inspection Mode", "Climate", "Thermodynamics", "Magnetism");
+        inspectSelect.setPosition(260, 680);
+        inspectSelect.setWidth(150);
+        inspectSelect.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                inspecSelect.showList();
+                inspectSelect.showList();
 //                Dialog dialog = new Dialog("Inspection Mode ", skin);
 //                dialog.setPosition(500, 500);
 //                dialog.setWidth(250);
@@ -146,10 +178,10 @@ public class MenuBar {
             }
         });
 
-        inspecSelect.addListener(new ChangeListener() {
+        inspectSelect.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                String currentSelection = inspecSelect.getSelected();
+                String currentSelection = inspectSelect.getSelected();
 
                 switch(currentSelection){
                     case "Climate":
@@ -219,6 +251,6 @@ public class MenuBar {
         stage.addActor(fileSelect);
         stage.addActor(editSelect);
         stage.addActor(viewSelect);
-        stage.addActor(inspecSelect);
+        stage.addActor(inspectSelect);
     }
 }

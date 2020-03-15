@@ -22,6 +22,7 @@ public class PlanetSim extends ApplicationAdapter {
 	ShaderProgram testShader;
 	MenuBar menuBar;
 	Stage stage;
+	//SideBar sideBar;
 	//SelectBox selectBox;
 	//SelectBox.SelectBoxStyle style;
     BitmapFont font;
@@ -60,6 +61,7 @@ public class PlanetSim extends ApplicationAdapter {
         Gdx.input.setInputProcessor(stage);
 
         menuBar = new MenuBar(stage);
+        //sideBar = new SideBar(stage);
         //selectBox = new SelectBox(style);
 
 	}
@@ -82,6 +84,6 @@ public class PlanetSim extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-        stage.dispose();
+		stage.dispose();
     }
 }
