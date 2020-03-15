@@ -145,7 +145,7 @@ public class MenuBar {
                         table.row();
                         table.add(sidepanel3);
                         table.row();
-                        
+
                         sideDialog.addActor(sidepanel1);
                         sideDialog.addActor(sidepanel2);
                         sideDialog.addActor(sidepanel3);

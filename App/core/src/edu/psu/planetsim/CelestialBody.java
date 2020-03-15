@@ -2,11 +2,14 @@ package edu.psu.planetsim;
 
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
+import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
@@ -29,12 +32,38 @@ public class CelestialBody extends KinematicObject {
         );
 
         _model = new ModelInstance(_modelBase);
+        _model.transform.set(Vector3.Zero, new Quaternion());
 
         // Build collision and kinematics data.
         final btCollisionShape shape = new btBoxShape(new Vector3(radius, radius, radius));
         final Vector3 inertia = new Vector3();
         shape.calculateLocalInertia(mass, inertia);
         _body = new btRigidBody(mass, new MotionState(_model.transform), shape, inertia);
+    }
+
+    void attachTo(btDynamicsWorld world) {
+        world.addRigidBody(_body);
+    }
+
+    void attachTo(GravitySimulation sim) {
+        sim.addMass(this);
+    }
+
+    void removeFrom(btDynamicsWorld world) {
+        world.removeRigidBody(_body);
+    }
+
+    void removeFrom(GravitySimulation sim) {
+        sim.removeMass(this);
+    }
+
+    void render(ModelBatch batch, Environment env) {
+        batch.render(_model, env);
+    }
+
+    void dispose() {
+        _modelBase.dispose();
+        _body.dispose();
     }
 
     static class MotionState extends btMotionState {

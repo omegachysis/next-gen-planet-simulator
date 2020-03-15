@@ -26,7 +26,8 @@ public class PlanetSim extends ApplicationAdapter {
 	//SelectBox selectBox;
 	//SelectBox.SelectBoxStyle style;
     BitmapFont font;
-    Skin skin;
+	Skin skin;
+	CelestialRenderer _cRenderer;
 
 	public static ShaderProgram loadShader(String name) {
 		ShaderProgram res = new ShaderProgram(
@@ -61,8 +62,13 @@ public class PlanetSim extends ApplicationAdapter {
         Gdx.input.setInputProcessor(stage);
 
         menuBar = new MenuBar(stage);
+
         //sideBar = new SideBar(stage);
         //selectBox = new SelectBox(style);
+		//selectBox = new SelectBox(style);
+		
+		_cRenderer = new CelestialRenderer();
+
 
 	}
 
@@ -72,11 +78,13 @@ public class PlanetSim extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		// testShader.begin();
 		// testMesh.render(testShader, GL20.GL_TRIANGLES, 0, 3);
 		// testShader.end();
+
+		_cRenderer.render();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -85,5 +93,9 @@ public class PlanetSim extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		stage.dispose();
+
+
+		_cRenderer.dispose();
+
     }
 }
