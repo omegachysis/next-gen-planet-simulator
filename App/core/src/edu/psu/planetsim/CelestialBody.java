@@ -32,6 +32,7 @@ public class CelestialBody extends KinematicObject {
         );
 
         _model = new ModelInstance(_modelBase);
+        _model.transform.set(Vector3.Zero, new Quaternion());
 
         // Build collision and kinematics data.
         final btCollisionShape shape = new btBoxShape(new Vector3(radius, radius, radius));
@@ -44,8 +45,16 @@ public class CelestialBody extends KinematicObject {
         world.addRigidBody(_body);
     }
 
+    void attachTo(GravitySimulation sim) {
+        sim.addMass(this);
+    }
+
     void removeFrom(btDynamicsWorld world) {
         world.removeRigidBody(_body);
+    }
+
+    void removeFrom(GravitySimulation sim) {
+        sim.removeMass(this);
     }
 
     void render(ModelBatch batch, Environment env) {
