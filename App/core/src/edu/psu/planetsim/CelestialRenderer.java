@@ -3,6 +3,7 @@ package edu.psu.planetsim;
 import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.*;
 import com.badlogic.gdx.graphics.g3d.attributes.*;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -16,7 +17,6 @@ import com.badlogic.gdx.physics.bullet.linearmath.*;
 public class CelestialRenderer {
     private final PerspectiveCamera _cam;
     private final ModelBatch _modelBatch;
-    private final CameraInputController _camControl;
     private final btDynamicsWorld _world;
     private final GravitySimulation _gravitySim;
     private final Environment _environment;
@@ -57,9 +57,6 @@ public class CelestialRenderer {
         _environment = new Environment();
         _environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.3f, 0.3f, 0.3f, 1f));
         _environment.add(new DirectionalLight().set(1f, 1f, 1f, -1f, -0.8f, -0.2f));
-
-        _camControl = new CameraInputController(_cam);
-        Gdx.input.setInputProcessor(_camControl);
 
         final btCollisionConfiguration config = new btDefaultCollisionConfiguration();
         _dispatcher = new btCollisionDispatcher(config);
@@ -123,15 +120,15 @@ public class CelestialRenderer {
         }
         _modelBatch.end();
 
-        _gravitySim.applyGravityForces(true);
-        _world.stepSimulation(Gdx.graphics.getDeltaTime());
+        //_gravitySim.applyGravityForces(true);
+        //_world.stepSimulation(Gdx.graphics.getDeltaTime());
 
         // _cam.position.set(_objects.get(0).getPosition().x,
         // _objects.get(0).getPosition().y + 300,
         // _objects.get(0).getPosition().z - 200);
         // _cam.lookAt(_objects.get(0).getPosition());
         // _cam.update();
-        _camControl.update();
+        // _camControl.update();
     }
 
     public void dispose() {

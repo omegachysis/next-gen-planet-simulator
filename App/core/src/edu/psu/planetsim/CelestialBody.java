@@ -58,7 +58,7 @@ public class CelestialBody extends KinematicObject {
     }
 
     void render(ModelBatch batch, Environment env) {
-        batch.render(_model);
+        batch.render(_model, env);
     }
 
     void dispose() {
