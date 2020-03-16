@@ -2,9 +2,14 @@ package edu.psu.planetsim;
 
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
+import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -12,6 +17,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.*;
@@ -19,49 +25,62 @@ import com.badlogic.gdx.physics.bullet.linearmath.*;
 
 public class CelestialBody extends KinematicObject {
     private final Model _modelBase;
+    private final float _radius;
 
-    public CelestialBody(final float mass, final float radius) {
+    public CelestialBody(final float mass, final float radius,
+        final Vector3 initPosition, final Vector3 initVelocity, final Vector3 initSpin,
+        final String textureFile) {
         super(null, null, mass);
 
+        // Load a texture.
+        final FileHandle imageFileHandle = Gdx.files.getFileHandle(
+            textureFile, Files.FileType.Internal);
+        final Texture texture1 = new Texture(imageFileHandle);
+
         // Build the model.
-        _modelBase = new ModelBuilder().createSphere(
-            radius * 2, radius * 2, radius * 2,
-            100, 100,
-            new Material(ColorAttribute.createDiffuse(Color.WHITE)),
-            Usage.Position | Usage.Normal
-        );
+        TextureAttribute texAttr = new TextureAttribute(TextureAttribute.Diffuse, texture1);
+        _modelBase = new ModelBuilder().createSphere(radius * 2, radius * 2, radius * 2, 50, 50,
+                new Material(texAttr),
+                Usage.Position | Usage.Normal | Usage.TextureCoordinates);
 
         _model = new ModelInstance(_modelBase);
-        _model.transform.set(Vector3.Zero, new Quaternion());
+        _model.transform.set(initPosition, new Quaternion(Vector3.X, 90f));
 
-        // Build collision and kinematics data.
-        final btCollisionShape shape = new btBoxShape(new Vector3(radius, radius, radius));
-        final Vector3 inertia = new Vector3();
-        shape.calculateLocalInertia(mass, inertia);
-        _body = new btRigidBody(mass, new MotionState(_model.transform), shape, inertia);
+        // Initialize physics.
+        _radius = radius;
+        resetUnderlyingPhysics(initVelocity, initSpin);
     }
 
-    void attachTo(btDynamicsWorld world) {
+    public void resetUnderlyingPhysics(final Vector3 velocity, final Vector3 spin) {
+        final btCollisionShape shape = new btSphereShape(_radius);
+        final Vector3 inertia = new Vector3();
+        shape.calculateLocalInertia(_mass, inertia);
+        _body = new btRigidBody(_mass, new MotionState(_model.transform), shape, inertia);
+        _body.applyCentralImpulse(velocity.cpy().scl(_mass));
+        _body.applyTorqueImpulse(spin.cpy().scl(_mass));
+    }
+
+    public void attachTo(final btDynamicsWorld world) {
         world.addRigidBody(_body);
     }
 
-    void attachTo(GravitySimulation sim) {
+    public void attachTo(final GravitySimulation sim) {
         sim.addMass(this);
     }
 
-    void removeFrom(btDynamicsWorld world) {
+    public void removeFrom(final btDynamicsWorld world) {
         world.removeRigidBody(_body);
     }
 
-    void removeFrom(GravitySimulation sim) {
+    public void removeFrom(final GravitySimulation sim) {
         sim.removeMass(this);
     }
 
-    void render(ModelBatch batch, Environment env) {
+    public void render(final ModelBatch batch, final Environment env) {
         batch.render(_model, env);
     }
 
-    void dispose() {
+    public void dispose() {
         _modelBase.dispose();
         _body.dispose();
     }

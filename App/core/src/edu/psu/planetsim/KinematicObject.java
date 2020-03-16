@@ -19,7 +19,7 @@ public class KinematicObject implements IMass {
         return _body;
     }
 
-    public void set_body(btRigidBody _body) {
+    public void setBody(btRigidBody _body) {
         this._body = _body;
     }
 

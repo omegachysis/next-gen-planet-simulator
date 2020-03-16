@@ -23,7 +23,7 @@ public class GravitySimulation {
      * Applies the force of gravity to all masses in the simulation
      * in the current configuration.
      */
-    public void applyGravityForces(boolean skipFirstMass) {
+    public void applyGravityForces() {
         for (int i = 0; i < _masses.size(); i++) {
             for (int j = i + 1; j < _masses.size(); j++) {
                 IMass a = _masses.get(i);
@@ -39,8 +39,7 @@ public class GravitySimulation {
 
                 // Take advantage of Newton's Third Law of Motion to calculate
                 // the mutual attraction of any two bodies once.
-                if (!skipFirstMass || i > 0)
-                    a.applyForce(force);
+                a.applyForce(force);
                 b.applyForce(force.scl(-1));
             }
         }

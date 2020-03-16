@@ -133,7 +133,7 @@ public class GravityDemo extends ApplicationAdapter {
 
         _camControl.update();
 
-        _sim.applyGravityForces(false);
+        _sim.applyGravityForces();
         for (TestMass3D mass : _masses) {
             mass.update(Gdx.graphics.getDeltaTime());
         }
