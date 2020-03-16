@@ -58,7 +58,7 @@ public class PlanetSim extends ApplicationAdapter {
 		font = new BitmapFont();
         skin = new Skin();
 
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
         menuBar = new MenuBar(stage);
