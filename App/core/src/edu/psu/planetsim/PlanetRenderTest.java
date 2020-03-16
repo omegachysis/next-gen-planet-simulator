@@ -3,11 +3,14 @@ package edu.psu.planetsim;
 import java.util.Random;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -15,10 +18,12 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 public class PlanetRenderTest implements ApplicationListener {
 	
@@ -33,6 +38,7 @@ public class PlanetRenderTest implements ApplicationListener {
     public ModelBatch modelBatch;
     public Environment environment;
     public Mesh mesh1;
+    public Texture texture1;
 
     @Override
     public void create () {
@@ -50,7 +56,7 @@ public class PlanetRenderTest implements ApplicationListener {
         
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.1f, 0.1f, 0.1f, 1f));
-        environment.add(new DirectionalLight().set(1f, 1f, 1f, -1f, -0.8f, -0.2f));
+        environment.add(new DirectionalLight().set(1f, 1f, 1f, 1f, 0.2f, 0.2f));
  
         ModelBuilder modelBuilder = new ModelBuilder();
         /*
@@ -66,11 +72,15 @@ public class PlanetRenderTest implements ApplicationListener {
         
         model1 = modelBuilder.createSphere(5f, 5f, 5f, longitude, latitude,
                 new Material(ColorAttribute.createDiffuse(Color.WHITE)),
-                Usage.Position | Usage.Normal);
+                Usage.Position | Usage.Normal | Usage.TextureCoordinates);
 
         Random rand = new Random();
 
         mesh1 = model1.meshes.first();
+        
+        FileHandle imageFileHandle = Gdx.files.getFileHandle("textest1.jpg", Files.FileType.Internal);
+        texture1 = new Texture(imageFileHandle);
+        TextureAttribute textureAttribute1 = new TextureAttribute(TextureAttribute.Diffuse, texture1);
 
         // Our model1 usage flags are Usage.Position and Usage.Normal,
         // thus every vertex has a Position vector and a Normal vector.
@@ -120,9 +130,10 @@ public class PlanetRenderTest implements ApplicationListener {
         	{
                 // Don't worry about the normal vectors yet... it gets pretty complicated 
                 // and it only affects lighting.
-                verticesHolder[i * 6 + 0] += 0.1f * rand.nextDouble();
-                verticesHolder[i * 6 + 1] += 0.1f * rand.nextDouble();
-                verticesHolder[i * 6 + 2] += 0.1f * rand.nextDouble();	
+        		double val = 0.01f * rand.nextDouble();
+                verticesHolder[i * 6 + 0] += val;
+                verticesHolder[i * 6 + 1] += val;
+                verticesHolder[i * 6 + 2] += val;	
         	}
         	
         	// Vertex format goes like pppnnnpppnnn...
@@ -164,10 +175,14 @@ public class PlanetRenderTest implements ApplicationListener {
         */
         
         mesh1.setVertices(verticesHolder);
+       
 
         // model1.meshes.set(0, mesh1);
         
         instance1 = new ModelInstance(model1, 0f, 0f, 0f);
+        
+        Material tempMaterial = instance1.materials.get(0);
+        tempMaterial.set(textureAttribute1);
         
         /*
         model2 = modelBuilder.createCone(4f, 3f, 4f, 10,
