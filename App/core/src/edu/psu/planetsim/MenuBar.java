@@ -72,10 +72,26 @@ public class MenuBar {
                         saveDialog.setMovable(true);
                         saveDialog.setResizable(true);
                         saveDialog.setPosition(500, 500);
-                        saveDialog.setWidth(250);
+                        saveDialog.setWidth(300);
 
-                        Label nameLabel = new Label("File name:", skin);
-                        nameLabel.setPosition(5,100);
+                        Label nameLabel1 = new Label("File name:", skin);
+                        nameLabel1.setPosition(5,95);
+                        TextField fileName1 = new TextField("",skin);
+                        fileName1.setPosition(100,95);
+
+                        Label nameLabel2 = new Label("Location:", skin);
+                        nameLabel2.setPosition(5,55);
+                        SelectBox<String> fileName2= new SelectBox<>(skin);
+                        fileName2.setItems("Desktop", "Documents", "Home", "Other Folder");
+                        fileName2.setPosition(100,55);
+                        fileName2.setWidth(90);
+
+                        Table table = new Table(skin);
+                        table.add(nameLabel1);
+                        table.add(fileName1);
+                        table.add(nameLabel2);
+                        table.add(fileName2);
+
                         //saveDialog.text("Name your file:");
 //                        TextField savetext = new TextField("", skin);
 //                        savetext.setPosition(100, 200);
@@ -83,7 +99,10 @@ public class MenuBar {
                         saveDialog.button("Save", true);
                         saveDialog.button("Cancel", true);
 
-                        saveDialog.addActor(nameLabel);
+                        saveDialog.addActor(nameLabel1);
+                        saveDialog.addActor(fileName1);
+                        saveDialog.addActor(nameLabel2);
+                        saveDialog.addActor(fileName2);
                         stage.addActor(saveDialog);
                         break;
                     case "Save":
@@ -150,27 +169,22 @@ public class MenuBar {
                         sideDialog.row();
                         Label nameLabel = new Label("Select Physical Properties:", skin);
                         nameLabel.setPosition(5,300);
-                        CheckBox sidepanel1 = new CheckBox("Initial distance from star(AU)", skin);
-                        sidepanel1.setPosition(10, 280);
-                        CheckBox sidepanel2 = new CheckBox("Initial velocity(km/s)", skin);
-                        sidepanel2.setPosition(10, 260);
-                        CheckBox sidepanel3 = new CheckBox("PhysicalProperty-3", skin);
-                        sidepanel3.setPosition(10, 240);
+                        CheckBox check1 = new CheckBox("Initial distance from star(AU)", skin);
+                        check1.setPosition(10, 280);
+                        CheckBox check2 = new CheckBox("Initial velocity(km/s)", skin);
+                        check2.setPosition(10, 260);
+                        CheckBox check3 = new CheckBox("PhysicalProperty-3", skin);
+                        check3.setPosition(10, 240);
 
                         Table table = new Table(skin);
-                        table.right().top();
                         table.add(nameLabel);
-                        table.row();
-                        table.add(sidepanel1);
-                        table.row();
-                        table.add(sidepanel2);
-                        table.row();
-                        table.add(sidepanel3);
-                        table.row();
+                        table.add(check1);
+                        table.add(check2);
+                        table.add(check3);
 
-                        sideDialog.addActor(sidepanel1);
-                        sideDialog.addActor(sidepanel2);
-                        sideDialog.addActor(sidepanel3);
+                        sideDialog.addActor(check1);
+                        sideDialog.addActor(check2);
+                        sideDialog.addActor(check3);
                         sideDialog.addActor(table);
                         sideDialog.addActor(nameLabel);
                         stage.addActor(sideDialog);
