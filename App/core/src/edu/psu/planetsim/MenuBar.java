@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Align;
 
+import javax.swing.text.View;
+
 import static com.badlogic.gdx.utils.Align.center;
 
 public class MenuBar {
@@ -71,12 +73,17 @@ public class MenuBar {
                         saveDialog.setResizable(true);
                         saveDialog.setPosition(500, 500);
                         saveDialog.setWidth(250);
-                        saveDialog.text("Name your file:");
+
+                        Label nameLabel = new Label("File name:", skin);
+                        nameLabel.setPosition(5,100);
+                        //saveDialog.text("Name your file:");
 //                        TextField savetext = new TextField("", skin);
 //                        savetext.setPosition(100, 200);
 //                        saveDialog.add(savetext);
                         saveDialog.button("Save", true);
                         saveDialog.button("Cancel", true);
+
+                        saveDialog.addActor(nameLabel);
                         stage.addActor(saveDialog);
                         break;
                     case "Save":
@@ -97,12 +104,27 @@ public class MenuBar {
         editSelect.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                editSelect.getSelected();
+                String currentSelection = editSelect.getSelected();
+                switch (currentSelection) {
+                    case "Add Celestial Body":
+                        break;
+                    case "Delete Celestial Body":
+                        Dialog deleteDialog = new Dialog("Delete Celestial Body", skin);
+                        deleteDialog.setResizable(true);
+                        deleteDialog.setMovable(true);
+                        deleteDialog.setPosition(500, 500);
+                        deleteDialog.setWidth(310);
+                        deleteDialog.text("Are you sure to delete a celestial body? \n Remember: You'll lose this celestial body.");
+                        deleteDialog.button("Yes", true);
+                        deleteDialog.button("No", false);
+                        stage.addActor(deleteDialog);
+                        break;
+                }
             }
         });
 
         final SelectBox<String> viewSelect= new SelectBox<>(skin);
-        viewSelect.setItems("View", "Show Side Panel", "Change Celestial Body");
+        viewSelect.setItems("View","Show Side Panel", "Change Celestial Body");
         viewSelect.setPosition(180, 680);
         viewSelect.setWidth(75);
         viewSelect.addListener(new ClickListener() {
@@ -120,7 +142,7 @@ public class MenuBar {
                         sideDialog.setMovable(true);
                         sideDialog.setResizable(true);
                         sideDialog.setPosition(10, 250);
-                        sideDialog.setWidth(200);
+                        sideDialog.setWidth(250);
                         sideDialog.setHeight(350);
                         sideDialog.button("Done", true);
                         sideDialog.button("Close", true);
@@ -128,9 +150,9 @@ public class MenuBar {
                         sideDialog.row();
                         Label nameLabel = new Label("Select Physical Properties:", skin);
                         nameLabel.setPosition(5,300);
-                        CheckBox sidepanel1 = new CheckBox("PhysicalProperty-1", skin);
+                        CheckBox sidepanel1 = new CheckBox("Initial distance from star(AU)", skin);
                         sidepanel1.setPosition(10, 280);
-                        CheckBox sidepanel2 = new CheckBox("PhysicalProperty-2", skin);
+                        CheckBox sidepanel2 = new CheckBox("Initial velocity(km/s)", skin);
                         sidepanel2.setPosition(10, 260);
                         CheckBox sidepanel3 = new CheckBox("PhysicalProperty-3", skin);
                         sidepanel3.setPosition(10, 240);
@@ -152,7 +174,6 @@ public class MenuBar {
                         sideDialog.addActor(table);
                         sideDialog.addActor(nameLabel);
                         stage.addActor(sideDialog);
-
 
                         break;
                     case "Change Celestial Body":
