@@ -126,6 +126,66 @@ public class MenuBar {
                 String currentSelection = editSelect.getSelected();
                 switch (currentSelection) {
                     case "Add Celestial Body":
+
+                        Dialog addDialog = new Dialog("Add Celestial Body", skin);
+                        addDialog.setMovable(true);
+                        addDialog.setResizable(true);
+                        addDialog.setPosition(10, 250);
+                        addDialog.setWidth(330);
+                        addDialog.setHeight(300);
+
+                        Label addLabel1 = new Label("Name:", skin);
+                        addLabel1.setPosition(5,240);
+                        TextField textField1 = new TextField("",skin);
+                        textField1.setPosition(160,240);
+
+                        Label addLabel2 = new Label("Radius (km):", skin);
+                        addLabel2.setPosition(5,195);
+                        TextField textField2 = new TextField("",skin);
+                        textField2.setPosition(160,195);
+
+                        Label addLabel3 = new Label("Initial Distance (AU):", skin);
+                        addLabel3.setPosition(5,150);
+                        TextField textField3 = new TextField("",skin);
+                        textField3.setPosition(160,150);
+
+                        Label addLabel4 = new Label("Velocity (km/s):", skin);
+                        addLabel4.setPosition(5,105);
+                        TextField textField4 = new TextField("",skin);
+                        textField4.setPosition(160,105);
+
+                        Label addLabel5 = new Label("Mass (M⊕):",skin);
+                        addLabel5.setPosition(5, 60);
+                        TextField textField5 = new TextField("",skin);
+                        textField5.setPosition(160,60);
+
+                        Table table = new Table(skin);
+                        table.add(addLabel1);
+                        table.add(textField1);
+                        table.add(addLabel2);
+                        table.add(textField2);
+                        table.add(addLabel3);
+                        table.add(textField3);
+                        table.add(addLabel4);
+                        table.add(textField4);
+                        table.add(addLabel5);
+                        table.add(textField5);
+
+                        addDialog.button("Add", true);
+                        addDialog.button("Cancel", true);
+
+                        addDialog.addActor(addLabel1);
+                        addDialog.addActor(textField1);
+                        addDialog.addActor(addLabel2);
+                        addDialog.addActor(textField2);
+                        addDialog.addActor(addLabel3);
+                        addDialog.addActor(textField3);
+                        addDialog.addActor(addLabel4);
+                        addDialog.addActor(textField4);
+                        addDialog.addActor(addLabel5);
+                        addDialog.addActor(textField5);
+                        stage.addActor(addDialog);
+
                         break;
                     case "Delete Celestial Body":
                         Dialog deleteDialog = new Dialog("Delete Celestial Body", skin);
