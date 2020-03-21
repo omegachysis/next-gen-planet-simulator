@@ -44,4 +44,13 @@ public class GravitySimulation {
             }
         }
     }
+
+    public Vector3 getCenterOfMass() {
+        Vector3 val = new Vector3(0, 0, 0);
+        for (IMass mass : _masses) {
+            val.mulAdd(mass.getPosition(), mass.getMass());
+        }
+
+        return val.scl(1f / _masses.size());
+    }
 }

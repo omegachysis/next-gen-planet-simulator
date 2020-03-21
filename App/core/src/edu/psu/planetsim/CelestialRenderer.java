@@ -47,12 +47,10 @@ public class CelestialRenderer {
         _cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         _cam.near = 1;
         _cam.far = 1000;
-        _cam.position.set(0, -15, 10);
-        _cam.lookAt(Vector3.Zero);
         _cam.update();
 
         _environment = new Environment();
-        _environment.add(new DirectionalLight().set(1, 1, 1, -7, 7, -2));
+        _environment.add(new DirectionalLight().set(1, 1, 1, 0, 0, 2));
 
         final btCollisionConfiguration config = new btDefaultCollisionConfiguration();
         _dispatcher = new btCollisionDispatcher(config);
@@ -66,10 +64,10 @@ public class CelestialRenderer {
         // Mass units: earth masses
         // Radius units: earth radii
         final CelestialBody earth = new CelestialBody(1.0f, 1.0f,
-            Vector3.Zero, Vector3.Zero, new Vector3(.04f, 0, .1f), "earth.jpg");
+            Vector3.Zero, Vector3.Zero, Vector3.Zero, "earth.jpg");
         add(earth);
         final CelestialBody luna = new CelestialBody(0.0123f, 0.2725f,
-            new Vector3(10, 0, 0), new Vector3(0, 3, 0), new Vector3(0, 0, .02f), "luna.jpg");
+            new Vector3(63, 0, 0), new Vector3(0, 3, 0), Vector3.Zero, "luna.jpg");
         add(luna);
     }
 
@@ -89,12 +87,10 @@ public class CelestialRenderer {
         _gravitySim.applyGravityForces();
         _world.stepSimulation(Gdx.graphics.getDeltaTime());
 
-        // _cam.position.set(_objects.get(0).getPosition().x,
-        // _objects.get(0).getPosition().y + 300,
-        // _objects.get(0).getPosition().z - 200);
-        // _cam.lookAt(_objects.get(0).getPosition());
-        // _cam.update();
-        // _camControl.update();
+        Vector3 com = _gravitySim.getCenterOfMass();
+        _cam.position.set(com.cpy().add(0f, 0f, -80f));
+        _cam.lookAt(com);
+        _cam.update();
     }
 
     public void dispose() {
