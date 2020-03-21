@@ -33,7 +33,7 @@ public class PlanetSim extends ApplicationAdapter {
 		// selectBox = new SelectBox(style);
 		// selectBox = new SelectBox(style);
 
-		_cRenderer = new CelestialRenderer();
+		_cRenderer = new CelestialRenderer(menuBar);
 	}
 
 	public void resize(final int width, final int height) {

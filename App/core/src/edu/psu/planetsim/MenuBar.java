@@ -367,4 +367,12 @@ public class MenuBar {
         stage.addActor(viewSelect);
         stage.addActor(inspectSelect);
     }
+
+    public int getSpeedFactor() {
+        try {
+            return Integer.parseInt(speedbutton.getText());
+        } catch (NumberFormatException e) {
+            return 1;
+        }
+    }
 }

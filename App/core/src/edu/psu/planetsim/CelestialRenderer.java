@@ -20,6 +20,7 @@ public class CelestialRenderer {
     private final btCollisionDispatcher _dispatcher;
     private final btDbvtBroadphase _pairCache;
     private final btSequentialImpulseConstraintSolver _solver;
+    private final MenuBar _menuBar;
 
     private final ArrayList<CelestialBody> _bodies = new ArrayList<>();
 
@@ -39,9 +40,10 @@ public class CelestialRenderer {
         }
     }
 
-    public CelestialRenderer() {
+    public CelestialRenderer(MenuBar menuBar) {
         Bullet.init();
 
+        _menuBar = menuBar;
         _modelBatch = new ModelBatch();
 
         _cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -89,7 +91,7 @@ public class CelestialRenderer {
         _modelBatch.end();
 
         _gravitySim.applyGravityForces();
-        _world.stepSimulation(Gdx.graphics.getDeltaTime() * 50000);
+        _world.stepSimulation(Gdx.graphics.getDeltaTime() * _menuBar.getSpeedFactor());
 
         Vector3 com = _gravitySim.getCenterOfMass();
         _cam.position.set(com.cpy().add(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
