@@ -13,7 +13,7 @@ public final class Metrics {
     private static final int M_PER_AU_E10 = 11;
 
     /** Return naturalized mass from kilograms and the exponent in scientific notation. */
-    public static float kg(float kg, int e10) {
+    public static float kg(double kg, int e10) {
         // Divide by earth's mass to first convert into earth units.
         kg /= EARTH_MASS;
         e10 -= EARTH_MASS_E10;
@@ -23,24 +23,24 @@ public final class Metrics {
         kg *= SQRT_G;
         e10 += SQRT_G_E10;
 
-        return kg * e10;
+        return (float)(kg * e10);
     }
 
     /** Return naturalized mass from kilograms. */
-    public static float kg(float kg) {
+    public static float kg(double kg) {
         return kg(kg, 1);
     }
 
     /** Return naturalized length from meters and the exponent in scientific notation. */
-    public static float m(float m, int e10) {
+    public static float m(double m, int e10) {
         // Convert all lengths to AU.
         m /= M_PER_AU;
         e10 -= M_PER_AU_E10;
-        return m * e10;
+        return (float)(m * e10);
     }
 
     /** Return naturalized length from meters. */
-    public static float m(float m) {
+    public static float m(double m) {
         return m(m, 1);
     }
 }
