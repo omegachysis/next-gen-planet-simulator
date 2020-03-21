@@ -45,8 +45,8 @@ public class CelestialRenderer {
         _modelBatch = new ModelBatch();
 
         _cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        _cam.near = 1;
-        _cam.far = 1000;
+        _cam.near = Metrics.m(1e3);
+        _cam.far = Metrics.m(1000e9);
         _cam.update();
 
         _environment = new Environment();
@@ -61,13 +61,17 @@ public class CelestialRenderer {
 
         _gravitySim = new GravitySimulation();
 
-        // Mass units: earth masses
-        // Radius units: earth radii
-        final CelestialBody earth = new CelestialBody(1.0f, 1.0f,
+        final CelestialBody earth = new CelestialBody(
+            Metrics.kg(5.97e24), // mass
+            Metrics.m(6378.1e3), // radius
             Vector3.Zero, Vector3.Zero, Vector3.Zero, "earth.jpg");
         add(earth);
-        final CelestialBody luna = new CelestialBody(0.0123f, 0.2725f,
-            new Vector3(63, 0, 0), new Vector3(0, 3, 0), Vector3.Zero, "luna.jpg");
+        final CelestialBody luna = new CelestialBody(
+            Metrics.kg(7.348e22), // mass
+            Metrics.m(1737.1e3), // radius
+            new Vector3(Metrics.m(357e6), 0, 0), // position
+            new Vector3(0, Metrics.m_s(1100), 0), // velocity
+            Vector3.Zero, "luna.jpg");
         add(luna);
     }
 
@@ -85,12 +89,18 @@ public class CelestialRenderer {
         _modelBatch.end();
 
         _gravitySim.applyGravityForces();
+
+        Vector3 moonPos1 = _bodies.get(1).getPosition();
         _world.stepSimulation(Gdx.graphics.getDeltaTime());
+        Vector3 moonPos2 = _bodies.get(1).getPosition();
 
         Vector3 com = _gravitySim.getCenterOfMass();
-        _cam.position.set(com.cpy().add(0f, 0f, -80f));
+        _cam.position.set(com.cpy().add(0f, 0f, Metrics.m(-6e8)));
         _cam.lookAt(com);
         _cam.update();
+
+        // System.out.println(Metrics.length(_bodies.get(0).getPosition().dst(_bodies.get(1).getPosition())));
+        System.out.println(Metrics.speed(moonPos2.dst(moonPos1)) / Gdx.graphics.getDeltaTime());
     }
 
     public void dispose() {

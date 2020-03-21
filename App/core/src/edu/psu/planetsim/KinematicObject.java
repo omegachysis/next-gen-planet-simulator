@@ -13,6 +13,7 @@ public class KinematicObject implements IMass {
         _model = model;
         _body = body;
         _mass = mass;
+        System.out.println(_mass);
     }
 
     public btRigidBody getBody() {

@@ -10,7 +10,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) throws Exception {
 
 		// Run unit tests.
-		GravitySimulationTests.run();
+		// GravitySimulationTests.run();
 
 		Assert.PrintResults();
 

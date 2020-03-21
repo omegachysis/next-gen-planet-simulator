@@ -1,46 +1,33 @@
 package edu.psu.planetsim;
 
 public final class Metrics {
-    
-    // sqrt of gravitational constant is approx. 8.16946 * 10^-6
-    private static final float SQRT_G = 8.16946f;
-    private static final int SQRT_G_E10 = -6;
+    private static final float EARTH_MASS = 5.97e24f;
+    private static final float M_PER_SOLAR_RADIUS = 6.957e8f;
 
-    private static final float EARTH_MASS = 5.97f;
-    private static final int EARTH_MASS_E10 = 24;
-
-    private static final float M_PER_AU = 1.496f;
-    private static final int M_PER_AU_E10 = 11;
+    // Gravitational constant in cubic solar radii earth masses per day squared:
+    public static final float G = 0.0088337f * 4;
 
     /** Return naturalized mass from kilograms and the exponent in scientific notation. */
-    public static float kg(double kg, int e10) {
-        // Divide by earth's mass to first convert into earth units.
-        kg /= EARTH_MASS;
-        e10 -= EARTH_MASS_E10;
-
-        // Scale all masses by the recip. of the sqrt. of the gravitational constant 
-        // to get naturalized units.
-        kg *= SQRT_G;
-        e10 += SQRT_G_E10;
-
-        return (float)(kg * e10);
-    }
-
-    /** Return naturalized mass from kilograms. */
     public static float kg(double kg) {
-        return kg(kg, 1);
+        // Divide by earth's mass to first convert into earth units.
+        return (float)(kg / EARTH_MASS);
     }
 
     /** Return naturalized length from meters and the exponent in scientific notation. */
-    public static float m(double m, int e10) {
+    public static float m(double m) {
         // Convert all lengths to AU.
-        m /= M_PER_AU;
-        e10 -= M_PER_AU_E10;
-        return (float)(m * e10);
+        return (float)(m / M_PER_SOLAR_RADIUS);
     }
 
-    /** Return naturalized length from meters. */
-    public static float m(double m) {
-        return m(m, 1);
+    public static double length(float x) {
+        return x * M_PER_SOLAR_RADIUS;
+    }
+
+    public static float m_s(double m_s) {
+        return (float)(m_s * 86400 / M_PER_SOLAR_RADIUS);
+    }
+
+    public static double speed(float dx) {
+        return dx * M_PER_SOLAR_RADIUS / 86400;
     }
 }
