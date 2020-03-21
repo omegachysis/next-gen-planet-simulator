@@ -50,7 +50,7 @@ public class CelestialRenderer {
         _cam.update();
 
         _environment = new Environment();
-        _environment.add(new DirectionalLight().set(1, 1, 1, 0, 0, 2));
+        _environment.add(new DirectionalLight().set(1, 1, 1, -1, 2, 0));
 
         final btCollisionConfiguration config = new btDefaultCollisionConfiguration();
         _dispatcher = new btCollisionDispatcher(config);
@@ -70,7 +70,7 @@ public class CelestialRenderer {
             Metrics.kg(7.348e22), // mass
             Metrics.m(1737.1e3), // radius
             new Vector3(Metrics.m(357e6), 0, 0), // position
-            new Vector3(0, Metrics.m_s(1100), 0), // velocity
+            new Vector3(0, Metrics.m(1100), 0), // velocity
             Vector3.Zero, "luna.jpg");
         add(luna);
     }
@@ -89,10 +89,10 @@ public class CelestialRenderer {
         _modelBatch.end();
 
         _gravitySim.applyGravityForces();
-        _world.stepSimulation(Gdx.graphics.getDeltaTime());
+        _world.stepSimulation(Gdx.graphics.getDeltaTime() * 50000);
 
         Vector3 com = _gravitySim.getCenterOfMass();
-        _cam.position.set(com.cpy().add(0f, 0f, Metrics.m(-6e8)));
+        _cam.position.set(com.cpy().add(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
         _cam.lookAt(com);
         _cam.update();
     }
