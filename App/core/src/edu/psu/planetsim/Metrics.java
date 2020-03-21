@@ -5,7 +5,7 @@ public final class Metrics {
     private static final float M_PER_SOLAR_RADIUS = 6.957e8f;
 
     // Gravitational constant in cubic solar radii earth masses per day squared:
-    public static final float G = 0.0088337f * 4;
+    public static final float G = 0.0088337f;
 
     /** Return naturalized mass from kilograms and the exponent in scientific notation. */
     public static float kg(double kg) {

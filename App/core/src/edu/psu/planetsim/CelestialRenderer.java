@@ -89,18 +89,12 @@ public class CelestialRenderer {
         _modelBatch.end();
 
         _gravitySim.applyGravityForces();
-
-        Vector3 moonPos1 = _bodies.get(1).getPosition();
         _world.stepSimulation(Gdx.graphics.getDeltaTime());
-        Vector3 moonPos2 = _bodies.get(1).getPosition();
 
         Vector3 com = _gravitySim.getCenterOfMass();
         _cam.position.set(com.cpy().add(0f, 0f, Metrics.m(-6e8)));
         _cam.lookAt(com);
         _cam.update();
-
-        // System.out.println(Metrics.length(_bodies.get(0).getPosition().dst(_bodies.get(1).getPosition())));
-        System.out.println(Metrics.speed(moonPos2.dst(moonPos1)) / Gdx.graphics.getDeltaTime());
     }
 
     public void dispose() {

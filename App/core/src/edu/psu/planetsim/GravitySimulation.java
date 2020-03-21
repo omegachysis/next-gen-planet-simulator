@@ -35,7 +35,7 @@ public class GravitySimulation {
                 // Calculate the vector force gravity by taking the scaled normalized
                 // vector from mass A to mass B by Newton's Law of Universal Gravitation.
                 float m = a.getMass() * b.getMass();
-                Vector3 force = r.nor().scl(Metrics.G * m / r.len2());
+                Vector3 force = r.cpy().nor().scl(Metrics.G * m / r.len2());
 
                 // Take advantage of Newton's Third Law of Motion to calculate
                 // the mutual attraction of any two bodies once.
