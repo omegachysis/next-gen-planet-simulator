@@ -342,11 +342,22 @@ public class MenuBar {
         button5.setSize(80, 30);
         button5.setPosition(40, 600);
 
+        TextButton zoomText;
+        zoomText = new TextButton("Zoom", textButtonStyle);
+        zoomText.setSize(150, 80);
+        zoomText.setPosition(1000, 615);
+
+        Slider zoomSlider;
+        zoomSlider = new Slider(0, 100, 10, false, skin);
+        zoomSlider.setPosition(1105, 645);
+
         stage.addActor(button1);
         stage.addActor(button2);
         stage.addActor(button3);
         stage.addActor(button4);
         stage.addActor(button5);
+        stage.addActor(zoomText);
+        stage.addActor(zoomSlider);
         stage.addActor(fileSelect);
         stage.addActor(editSelect);
         stage.addActor(viewSelect);
