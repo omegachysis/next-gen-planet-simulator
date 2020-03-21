@@ -66,6 +66,7 @@ public class MenuBar {
                         newDialog.button("Yes", true);
                         newDialog.button("No", true);
                         stage.addActor(newDialog);
+                        fileSelect.setSelectedIndex(0);
                         break;
                     case "Save As":
                         Dialog saveDialog = new Dialog("Save as", skin);
@@ -91,11 +92,6 @@ public class MenuBar {
                         table.add(fileName1);
                         table.add(nameLabel2);
                         table.add(fileName2);
-
-                        //saveDialog.text("Name your file:");
-//                        TextField savetext = new TextField("", skin);
-//                        savetext.setPosition(100, 200);
-//                        saveDialog.add(savetext);
                         saveDialog.button("Save", true);
                         saveDialog.button("Cancel", true);
 
@@ -104,8 +100,11 @@ public class MenuBar {
                         saveDialog.addActor(nameLabel2);
                         saveDialog.addActor(fileName2);
                         stage.addActor(saveDialog);
+                        fileSelect.setSelectedIndex(0);
                         break;
+
                     case "Save":
+                        fileSelect.setSelectedIndex(0);
                         break;
                 }
             }
@@ -126,7 +125,6 @@ public class MenuBar {
                 String currentSelection = editSelect.getSelected();
                 switch (currentSelection) {
                     case "Add Celestial Body":
-
                         Dialog addDialog = new Dialog("Add Celestial Body", skin);
                         addDialog.setMovable(true);
                         addDialog.setResizable(true);
@@ -185,8 +183,10 @@ public class MenuBar {
                         addDialog.addActor(addLabel5);
                         addDialog.addActor(textField5);
                         stage.addActor(addDialog);
+                        editSelect.setSelectedIndex(0);
 
                         break;
+
                     case "Delete Celestial Body":
                         Dialog deleteDialog = new Dialog("Delete Celestial Body", skin);
                         deleteDialog.setResizable(true);
@@ -197,8 +197,14 @@ public class MenuBar {
                         deleteDialog.button("Yes", true);
                         deleteDialog.button("No", false);
                         stage.addActor(deleteDialog);
+                        editSelect.setSelectedIndex(0);
                         break;
+
+                    case "Duplicate":
+                        editSelect.setSelectedIndex(0);
                 }
+
+
             }
         });
 
@@ -248,9 +254,11 @@ public class MenuBar {
                         sideDialog.addActor(table);
                         sideDialog.addActor(nameLabel);
                         stage.addActor(sideDialog);
+                        viewSelect.setSelectedIndex(0);
 
                         break;
                     case "Change Celestial Body":
+                        viewSelect.setSelectedIndex(0);
                         break;
                 }
             }
@@ -263,13 +271,6 @@ public class MenuBar {
         inspectSelect.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 inspectSelect.showList();
-//                Dialog dialog = new Dialog("Inspection Mode ", skin);
-//                dialog.setPosition(500, 500);
-//                dialog.setWidth(250);
-//                dialog.text("Discription will come here...");
-//                dialog.button("Close", true);
-//                stage.addActor(dialog);
-
             }
         });
 
@@ -288,7 +289,9 @@ public class MenuBar {
                         dialog.text("Climate description here...");
                         dialog.button("Close", true);
                         stage.addActor(dialog);
+                        inspectSelect.setSelectedIndex(0);
                         break;
+
                     case "Thermodynamics":
                         Dialog thermoDialog = new Dialog("Inspection Mode: Thermodynamics", skin);
                         thermoDialog.setMovable(true);
@@ -298,6 +301,7 @@ public class MenuBar {
                         thermoDialog.text("Thermodynamics description here...");
                         thermoDialog.button("Close", true);
                         stage.addActor(thermoDialog);
+                        inspectSelect.setSelectedIndex(0);
                         break;
                     case "Magnetism":
                         Dialog magDialog = new Dialog("Inspection Mode: Magnetism", skin);
@@ -308,6 +312,7 @@ public class MenuBar {
                         magDialog.text("Magnetism description here...");
                         magDialog.button("Close", true);
                         stage.addActor(magDialog);
+                        inspectSelect.setSelectedIndex(0);
                         break;
                 }
             }
@@ -336,7 +341,6 @@ public class MenuBar {
         button5 = new TextButton("Luna", skin, "default");
         button5.setSize(80, 30);
         button5.setPosition(40, 600);
-
 
         stage.addActor(button1);
         stage.addActor(button2);
