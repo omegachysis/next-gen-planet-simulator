@@ -66,11 +66,10 @@ public class PlanetRenderTest implements ApplicationListener {
         instance = new ModelInstance(model);
         */
         
-        int latitude = 180;
+        int latitudes = 180;
+        int longitudes = 180;
         
-        int longitude = 180;
-        
-        model1 = modelBuilder.createSphere(5f, 5f, 5f, longitude, latitude,
+        model1 = modelBuilder.createSphere(5f, 5f, 5f, longitudes - 1, latitudes - 1,
                 new Material(ColorAttribute.createDiffuse(Color.WHITE)),
                 Usage.Position | Usage.Normal | Usage.TextureCoordinates);
 
@@ -90,7 +89,9 @@ public class PlanetRenderTest implements ApplicationListener {
         mesh1.getVertices(verticesHolder);
 
         // We'll get some input map of elevations by latitude/longitude:
-        float[] elevationMap = new float[((latitude-1) * longitude) + 2];
+        float[] elevationMap = new float[latitudes * longitudes];
+        for (int i = 0; i < elevationMap.length; i++)
+            elevationMap[i] = 1;
         
         System.out.println(mesh1.getNumVertices());
         System.out.println(verticesHolder.length);
@@ -105,15 +106,15 @@ public class PlanetRenderTest implements ApplicationListener {
             // to verticesHolder[24], not verticesHolder[20].
         	
         	// This condition connects the last longitude with the first longitude to share the same vertex per latitude.
-        	if ((i+1) % (longitude+1) == 0 && i != 0)
+        	if ((i+1) % (longitudes+1) == 0 && i != 0)
         	{
-        		verticesHolder[i * 8 + 0] = verticesHolder[(i - longitude) * 8 + 0];
-                verticesHolder[i * 8 + 1] = verticesHolder[(i - longitude) * 8 + 1];
-                verticesHolder[i * 8 + 2] = verticesHolder[(i - longitude) * 8 + 2];
+        		verticesHolder[i * 8 + 0] = verticesHolder[(i - longitudes) * 8 + 0];
+                verticesHolder[i * 8 + 1] = verticesHolder[(i - longitudes) * 8 + 1];
+                verticesHolder[i * 8 + 2] = verticesHolder[(i - longitudes) * 8 + 2];
         	}
         	
         	// This condition forces north pole vertices to share the same coordinate.
-        	else if (i <= longitude && i != 0)
+        	else if (i <= longitudes && i != 0)
         	{
         		verticesHolder[i * 8 + 0] = verticesHolder[0 * 8 + 0];
                 verticesHolder[i * 8 + 1] = verticesHolder[0 * 8 + 1];
@@ -121,11 +122,11 @@ public class PlanetRenderTest implements ApplicationListener {
         	}
         	
         	// This condition forces south pole vertices to share the same coordinate.
-        	else if (i > (longitude * (latitude + 1)))
+        	else if (i > (longitudes * (latitudes + 1)))
         	{
-        		verticesHolder[i * 8 + 0] = verticesHolder[(longitude * (latitude + 1)) * 8 + 0];
-                verticesHolder[i * 8 + 1] = verticesHolder[(longitude * (latitude + 1)) * 8 + 1];
-                verticesHolder[i * 8 + 2] = verticesHolder[(longitude * (latitude + 1)) * 8 + 2];
+        		verticesHolder[i * 8 + 0] = verticesHolder[(longitudes * (latitudes + 1)) * 8 + 0];
+                verticesHolder[i * 8 + 1] = verticesHolder[(longitudes * (latitudes + 1)) * 8 + 1];
+                verticesHolder[i * 8 + 2] = verticesHolder[(longitudes * (latitudes + 1)) * 8 + 2];
         	}
         	else
         	{
@@ -152,13 +153,13 @@ public class PlanetRenderTest implements ApplicationListener {
             // I (Danny Ruan) will clean this up at some point because I don't like using empty thens
             // in if-elses. The first three conditions prevent reassignment of elevations to already-
             // existing coordinates.
-            if ((i+1) % (longitude+1) == 0 && i != 0)
+            if ((i+1) % (longitudes+1) == 0 && i != 0)
         	{
         	}
-        	else if (i <= longitude && i != 0)
+        	else if (i <= longitudes && i != 0)
         	{
         	}
-        	else if (i > (longitude * (latitude + 1)))
+        	else if (i > (longitudes * (latitudes + 1)))
         	{
         	}
         	else
