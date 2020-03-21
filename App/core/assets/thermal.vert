@@ -1,4 +1,4 @@
-#version 120
+#version 110
 attribute vec2 a_position;
 varying vec2 f_position;
 
