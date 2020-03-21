@@ -66,7 +66,7 @@ public class ThermalTest extends ApplicationAdapter {
         shader.begin();
         shader.setUniformi("u_texture", 0);
         shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime());
-        shader.setUniformf("u_dx", -1f); //1f / fbo.getWidth());
+        shader.setUniformf("u_dx", 1f / fbo.getWidth());
         mesh.render(shader, GL20.GL_TRIANGLES, 0, 6);
         shader.end();
         fbo.end();
