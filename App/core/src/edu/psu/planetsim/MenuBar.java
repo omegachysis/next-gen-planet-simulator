@@ -27,7 +27,7 @@ public class MenuBar {
 
     private TextButton button1;
     private TextButton button2;
-    private TextButton button3;
+    private TextField speedbutton;
     private TextButton button4;
     private TextButton button5;
     private TextButton.TextButtonStyle textButtonStyle;
@@ -328,11 +328,15 @@ public class MenuBar {
 
         button2 = new TextButton("Speed", textButtonStyle);
         button2.setSize(150, 80);
-        button2.setPosition(1000, 655);
+        button2.setPosition(940, 655);
 
-        button3 = new TextButton("100", skin, "default");
-        button3.setSize(60, 35);
-        button3.setPosition(1105, 680);
+        //button3 = new TextButton("100", skin, "default");
+        //button3.setSize(60, 35);
+        //button3.setPosition(1105, 680);
+
+        speedbutton = new TextField("",skin);
+        speedbutton.setSize(110,35);
+        speedbutton.setPosition(1050,680);
 
         button4 = new TextButton("Earth", skin, "default");
         button4.setSize(110, 30);
@@ -353,7 +357,7 @@ public class MenuBar {
 
         stage.addActor(button1);
         stage.addActor(button2);
-        stage.addActor(button3);
+        stage.addActor(speedbutton);
         stage.addActor(button4);
         stage.addActor(button5);
         stage.addActor(zoomText);
