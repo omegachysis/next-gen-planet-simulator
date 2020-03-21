@@ -1,38 +1,43 @@
-#version 110
+#version 120
 varying vec2 f_position;
 uniform sampler2D u_texture;
-uniform float u_dx;
-uniform float u_dt;
+uniform highp float u_dx;
+uniform highp float u_dt;
 
-float getF(vec3 pixel)
+// Do a base-255 conversion between RGB values and a single packed value.
+highp float getF(vec3 pixel)
 {
-    return floor(pixel.r * 255.0) * 255.0 * 255.0 + 
-        floor(pixel.g * 255.0) * 255.0 + 
-        floor(pixel.b * 255.0);
+    highp float r = pixel.r * 255.0;
+    highp float g = pixel.g * 255.0;
+    highp float b = pixel.b * 255.0;
+    return floor(r) * 256.0 * 256.0 +
+        floor(g) * 256.0 + 
+        floor(b);
 }
 
-vec3 getColor(float f)
+// Do a base-255 conversion between RGB values and a single packed value.
+vec3 getColor(highp float f)
 {
-    float r = mod(f, 255.0);
-    float g = mod(floor(f / 255.0), 255.0 * 255.0);
-    float b = floor(f / 255.0 / 255.0);
-    return vec3(r, g, b);
+    highp float b = mod(f, 256.0);
+    highp float g = mod(floor(f / 256.0), 256.0 * 256.0);
+    highp float r = floor(f / 256.0 / 256.0);
+    return vec3(r / 255.0, g / 255.0, b / 255.0);
 }
 
 void main()
 {
     // Fetch nearby pixel values for calculating derivatives.
-    float c = texture2D(u_texture, vec2(f_position.x, f_position.y)).r;
-    float w = texture2D(u_texture, vec2(f_position.x - u_dx, f_position.y)).r;
-    float e = texture2D(u_texture, vec2(f_position.x + u_dx, f_position.y)).r;
-    float n = texture2D(u_texture, vec2(f_position.x, f_position.y - u_dx)).r;
-    float s = texture2D(u_texture, vec2(f_position.x, f_position.y + u_dx)).r;
+    highp float c = getF(texture2D(u_texture, vec2(f_position.x, f_position.y)).rgb);
+    highp float w = getF(texture2D(u_texture, vec2(f_position.x - u_dx, f_position.y)).rgb);
+    highp float e = getF(texture2D(u_texture, vec2(f_position.x + u_dx, f_position.y)).rgb);
+    highp float n = getF(texture2D(u_texture, vec2(f_position.x, f_position.y - u_dx)).rgb);
+    highp float s = getF(texture2D(u_texture, vec2(f_position.x, f_position.y + u_dx)).rgb);
 
     // Calculate laplacian.
-    float laplacian = (w + e + n + s) * 0.25 - c;
+    highp float laplacian = (w + e + n + s) * 0.25 - c;
 
     // Calculate heat equation.
-    float df_dt = 10.0 * laplacian * u_dt;
+    highp float df_dt = 0.5 * laplacian * u_dt;
 
-    gl_FragColor = vec4(c + df_dt, 0, 0, 1);
+    gl_FragColor = vec4(getColor(c + df_dt), 1);
 }

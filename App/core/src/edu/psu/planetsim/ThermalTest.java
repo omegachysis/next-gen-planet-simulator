@@ -46,13 +46,13 @@ public class ThermalTest extends ApplicationAdapter {
         });
         mesh.setIndices(new short[] { 0, 2, 1, 1, 2, 3 });
         
-        fbo = new FrameBuffer(Format.RGB888, 500, 500, false);
+        fbo = new FrameBuffer(Format.RGB888, 128, 128, false);
         batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
+        img = new Texture("heat.png");
 
         fbo.begin();
         batch.begin();
-        batch.draw(img, 0, 0);
+        batch.draw(img, 0, 0, 1280, 800);
         batch.end();
         fbo.end();
 	}
@@ -72,7 +72,7 @@ public class ThermalTest extends ApplicationAdapter {
         fbo.end();
 
         batch.begin();
-        batch.draw(fbo.getColorBufferTexture(), 0, 0);
+        batch.draw(fbo.getColorBufferTexture(), 0, 0, 1280, 800);
         batch.end();
 	}
 
