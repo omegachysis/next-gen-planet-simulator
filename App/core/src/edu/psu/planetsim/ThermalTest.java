@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class ThermalTest extends ApplicationAdapter {
-    ShaderProgram testShader;
+    ShaderProgram shader;
     SpriteBatch batch;
     Texture img;
     FrameBuffer fbo;
@@ -32,11 +32,12 @@ public class ThermalTest extends ApplicationAdapter {
 	}
 
 	public void create() {
-		testShader = loadShader("thermal");
+        shader = loadShader("thermal");
 
+        // Create a quad for performing the draw instruction that calculates 
+        // the heat equation on the graphics card.
         mesh = new Mesh(
             true, 4, 6, new VertexAttribute(Usage.Position, 2, "a_position"));
-
         mesh.setVertices(new float[] { 
             -1, 1,
             1, 1,
@@ -48,6 +49,12 @@ public class ThermalTest extends ApplicationAdapter {
         fbo = new FrameBuffer(Format.RGB888, 500, 500, false);
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
+
+        fbo.begin();
+        batch.begin();
+        batch.draw(img, 0, 0);
+        batch.end();
+        fbo.end();
 	}
 
 	public void render() {
@@ -55,9 +62,13 @@ public class ThermalTest extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         fbo.begin();
-        testShader.begin();
-        mesh.render(testShader, GL20.GL_TRIANGLES, 0, 6);
-        testShader.end();
+        fbo.getColorBufferTexture().bind(0);
+        shader.begin();
+        shader.setUniformi("u_texture", 0);
+        shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime());
+        shader.setUniformf("u_dx", -1f); //1f / fbo.getWidth());
+        mesh.render(shader, GL20.GL_TRIANGLES, 0, 6);
+        shader.end();
         fbo.end();
 
         batch.begin();
@@ -67,6 +78,9 @@ public class ThermalTest extends ApplicationAdapter {
 
 	public void dispose() {
         batch.dispose();
-        testShader.dispose();
+        shader.dispose();
+        img.dispose();
+        mesh.dispose();
+        fbo.dispose();
     }
 }
