@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public class PlanetSim extends ApplicationAdapter {
+public class PlanetSim extends ApplicationAdapter 
+{
 	MenuBar menuBar;
 	Stage stage;
 	//SideBar sideBar;
@@ -20,7 +20,8 @@ public class PlanetSim extends ApplicationAdapter {
 	Skin skin;
 	CelestialRenderer _cRenderer;
 
-	public void create() {
+	public void create() 
+	{
 		font = new BitmapFont();
 		skin = new Skin();
 
@@ -36,11 +37,13 @@ public class PlanetSim extends ApplicationAdapter {
 		_cRenderer = new CelestialRenderer(menuBar);
 	}
 
-	public void resize(final int width, final int height) {
+	public void resize(final int width, final int height)
+	{
 		stage.getViewport().update(width, height, true);
 	}
 
-	public void render() {
+	public void render() 
+	{
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		
@@ -50,7 +53,8 @@ public class PlanetSim extends ApplicationAdapter {
         stage.draw();
 	}
 	
-	public void dispose() {
+	public void dispose() 
+	{
 		stage.dispose();
 		_cRenderer.dispose();
     }

@@ -14,14 +14,16 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public class ThermalTest extends ApplicationAdapter {
+public class ThermalTest extends ApplicationAdapter 
+{
     ShaderProgram shader;
     SpriteBatch batch;
     Texture img;
     FrameBuffer fbo;
     Mesh mesh;
 
-	public static ShaderProgram loadShader(final String name) {
+    public static ShaderProgram loadShader(final String name) 
+    {
         final ShaderProgram res = new ShaderProgram(
 			Gdx.files.getFileHandle(name + ".vert", Files.FileType.Internal),
 			Gdx.files.getFileHandle(name + ".frag", Files.FileType.Internal));
@@ -31,14 +33,16 @@ public class ThermalTest extends ApplicationAdapter {
 		return res;
 	}
 
-	public void create() {
+    public void create() 
+    {
         shader = loadShader("thermal");
 
         // Create a quad for performing the draw instruction that calculates 
         // the heat equation on the graphics card.
         mesh = new Mesh(
             true, 4, 6, new VertexAttribute(Usage.Position, 2, "a_position"));
-        mesh.setVertices(new float[] { 
+        mesh.setVertices(new float[] 
+        { 
             -1, 1,
             1, 1,
             -1, -1,
@@ -57,7 +61,8 @@ public class ThermalTest extends ApplicationAdapter {
         fbo.end();
 	}
 
-	public void render() {
+    public void render() 
+    {
 		Gdx.gl.glClearColor(0.4f, 0.1f, 0.3f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -76,7 +81,8 @@ public class ThermalTest extends ApplicationAdapter {
         batch.end();
 	}
 
-	public void dispose() {
+    public void dispose() 
+    {
         batch.dispose();
         shader.dispose();
         img.dispose();

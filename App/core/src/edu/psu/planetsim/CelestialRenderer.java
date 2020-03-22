@@ -9,9 +9,9 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.dynamics.*;
-import com.badlogic.gdx.physics.bullet.linearmath.*;
 
-public class CelestialRenderer {
+public class CelestialRenderer 
+{
     private final PerspectiveCamera _cam;
     private final ModelBatch _modelBatch;
     private final btDynamicsWorld _world;
@@ -21,26 +21,10 @@ public class CelestialRenderer {
     private final btDbvtBroadphase _pairCache;
     private final btSequentialImpulseConstraintSolver _solver;
     private final MenuBar _menuBar;
-
     private final ArrayList<CelestialBody> _bodies = new ArrayList<>();
 
-    static class MyMotionState extends btMotionState {
-        private final Matrix4 _transform;
-
-        public MyMotionState(final Matrix4 transform) {
-            _transform = transform;
-        }
-
-        public void getWorldTransform(final Matrix4 worldTrans) {
-            worldTrans.set(_transform);
-        }
-
-        public void setWorldTransform(final Matrix4 worldTrans) {
-            _transform.set(worldTrans);
-        }
-    }
-
-    public CelestialRenderer(MenuBar menuBar) {
+    public CelestialRenderer(final MenuBar menuBar) 
+    {
         Bullet.init();
 
         _menuBar = menuBar;
@@ -80,15 +64,18 @@ public class CelestialRenderer {
         add(luna);
     }
 
-    public void add(final CelestialBody body) {
+    public void add(final CelestialBody body) 
+    {
         _bodies.add(body);
         body.attachTo(_world);
         body.attachTo(_gravitySim);
     }
 
-    public void render() {
+    public void render() 
+    {
         _modelBatch.begin(_cam);
-        for (final CelestialBody body : _bodies) {
+        for (final CelestialBody body : _bodies) 
+        {
             body.render(_modelBatch, _environment);
         }
         _modelBatch.end();
@@ -100,15 +87,17 @@ public class CelestialRenderer {
         _cam.position.set(target.cpy().add(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
         _cam.lookAt(target);
 
-        Interpolation interp = Interpolation.pow4Out;
+        final Interpolation interp = Interpolation.pow4Out;
         _cam.fieldOfView = interp.apply(200f, 0.1f, _menuBar.getZoom());
         _cam.update();
     }
 
-    public void dispose() {
+    public void dispose() 
+    {
         _modelBatch.dispose();
         _world.dispose();
-        for (final CelestialBody body : _bodies) {
+        for (final CelestialBody body : _bodies) 
+        {
             body.dispose();
         }
     }

@@ -368,15 +368,20 @@ public class MenuBar {
         stage.addActor(inspectSelect);
     }
 
-    public int getSpeedFactor() {
-        try {
+    public int getSpeedFactor() 
+    {
+        try 
+        {
             return Integer.parseInt(speedbutton.getText());
-        } catch (NumberFormatException e) {
+        } 
+        catch (NumberFormatException e) 
+        {
             return 1;
         }
     }
 
-    public float getZoom() {
+    public float getZoom() 
+    {
         return zoomSlider.getValue();
     }
 }
