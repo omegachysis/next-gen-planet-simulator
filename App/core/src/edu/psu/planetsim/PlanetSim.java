@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -17,9 +18,6 @@ public class PlanetSim extends ApplicationAdapter
 	AppState appState;
 	MenuBar menuBar;
 	Stage stage;
-	//SideBar sideBar;
-	//SelectBox selectBox;
-	//SelectBox.SelectBoxStyle style;
 	CelestialRenderer _cRenderer;
 
 	public void create() 
@@ -27,7 +25,12 @@ public class PlanetSim extends ApplicationAdapter
 		appState = new AppState();
 
 		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
+
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(stage);
+
+		Gdx.input.setInputProcessor(multiplexer);
+//		Gdx.input.setInputProcessor(stage);
 
 		menuBar = new MenuBar(stage, appState);
 

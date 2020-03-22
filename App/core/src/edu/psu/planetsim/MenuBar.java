@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Align;
 
+import javax.swing.ButtonGroup;
 import javax.swing.text.View;
 
 import static com.badlogic.gdx.utils.Align.center;
@@ -187,7 +188,6 @@ public class MenuBar {
                         addDialog.addActor(textField5);
                         stage.addActor(addDialog);
                         editSelect.setSelectedIndex(0);
-
                         break;
 
                     case "Delete Celestial Body":
@@ -261,6 +261,18 @@ public class MenuBar {
 
                         break;
                     case "Change Celestial Body":
+                        Dialog changeDialog = new Dialog("Change Celestial Body", skin);
+                        changeDialog.setMovable(true);
+                        changeDialog.setResizable(true);
+                        changeDialog.setPosition(500, 500);
+                        changeDialog.setWidth(250);
+                        changeDialog.text("Change celestial body selection...");
+//                        Label planet1 = new Label("Earth", skin);
+//                        Label planet2 = new Label("Luna", skin);
+//                        ButtonGroup select = new ButtonGroup();
+                        changeDialog.button("Change", true);
+                        changeDialog.button("Close", true);
+                        stage.addActor(changeDialog);
                         viewSelect.setSelectedIndex(0);
                         break;
                 }
