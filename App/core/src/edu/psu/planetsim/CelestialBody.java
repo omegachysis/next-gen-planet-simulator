@@ -10,6 +10,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -35,10 +36,11 @@ public class CelestialBody extends KinematicObject {
         // Load a texture.
         final FileHandle imageFileHandle = Gdx.files.getFileHandle(
             textureFile, Files.FileType.Internal);
-        final Texture texture1 = new Texture(imageFileHandle);
+        final Texture texture = new Texture(imageFileHandle, true);
+        texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
         // Build the model.
-        TextureAttribute texAttr = new TextureAttribute(TextureAttribute.Diffuse, texture1);
+        TextureAttribute texAttr = new TextureAttribute(TextureAttribute.Diffuse, texture);
         _modelBase = new ModelBuilder().createSphere(radius * 2, radius * 2, radius * 2, 50, 50,
                 new Material(texAttr),
                 Usage.Position | Usage.Normal | Usage.TextureCoordinates);

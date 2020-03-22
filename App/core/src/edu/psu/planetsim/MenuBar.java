@@ -32,6 +32,7 @@ public class MenuBar {
     private TextButton button5;
     private TextButton.TextButtonStyle textButtonStyle;
     private Dialog endDialog;
+    private Slider zoomSlider;
     BitmapFont font;
     Color fontColor;
 
@@ -351,8 +352,7 @@ public class MenuBar {
         zoomText.setSize(150, 80);
         zoomText.setPosition(1000, 615);
 
-        Slider zoomSlider;
-        zoomSlider = new Slider(0, 100, 10, false, skin);
+        zoomSlider = new Slider(0f, 1f, 0.001f, false, skin);
         zoomSlider.setPosition(1105, 645);
 
         stage.addActor(button1);
@@ -374,5 +374,9 @@ public class MenuBar {
         } catch (NumberFormatException e) {
             return 1;
         }
+    }
+
+    public float getZoom() {
+        return zoomSlider.getValue();
     }
 }

@@ -98,7 +98,10 @@ public class CelestialRenderer {
 
         Vector3 com = _gravitySim.getCenterOfMass();
         _cam.position.set(com.cpy().add(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
-        _cam.lookAt(com);
+        _cam.lookAt(_bodies.get(0).getPosition());
+
+        Interpolation interp = Interpolation.pow4Out;
+        _cam.fieldOfView = interp.apply(200f, 0.1f, _menuBar.getZoom());
         _cam.update();
     }
 
