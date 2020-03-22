@@ -46,14 +46,17 @@ public class CelestialBody extends KinematicObject {
                 Usage.Position | Usage.Normal | Usage.TextureCoordinates);
 
         _model = new ModelInstance(_modelBase);
-        _model.transform.set(initPosition, new Quaternion(Vector3.X, 90f));
 
         // Initialize physics.
         _radius = radius;
-        resetUnderlyingPhysics(initVelocity, initSpin);
+        resetUnderlyingPhysics(initPosition, initVelocity, initSpin);
     }
 
-    public void resetUnderlyingPhysics(final Vector3 velocity, final Vector3 spin) {
+    public void resetUnderlyingPhysics(final Vector3 position, 
+    final Vector3 velocity, final Vector3 spin) {
+        _model.transform.set(position, 
+            new Quaternion().setFromCross(Vector3.Y, spin));
+
         final btCollisionShape shape = new btSphereShape(_radius);
         final Vector3 inertia = new Vector3();
         shape.calculateLocalInertia(_mass, inertia);

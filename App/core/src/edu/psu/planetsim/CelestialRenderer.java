@@ -52,7 +52,7 @@ public class CelestialRenderer {
         _cam.update();
 
         _environment = new Environment();
-        _environment.add(new DirectionalLight().set(1, 1, 1, -1, 2, 0));
+        _environment.add(new DirectionalLight().set(1, 1, 1, 1, 2, 0));
 
         final btCollisionConfiguration config = new btDefaultCollisionConfiguration();
         _dispatcher = new btCollisionDispatcher(config);
@@ -67,7 +67,7 @@ public class CelestialRenderer {
             Metrics.kg(5.97e24), // mass
             Metrics.m(6378.1e3), // radius
             Vector3.Zero, Vector3.Zero, 
-            new Vector3(0, 0, 7.292115e-5f), // spin
+            new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f), // spin
             "earth.jpg");
         add(earth);
         final CelestialBody luna = new CelestialBody(
