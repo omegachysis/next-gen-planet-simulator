@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Vector3;
  */
 public class AppState
 {
-    public HashMap<UUID, CelestialBody> bodies;
+    public HashMap<UUID, CelestialBody> bodies = new HashMap<>();
 
     public float speed = 1;
     public float zoom = 0.6f;
@@ -28,6 +28,6 @@ public class AppState
         public Vector3 spin;
         public Quaternion orientation;
         public float[] elevationMap;
-        public ArrayList<UUID> satellites;
+        public ArrayList<UUID> satellites = new ArrayList<>();
     }
 }

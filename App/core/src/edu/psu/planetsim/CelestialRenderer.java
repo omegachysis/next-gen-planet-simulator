@@ -24,6 +24,14 @@ public class CelestialRenderer
     private final btSequentialImpulseConstraintSolver _solver;
     private final ArrayList<CelestialBody> _bodies = new ArrayList<>();
     private final AppState _appState;
+    private UUID _currentCelestialBody;
+    
+    /** Which body to actually zoom to in the simulation.
+     * Specify -1 to zoom to the center of mass.
+     * Specify 0 to zoom to the main celestial body.
+     * Specify a number >= 1 to zoom to that indexed natural satellite.
+     */
+    public int zoomTo = -1;
 
     public CelestialRenderer(final AppState appState) 
     {
@@ -48,34 +56,28 @@ public class CelestialRenderer
         _world.setGravity(Vector3.Zero);
 
         _gravitySim = new GravitySimulation();
+    }
 
-        AppState.CelestialBody earthDto = new AppState.CelestialBody();
-        earthDto.id = UUID.randomUUID();
-        earthDto.name = "Earth";
-        earthDto.mass = 5.97e24;
-        earthDto.position = new Vector3();
-        earthDto.velocity = new Vector3();
-        earthDto.spin = new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f);
-        earthDto.orientation = new Quaternion().setFromCross(Vector3.Y, earthDto.spin);
+    public UUID getCurrentCelestialBody()
+    {
+        return _currentCelestialBody;
+    }
+    
+    public void setCurrentCelestialBody(UUID value)
+    {
+        zoomTo = 0;
+        clear();
 
-        CelestialBody earth = new CelestialBody(earthDto);
-        add(earth);
-
-        // final CelestialBody earth = new CelestialBody(
-        //     Metrics.kg(5.97e24), // mass
-        //     Metrics.m(6378.1e3), // radius
-        //     Vector3.Zero, Vector3.Zero, 
-        //     new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f), // spin
-        //     "earth.jpg");
-        // add(earth);
-        // final CelestialBody luna = new CelestialBody(
-        //     Metrics.kg(7.348e22), // mass
-        //     Metrics.m(1737.1e3), // radius
-        //     new Vector3(Metrics.m(357e6), 0, 0), // position
-        //     new Vector3(0, Metrics.m(1100), 0), // velocity
-        //     new Vector3(0, 0, 2.6617e-6f).rotate(Vector3.Y, 1.5f), // spin
-        //     "luna.jpg");
-        // add(luna);
+        _currentCelestialBody = value;
+        if (_appState.bodies.containsKey(value))
+        {
+            AppState.CelestialBody dto = _appState.bodies.get(value);
+            add(new CelestialBody(dto));
+            for (UUID satelliteId : dto.satellites)
+            {
+                add(new CelestialBody(_appState.bodies.get(satelliteId)));
+            }
+        }
     }
 
     public void add(final CelestialBody body) 
@@ -83,6 +85,25 @@ public class CelestialRenderer
         _bodies.add(body);
         body.attachTo(_world);
         body.attachTo(_gravitySim);
+    }
+
+    public void remove(final CelestialBody body)
+    {
+        _bodies.remove(body);
+        body.removeFrom(_world);
+        body.removeFrom(_gravitySim);
+    }
+
+    public void clear()
+    {
+        for (final CelestialBody body : _bodies) 
+        {
+            body.removeFrom(_world);
+            body.removeFrom(_gravitySim);
+            body.dispose();
+        }
+
+        _bodies.clear();
     }
 
     public void render() 
@@ -97,7 +118,19 @@ public class CelestialRenderer
         _gravitySim.applyGravityForces();
         _world.stepSimulation(Gdx.graphics.getDeltaTime() * _appState.speed);
 
-        final Vector3 target = _bodies.get(0).getPosition();
+        final Vector3 target;
+        if (zoomTo == -1) 
+        {
+            target = _gravitySim.getCenterOfMass();
+        }
+        else
+        {
+            if (zoomTo < _bodies.size())
+                target = _bodies.get(zoomTo).getPosition();
+            else
+                target = Vector3.Zero;
+        }
+
         _cam.position.set(target.cpy().add(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
         _cam.lookAt(target);
 
@@ -110,9 +143,6 @@ public class CelestialRenderer
     {
         _modelBatch.dispose();
         _world.dispose();
-        for (final CelestialBody body : _bodies) 
-        {
-            body.dispose();
-        }
+        clear();
     }
 }

@@ -35,6 +35,7 @@ public class CelestialBody extends KinematicObject
 
         // Initialize physics.
         _radius = radius;
+        mass = (float)dto.mass;
         resetUnderlyingPhysics(dto.position, dto.velocity, dto.spin, dto.orientation);
     }
 
