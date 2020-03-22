@@ -75,7 +75,7 @@ public class CelestialRenderer {
             Metrics.m(1737.1e3), // radius
             new Vector3(Metrics.m(357e6), 0, 0), // position
             new Vector3(0, Metrics.m(1100), 0), // velocity
-            new Vector3(0, 0, 2.6617e-6f), // spin
+            new Vector3(0, 0, 2.6617e-6f).rotate(Vector3.Y, 1.5f), // spin
             "luna.jpg");
         add(luna);
     }
@@ -96,9 +96,9 @@ public class CelestialRenderer {
         _gravitySim.applyGravityForces();
         _world.stepSimulation(Gdx.graphics.getDeltaTime() * _menuBar.getSpeedFactor());
 
-        Vector3 com = _gravitySim.getCenterOfMass();
-        _cam.position.set(com.cpy().add(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
-        _cam.lookAt(_bodies.get(0).getPosition());
+        final Vector3 target = _bodies.get(0).getPosition();
+        _cam.position.set(target.cpy().add(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
+        _cam.lookAt(target);
 
         Interpolation interp = Interpolation.pow4Out;
         _cam.fieldOfView = interp.apply(200f, 0.1f, _menuBar.getZoom());
