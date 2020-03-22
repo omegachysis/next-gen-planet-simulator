@@ -66,14 +66,17 @@ public class CelestialRenderer {
         final CelestialBody earth = new CelestialBody(
             Metrics.kg(5.97e24), // mass
             Metrics.m(6378.1e3), // radius
-            Vector3.Zero, Vector3.Zero, Vector3.Zero, "earth.jpg");
+            Vector3.Zero, Vector3.Zero, 
+            new Vector3(0, 0, 7.292115e-5f), // spin
+            "earth.jpg");
         add(earth);
         final CelestialBody luna = new CelestialBody(
             Metrics.kg(7.348e22), // mass
             Metrics.m(1737.1e3), // radius
             new Vector3(Metrics.m(357e6), 0, 0), // position
             new Vector3(0, Metrics.m(1100), 0), // velocity
-            Vector3.Zero, "luna.jpg");
+            new Vector3(0, 0, 2.6617e-6f), // spin
+            "luna.jpg");
         add(luna);
     }
 

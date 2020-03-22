@@ -57,7 +57,9 @@ public class CelestialBody extends KinematicObject {
         shape.calculateLocalInertia(_mass, inertia);
         _body = new btRigidBody(_mass, new MotionState(_model.transform), shape, inertia);
         _body.applyCentralImpulse(velocity.cpy().scl(_mass));
-        _body.applyTorqueImpulse(spin.cpy().scl(_mass));
+
+        final float moment = 2 * _mass * _radius * _radius / 5;
+        _body.applyTorqueImpulse(spin.cpy().scl(moment));
     }
 
     public void attachTo(final btDynamicsWorld world) {
