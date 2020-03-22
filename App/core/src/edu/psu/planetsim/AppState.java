@@ -15,12 +15,16 @@ public class AppState
 {
     public HashMap<UUID, CelestialBody> bodies;
 
+    public float speed = 1;
+    public float zoom = 0.6f;
+
     static class CelestialBody
     {
         public UUID id;
         public String name;
-        public float mass;
+        public double mass;
         public Vector3 position;
+        public Vector3 velocity;
         public Vector3 spin;
         public Quaternion orientation;
         public float[] elevationMap;

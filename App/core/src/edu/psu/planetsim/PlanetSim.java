@@ -3,7 +3,6 @@ package edu.psu.planetsim;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -11,30 +10,28 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 
 public class PlanetSim extends ApplicationAdapter 
 {
+	AppState appState;
 	MenuBar menuBar;
 	Stage stage;
 	//SideBar sideBar;
 	//SelectBox selectBox;
 	//SelectBox.SelectBoxStyle style;
-    BitmapFont font;
-	Skin skin;
 	CelestialRenderer _cRenderer;
 
 	public void create() 
 	{
-		font = new BitmapFont();
-		skin = new Skin();
+		appState = new AppState();
 
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 
-		menuBar = new MenuBar(stage);
+		menuBar = new MenuBar(stage, appState);
 
 		// sideBar = new SideBar(stage);
 		// selectBox = new SelectBox(style);
 		// selectBox = new SelectBox(style);
 
-		_cRenderer = new CelestialRenderer(menuBar);
+		_cRenderer = new CelestialRenderer(appState);
 	}
 
 	public void resize(final int width, final int height)

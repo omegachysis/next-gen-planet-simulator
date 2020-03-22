@@ -1,6 +1,8 @@
 package edu.psu.planetsim;
 
 import java.util.ArrayList;
+import java.util.UUID;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.*;
@@ -20,14 +22,14 @@ public class CelestialRenderer
     private final btCollisionDispatcher _dispatcher;
     private final btDbvtBroadphase _pairCache;
     private final btSequentialImpulseConstraintSolver _solver;
-    private final MenuBar _menuBar;
     private final ArrayList<CelestialBody> _bodies = new ArrayList<>();
+    private final AppState _appState;
 
-    public CelestialRenderer(final MenuBar menuBar) 
+    public CelestialRenderer(final AppState appState) 
     {
         Bullet.init();
 
-        _menuBar = menuBar;
+        _appState = appState;
         _modelBatch = new ModelBatch();
 
         _cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -47,21 +49,33 @@ public class CelestialRenderer
 
         _gravitySim = new GravitySimulation();
 
-        final CelestialBody earth = new CelestialBody(
-            Metrics.kg(5.97e24), // mass
-            Metrics.m(6378.1e3), // radius
-            Vector3.Zero, Vector3.Zero, 
-            new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f), // spin
-            "earth.jpg");
+        AppState.CelestialBody earthDto = new AppState.CelestialBody();
+        earthDto.id = UUID.randomUUID();
+        earthDto.name = "Earth";
+        earthDto.mass = 5.97e24;
+        earthDto.position = new Vector3();
+        earthDto.velocity = new Vector3();
+        earthDto.spin = new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f);
+        earthDto.orientation = new Quaternion().setFromCross(Vector3.Y, earthDto.spin);
+
+        CelestialBody earth = new CelestialBody(earthDto);
         add(earth);
-        final CelestialBody luna = new CelestialBody(
-            Metrics.kg(7.348e22), // mass
-            Metrics.m(1737.1e3), // radius
-            new Vector3(Metrics.m(357e6), 0, 0), // position
-            new Vector3(0, Metrics.m(1100), 0), // velocity
-            new Vector3(0, 0, 2.6617e-6f).rotate(Vector3.Y, 1.5f), // spin
-            "luna.jpg");
-        add(luna);
+
+        // final CelestialBody earth = new CelestialBody(
+        //     Metrics.kg(5.97e24), // mass
+        //     Metrics.m(6378.1e3), // radius
+        //     Vector3.Zero, Vector3.Zero, 
+        //     new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f), // spin
+        //     "earth.jpg");
+        // add(earth);
+        // final CelestialBody luna = new CelestialBody(
+        //     Metrics.kg(7.348e22), // mass
+        //     Metrics.m(1737.1e3), // radius
+        //     new Vector3(Metrics.m(357e6), 0, 0), // position
+        //     new Vector3(0, Metrics.m(1100), 0), // velocity
+        //     new Vector3(0, 0, 2.6617e-6f).rotate(Vector3.Y, 1.5f), // spin
+        //     "luna.jpg");
+        // add(luna);
     }
 
     public void add(final CelestialBody body) 
@@ -81,14 +95,14 @@ public class CelestialRenderer
         _modelBatch.end();
 
         _gravitySim.applyGravityForces();
-        _world.stepSimulation(Gdx.graphics.getDeltaTime() * _menuBar.getSpeedFactor());
+        _world.stepSimulation(Gdx.graphics.getDeltaTime() * _appState.speed);
 
         final Vector3 target = _bodies.get(0).getPosition();
         _cam.position.set(target.cpy().add(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
         _cam.lookAt(target);
 
         final Interpolation interp = Interpolation.pow4Out;
-        _cam.fieldOfView = interp.apply(200f, 0.1f, _menuBar.getZoom());
+        _cam.fieldOfView = interp.apply(180f, 0.1f, _appState.zoom);
         _cam.update();
     }
 

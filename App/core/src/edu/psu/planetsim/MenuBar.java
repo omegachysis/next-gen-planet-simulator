@@ -22,6 +22,7 @@ import static com.badlogic.gdx.utils.Align.center;
 
 public class MenuBar {
 
+    private AppState _appState;
     private Stage stage;
     private Skin skin;
 
@@ -37,8 +38,9 @@ public class MenuBar {
     Color fontColor;
 
 
-    public MenuBar(final Stage stage) {
+    public MenuBar(final Stage stage, AppState appState) {
 
+        _appState = appState;
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         final SelectBox<String> fileSelect= new SelectBox<>(skin);
@@ -338,6 +340,18 @@ public class MenuBar {
         speedbutton = new TextField("",skin);
         speedbutton.setSize(110,35);
         speedbutton.setPosition(1050,680);
+        speedbutton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                try 
+                {
+                    _appState.speed = (float)Double.parseDouble(speedbutton.getText());
+                } 
+                catch (NumberFormatException e) 
+                {
+                    _appState.speed = 0.6f;
+                }
+            }
+        });
 
         button4 = new TextButton("Earth", skin, "default");
         button4.setSize(110, 30);
@@ -354,6 +368,12 @@ public class MenuBar {
 
         zoomSlider = new Slider(0f, 1f, 0.001f, false, skin);
         zoomSlider.setPosition(1105, 645);
+        zoomSlider.setValue(appState.zoom);
+        zoomSlider.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                _appState.zoom = zoomSlider.getValue();
+            }
+        });
 
         stage.addActor(button1);
         stage.addActor(button2);
