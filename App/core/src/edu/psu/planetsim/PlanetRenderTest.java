@@ -56,7 +56,7 @@ public class PlanetRenderTest implements ApplicationListener {
         Gdx.input.setInputProcessor(camController);
         
         environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.1f, 0.1f, 0.1f, 1f));
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
         environment.add(new DirectionalLight().set(1f, 1f, 1f, 1f, 0.2f, 0.2f));
  
         ModelBuilder modelBuilder = new ModelBuilder();
@@ -93,7 +93,11 @@ public class PlanetRenderTest implements ApplicationListener {
         // We'll get some input map of elevations by latitude/longitude:
         float[] elevationMap = new float[latitudes * longitudes];
         for (int i = 0; i < elevationMap.length; i++)
-            elevationMap[i] = 1;
+        {
+            elevationMap[i] = 1f;
+            elevationMap[i] += (float)Math.sin((i / 180) * 0.4f) * 0.02f;
+            elevationMap[i] += (float)Math.sin((i % 180) * 0.4f) * 0.02f;
+        }
         
         //System.out.println(mesh1.getNumVertices());
         //System.out.println(verticesHolder.length);
@@ -181,23 +185,23 @@ public class PlanetRenderTest implements ApplicationListener {
         	
         	// Vertex format goes like pppnnnpppnnn...
             // where p are position components, n are normal components.
-            float px = verticesHolder[i * 8 + 0];
-            float py = verticesHolder[i * 8 + 1];
-            float pz = verticesHolder[i * 8 + 2];
+            // float px = verticesHolder[i * 8 + 0];
+            // float py = verticesHolder[i * 8 + 1];
+            // float pz = verticesHolder[i * 8 + 2];
             float nx = verticesHolder[i * 8 + 3];
             float ny = verticesHolder[i * 8 + 4];
             float nz = verticesHolder[i * 8 + 5];
-            float tx = verticesHolder[i * 8 + 6];
-            float ty = verticesHolder[i * 8 + 7];
+            // float tx = verticesHolder[i * 8 + 6];
+            // float ty = verticesHolder[i * 8 + 7];
             
             Vector3 workVector = new Vector3(nx, ny, nz);
             workVector = workVector.scl(elevationMap[i]);
             verticesHolder[i * 8 + 0] = workVector.x;
             verticesHolder[i * 8 + 1] = workVector.y;
             verticesHolder[i * 8 + 2] = workVector.z;
-            px = workVector.x;
-            py = workVector.y;
-            pz = workVector.z;
+            // px = workVector.x;
+            // py = workVector.y;
+            // pz = workVector.z;
             
             
             // This if-else passes the result of planetCenter.dst(x, y, z) to the elevationMap[].
@@ -205,29 +209,29 @@ public class PlanetRenderTest implements ApplicationListener {
             // in if-elses. The first three conditions prevent reassignment of elevations to already-
             // existing coordinates.
             
-            if ((i+1) % (longitudes+1) == 0 && i != 0)
-        	{
-        	}
-        	else if (i <= longitudes && i != 0)
-        	{
-        	}
-        	else if (i > (longitudes * (latitudes + 1)))
-        	{
-        	}
-        	else
-        	{
-        		elevationMapTester[f] = planetCenter.dst(px, py, pz);
-        		f++;
-        	}
+            // if ((i+1) % (longitudes+1) == 0 && i != 0)
+        	// {
+        	// }
+        	// else if (i <= longitudes && i != 0)
+        	// {
+        	// }
+        	// else if (i > (longitudes * (latitudes + 1)))
+        	// {
+        	// }
+        	// else
+        	// {
+        	// 	elevationMapTester[f] = planetCenter.dst(px, py, pz);
+        	// 	f++;
+        	// }
         	
         }
         
         // Test code to check that the elevationMap is storing values correctly
         
-        for (int i = 0; i < f; i++)
-        {
-        	System.out.println(elevationMapTester[i]);
-        }
+        // for (int i = 0; i < f; i++)
+        // {
+        // 	System.out.println(elevationMapTester[i]);
+        // }
         
         
         mesh1.setVertices(verticesHolder);
