@@ -195,6 +195,10 @@ public class PlanetRenderTest implements ApplicationListener {
             verticesHolder[i * 8 + 0] = workVector.x;
             verticesHolder[i * 8 + 1] = workVector.y;
             verticesHolder[i * 8 + 2] = workVector.z;
+            px = workVector.x;
+            py = workVector.y;
+            pz = workVector.z;
+            
             
             // This if-else passes the result of planetCenter.dst(x, y, z) to the elevationMap[].
             // I (Danny Ruan) will clean this up at some point because I don't like using empty thens
@@ -217,11 +221,10 @@ public class PlanetRenderTest implements ApplicationListener {
         	}
         	
         }
-        f = 0;
         
         // Test code to check that the elevationMap is storing values correctly
         
-        for (int i = 0; i < elevationMapTester.length; i++)
+        for (int i = 0; i < f; i++)
         {
         	System.out.println(elevationMapTester[i]);
         }
