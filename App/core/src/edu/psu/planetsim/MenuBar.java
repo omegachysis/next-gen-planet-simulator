@@ -8,18 +8,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Align;
-
-import javax.swing.ButtonGroup;
-import javax.swing.text.View;
-
-import static com.badlogic.gdx.utils.Align.center;
 
 public class MenuBar {
 
@@ -33,16 +26,17 @@ public class MenuBar {
     private TextButton button4;
     private TextButton button5;
     private TextButton.TextButtonStyle textButtonStyle;
-    private Dialog endDialog;
     private Slider zoomSlider;
     BitmapFont font;
-    Color fontColor;
 
 
     public MenuBar(final Stage stage, AppState appState) {
 
         _appState = appState;
         skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+        //inputManager = new InputMethodManager();
+        //Gdx.input.setInputProcessor(inputManager);
 
         final SelectBox<String> fileSelect= new SelectBox<>(skin);
         fileSelect.setItems("File", "New", "Save As", "Save");
@@ -61,14 +55,37 @@ public class MenuBar {
                 String currentSelection = fileSelect.getSelected();
                 switch (currentSelection){
                     case "New":
-                        Dialog newDialog = new Dialog("New", skin);
+                        final Dialog newDialog = new Dialog("New", skin);
                         newDialog.setResizable(true);
                         newDialog.setMovable(true);
                         newDialog.setPosition(500, 500);
                         newDialog.setWidth(250);
                         newDialog.text("Create a new celestial body? \n You'll lose all unsaved changes." );
-                        newDialog.button("Yes", true);
-                        newDialog.button("No", true);
+
+                        newDialog.button("Yes").addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y){
+
+                                Dialog help = new Dialog("CB", skin);
+                                help.setMovable(true);
+                                help.text("Assume this as new CB for now");
+                                help.setPosition(500, 300);
+                                help.setWidth(250);
+                                stage.addActor(help);
+                            }
+                        });
+
+                        {
+                            if (Gdx.input.isTouched()) {
+                                Dialog help = new Dialog("CB", skin);
+                                help.setMovable(true);
+                                help.setPosition(500, 500);
+                                stage.addActor(help);
+                            }
+
+                    }
+                        newDialog.button("No",true);
+
                         stage.addActor(newDialog);
                         fileSelect.setSelectedIndex(0);
                         break;
