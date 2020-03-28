@@ -13,6 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Timer;
+
+import java.util.TimerTask;
 
 public class MenuBar {
 
@@ -90,7 +93,7 @@ public class MenuBar {
                         fileSelect.setSelectedIndex(0);
                         break;
                     case "Save As":
-                        Dialog saveDialog = new Dialog("Save as", skin);
+                        final Dialog saveDialog = new Dialog("Save as", skin);
                         saveDialog.setMovable(true);
                         saveDialog.setResizable(true);
                         saveDialog.setPosition(500, 500);
@@ -113,7 +116,20 @@ public class MenuBar {
                         table.add(fileName1);
                         table.add(nameLabel2);
                         table.add(fileName2);
-                        saveDialog.button("Save", true);
+                        saveDialog.button("Save").addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y){
+
+                                Dialog saved = new Dialog("", skin);
+                                saved.setMovable(true);
+                                saved.text("File Saved");
+                                saved.setPosition(500, 300);
+                                saved.setWidth(250);
+                                saved.button("Ok",true);
+                                stage.addActor(saved);
+                            }
+                        });
+                        ;
                         saveDialog.button("Cancel", true);
 
                         saveDialog.addActor(nameLabel1);
@@ -125,6 +141,15 @@ public class MenuBar {
                         break;
 
                     case "Save":
+                        final Dialog save = new Dialog("", skin);
+                        save.setResizable(true);
+                        save.setMovable(true);
+                        save.setPosition(500, 500);
+                        save.setWidth(250);
+                        save.text("File Saved" );
+                        save.button("Ok",true);
+                        stage.addActor(save);
+
                         fileSelect.setSelectedIndex(0);
                         break;
                 }
@@ -177,6 +202,7 @@ public class MenuBar {
                         TextField textField5 = new TextField("",skin);
                         textField5.setPosition(160,60);
 
+                        /*
                         TextButton addButton = new TextButton("Add", skin);
                         addButton.setPosition(115, 10);
                         addButton.addListener(e -> {
@@ -199,6 +225,8 @@ public class MenuBar {
                             return true;
                         });
 
+                         */
+
                         Table table = new Table(skin);
                         table.add(addLabel1);
                         table.add(textField1);
@@ -210,8 +238,8 @@ public class MenuBar {
                         table.add(textField4);
                         table.add(addLabel5);
                         table.add(textField5);
-                        table.add(addButton);
-                        table.add(cancelButton);
+                        //table.add(addButton);
+                        //table.add(cancelButton);
 
 //                        addDialog.button("Add", true);
 //                        addDialog.button("Cancel", true);
@@ -226,8 +254,8 @@ public class MenuBar {
                         addDialog.addActor(textField4);
                         addDialog.addActor(addLabel5);
                         addDialog.addActor(textField5);
-                        addDialog.addActor(addButton);
-                        addDialog.addActor(cancelButton);
+                      //addDialog.addActor(addButton);
+                      //addDialog.addActor(cancelButton);
                         stage.addActor(addDialog);
                         editSelect.setSelectedIndex(0);
                         break;
@@ -248,8 +276,6 @@ public class MenuBar {
                     case "Duplicate":
                         editSelect.setSelectedIndex(0);
                 }
-
-
             }
         });
 
