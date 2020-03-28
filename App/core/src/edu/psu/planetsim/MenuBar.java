@@ -148,7 +148,6 @@ public class MenuBar {
                     case "Add Celestial Body":
                         Dialog addDialog = new Dialog("Add Celestial Body", skin);
                         addDialog.setMovable(true);
-                        addDialog.setResizable(true);
                         addDialog.setPosition(10, 250);
                         addDialog.setWidth(330);
                         addDialog.setHeight(300);
@@ -178,6 +177,28 @@ public class MenuBar {
                         TextField textField5 = new TextField("",skin);
                         textField5.setPosition(160,60);
 
+                        TextButton addButton = new TextButton("Add", skin);
+                        addButton.setPosition(115, 10);
+                        addButton.addListener(e -> {
+                            if (addButton.isPressed()) {
+                                String name = textField1.getText();
+                                double radius = Double.parseDouble(textField2.getText());
+                                double distance = Double.parseDouble(textField3.getText());
+                                double velocity = Double.parseDouble(textField4.getText());
+                                double mass = Double.parseDouble(textField5.getText());
+                            }
+                            return true;
+                        });
+
+                        TextButton cancelButton = new TextButton("Cancel", skin);
+                        cancelButton.setPosition(160, 10);
+                        cancelButton.addListener(e -> {
+                            if (cancelButton.isPressed()) {
+                                addDialog.hide();
+                            }
+                            return true;
+                        });
+
                         Table table = new Table(skin);
                         table.add(addLabel1);
                         table.add(textField1);
@@ -189,9 +210,11 @@ public class MenuBar {
                         table.add(textField4);
                         table.add(addLabel5);
                         table.add(textField5);
+                        table.add(addButton);
+                        table.add(cancelButton);
 
-                        addDialog.button("Add", true);
-                        addDialog.button("Cancel", true);
+//                        addDialog.button("Add", true);
+//                        addDialog.button("Cancel", true);
 
                         addDialog.addActor(addLabel1);
                         addDialog.addActor(textField1);
@@ -203,6 +226,8 @@ public class MenuBar {
                         addDialog.addActor(textField4);
                         addDialog.addActor(addLabel5);
                         addDialog.addActor(textField5);
+                        addDialog.addActor(addButton);
+                        addDialog.addActor(cancelButton);
                         stage.addActor(addDialog);
                         editSelect.setSelectedIndex(0);
                         break;
