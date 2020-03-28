@@ -12,14 +12,14 @@ public final class Metrics
     public static float kg(final double kg) 
     {
         // Divide by earth's mass to first convert into earth units.
-        return (float) (kg / EARTH_MASS);
+        return (float)(kg / EARTH_MASS);
     }
 
     /** Return naturalized length from meters. */
     public static float m(final double m) 
     {
         // Convert all lengths to AU.
-        return (float) (m / M_PER_SOLAR_RADIUS);
+        return (float)(m / M_PER_SOLAR_RADIUS);
     }
 
     /** Return meters from naturalized length. */

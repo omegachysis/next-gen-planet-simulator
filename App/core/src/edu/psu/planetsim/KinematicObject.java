@@ -17,7 +17,7 @@ public class KinematicObject implements IMass
 
     public Vector3 getPosition() 
     {
-        final Vector3 res = new Vector3();
+        final var res = new Vector3();
         model.transform.getTranslation(res);
         return res;
     }

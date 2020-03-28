@@ -26,11 +26,11 @@ public class PlanetSim extends ApplicationAdapter
 
 		stage = new Stage();
 
-		InputMultiplexer multiplexer = new InputMultiplexer();
+		final var multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(stage);
 
 		Gdx.input.setInputProcessor(multiplexer);
-//		Gdx.input.setInputProcessor(stage);
+		// Gdx.input.setInputProcessor(stage);
 
 		menuBar = new MenuBar(stage, appState);
 
@@ -38,7 +38,7 @@ public class PlanetSim extends ApplicationAdapter
 		// selectBox = new SelectBox(style);
 		// selectBox = new SelectBox(style);
 
-		AppState.CelestialBody planet1 = new AppState.CelestialBody();
+		final var planet1 = new AppState.CelestialBody();
         planet1.id = UUID.randomUUID();
         planet1.name = "Planet 1";
         planet1.mass = 1.0e24;

@@ -48,7 +48,7 @@ public class CelestialRenderer
         _environment = new Environment();
         _environment.add(new DirectionalLight().set(1, 1, 1, 1, 2, 0));
 
-        final btCollisionConfiguration config = new btDefaultCollisionConfiguration();
+        final var config = new btDefaultCollisionConfiguration();
         _dispatcher = new btCollisionDispatcher(config);
         _pairCache = new btDbvtBroadphase();
         _solver = new btSequentialImpulseConstraintSolver();
@@ -71,9 +71,9 @@ public class CelestialRenderer
         _currentCelestialBody = value;
         if (_appState.bodies.containsKey(value))
         {
-            AppState.CelestialBody dto = _appState.bodies.get(value);
+            var dto = _appState.bodies.get(value);
             add(new CelestialBody(dto));
-            for (UUID satelliteId : dto.satellites)
+            for (var satelliteId : dto.satellites)
             {
                 add(new CelestialBody(_appState.bodies.get(satelliteId)));
             }
@@ -96,7 +96,7 @@ public class CelestialRenderer
 
     public void clear()
     {
-        for (final CelestialBody body : _bodies) 
+        for (final var body : _bodies) 
         {
             body.removeFrom(_world);
             body.removeFrom(_gravitySim);
@@ -109,7 +109,7 @@ public class CelestialRenderer
     public void render() 
     {
         _modelBatch.begin(_cam);
-        for (final CelestialBody body : _bodies) 
+        for (final var body : _bodies) 
         {
             body.render(_modelBatch, _environment);
         }
@@ -134,7 +134,7 @@ public class CelestialRenderer
         _cam.position.set(target.cpy().add(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
         _cam.lookAt(target);
 
-        final Interpolation interp = Interpolation.pow4Out;
+        final var interp = Interpolation.pow4Out;
         _cam.fieldOfView = interp.apply(180f, 0.1f, _appState.zoom);
         _cam.update();
     }

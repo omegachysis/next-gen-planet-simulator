@@ -24,7 +24,7 @@ public class CelestialBody extends KinematicObject
 
     public CelestialBody(final AppState.CelestialBody dto)
     {
-        final float radius = Metrics.m(5.0e6);
+        final var radius = Metrics.m(5.0e6);
 
         // Build the model.
         _modelBase = new ModelBuilder().createSphere(
@@ -44,13 +44,13 @@ public class CelestialBody extends KinematicObject
     {
         model.transform.set(position, orientation);
 
-        final btCollisionShape shape = new btSphereShape(_radius);
-        final Vector3 inertia = new Vector3();
+        final var shape = new btSphereShape(_radius);
+        final var inertia = new Vector3();
         shape.calculateLocalInertia(mass, inertia);
         body = new btRigidBody(mass, new MotionState(model.transform), shape, inertia);
         body.applyCentralImpulse(velocity.cpy().scl(mass));
 
-        final float moment = 2 * mass * _radius * _radius / 5;
+        final var moment = 2 * mass * _radius * _radius / 5;
         body.applyTorqueImpulse(spin.cpy().scl(moment));
     }
 

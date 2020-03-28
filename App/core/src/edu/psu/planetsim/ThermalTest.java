@@ -24,7 +24,7 @@ public class ThermalTest extends ApplicationAdapter
 
     public static ShaderProgram loadShader(final String name) 
     {
-        final ShaderProgram res = new ShaderProgram(
+        final var res = new ShaderProgram(
 			Gdx.files.getFileHandle(name + ".vert", Files.FileType.Internal),
 			Gdx.files.getFileHandle(name + ".frag", Files.FileType.Internal));
 		if (!res.isCompiled())
