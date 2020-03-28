@@ -74,6 +74,7 @@ public class MenuBar {
                                 help.text("Assume this as new CB for now");
                                 help.setPosition(500, 300);
                                 help.setWidth(250);
+                                help.button("Ok",true);
                                 stage.addActor(help);
                             }
                         });
@@ -122,7 +123,7 @@ public class MenuBar {
 
                                 Dialog saved = new Dialog("", skin);
                                 saved.setMovable(true);
-                                saved.text("File Saved");
+                                saved.text("File Saved!");
                                 saved.setPosition(500, 300);
                                 saved.setWidth(250);
                                 saved.button("Ok",true);
@@ -146,7 +147,7 @@ public class MenuBar {
                         save.setMovable(true);
                         save.setPosition(500, 500);
                         save.setWidth(250);
-                        save.text("File Saved" );
+                        save.text("File Saved!" );
                         save.button("Ok",true);
                         stage.addActor(save);
 
@@ -332,7 +333,7 @@ public class MenuBar {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 String currentSelection = viewSelect.getSelected();
-                switch (currentSelection){
+                switch (currentSelection) {
                     case "Show Side Panel":
                         Dialog sideDialog = new Dialog("Side panel", skin);
                         sideDialog.setMovable(true);
@@ -345,7 +346,7 @@ public class MenuBar {
 
                         sideDialog.row();
                         Label nameLabel = new Label("Select Physical Properties:", skin);
-                        nameLabel.setPosition(5,300);
+                        nameLabel.setPosition(5, 300);
                         CheckBox check1 = new CheckBox("Initial distance from star(AU)", skin);
                         check1.setPosition(10, 280);
                         CheckBox check2 = new CheckBox("Initial velocity(km/s)", skin);
@@ -375,14 +376,35 @@ public class MenuBar {
                         changeDialog.setPosition(500, 500);
                         changeDialog.setWidth(250);
                         changeDialog.text("Change celestial body selection...");
-//                        Label planet1 = new Label("Earth", skin);
-//                        Label planet2 = new Label("Luna", skin);
-//                        ButtonGroup select = new ButtonGroup();
-                        changeDialog.button("Change", true);
-                        changeDialog.button("Close", true);
-                        stage.addActor(changeDialog);
-                        viewSelect.setSelectedIndex(0);
-                        break;
+
+                        changeDialog.button("Change").addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+
+                                Dialog newCB = new Dialog("New Celestial Body", skin);
+                                newCB.setMovable(true);
+                                newCB.text("Assume this as new CB for now");
+                                newCB.setPosition(500, 300);
+                                newCB.setWidth(250);
+                                newCB.button("Ok", true);
+                                stage.addActor(newCB);
+                            }
+                        });
+
+                    {
+                        if (Gdx.input.isTouched()) {
+                            Dialog newCB = new Dialog("CB", skin);
+                            newCB.setMovable(true);
+                            newCB.setPosition(500, 500);
+                            stage.addActor(newCB);
+                        }
+
+                    }
+
+                    changeDialog.button("Close", false);
+                    stage.addActor(changeDialog);
+                    viewSelect.setSelectedIndex(0);
+                    break;
                 }
             }
         });
