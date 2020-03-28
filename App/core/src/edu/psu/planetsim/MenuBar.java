@@ -202,16 +202,58 @@ public class MenuBar {
                         TextField textField5 = new TextField("",skin);
                         textField5.setPosition(160,60);
 
-                        /*
+
                         TextButton addButton = new TextButton("Add", skin);
                         addButton.setPosition(115, 10);
                         addButton.addListener(e -> {
                             if (addButton.isPressed()) {
                                 String name = textField1.getText();
-                                double radius = Double.parseDouble(textField2.getText());
-                                double distance = Double.parseDouble(textField3.getText());
-                                double velocity = Double.parseDouble(textField4.getText());
-                                double mass = Double.parseDouble(textField5.getText());
+
+                                Dialog wrong = new Dialog("Incorrect entry", skin);
+                                wrong.text("One or more of your values is invalid. \n Please try again.");
+                                wrong.setPosition(500, 500);
+                                wrong.setWidth(400);
+                                wrong.button("Close");
+
+                                try {
+                                    double radius = Double.parseDouble(textField2.getText());
+                                    double distance = Double.parseDouble(textField3.getText());
+                                    double velocity = Double.parseDouble(textField4.getText());
+                                    double mass = Double.parseDouble(textField5.getText());
+                                } catch (NumberFormatException n) {
+                                        stage.addActor(wrong);
+                                    return false;
+                                }
+
+//                                try{
+//                                    double radius = Double.parseDouble(textField2.getText());
+//                                }catch(NumberFormatException n){
+//                                    stage.addActor(wrong);
+//                                    return false;
+//                                }
+//                                try{
+//                                    double distance = Double.parseDouble(textField3.getText());
+//                                }catch(NumberFormatException n){
+//                                    stage.addActor(wrong);
+//                                }
+//                                try{
+//                                    double velocity = Double.parseDouble(textField4.getText());
+//                                }catch(NumberFormatException n){
+//                                    stage.addActor(wrong);
+//                                }
+//                                try{
+//                                    double mass = Double.parseDouble(textField5.getText());
+//                                }catch(NumberFormatException n){
+//                                    stage.addActor(wrong);
+//                                }
+
+                                Dialog success = new Dialog("Correct entry", skin);
+                                success.setPosition(500, 500);
+                                success.setWidth(400);
+                                success.text("Your celestial body has been added.");
+                                success.button("Close");
+                                stage.addActor(success);
+                                addDialog.hide();
                             }
                             return true;
                         });
@@ -225,8 +267,6 @@ public class MenuBar {
                             return true;
                         });
 
-                         */
-
                         Table table = new Table(skin);
                         table.add(addLabel1);
                         table.add(textField1);
@@ -238,8 +278,8 @@ public class MenuBar {
                         table.add(textField4);
                         table.add(addLabel5);
                         table.add(textField5);
-                        //table.add(addButton);
-                        //table.add(cancelButton);
+                        table.add(addButton);
+                        table.add(cancelButton);
 
 //                        addDialog.button("Add", true);
 //                        addDialog.button("Cancel", true);
@@ -254,8 +294,8 @@ public class MenuBar {
                         addDialog.addActor(textField4);
                         addDialog.addActor(addLabel5);
                         addDialog.addActor(textField5);
-                      //addDialog.addActor(addButton);
-                      //addDialog.addActor(cancelButton);
+                        addDialog.addActor(addButton);
+                        addDialog.addActor(cancelButton);
                         stage.addActor(addDialog);
                         editSelect.setSelectedIndex(0);
                         break;
