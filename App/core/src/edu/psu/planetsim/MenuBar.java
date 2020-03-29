@@ -118,33 +118,35 @@ public class MenuBar {
                         table.add(nameLabel2);
                         table.add(fileName2);
 
-                        // var saveButton = new TextButton("Save", textButtonStyle);
-                        // saveButton.addListener(e -> {
-                        //     Dialog saved = new Dialog("", skin);
-                        //     saved.setMovable(true);
-                        //     saved.text("File Saved!");
-                        //     saved.setPosition(500, 300);
-                        //     saved.setWidth(250);
-                        //     saved.button("Ok",true);
-                        //     stage.addActor(saved);
-                        // });
-                        // table.add(saveButton);
+                        var saveButton = new TextButton("Save", skin);
+                        saveButton.setPosition(90, 3);
+                         saveButton.addListener(e -> {
+                             if (saveButton.isPressed()) {
+                                 Dialog saved = new Dialog("", skin);
+                                 saved.setMovable(true);
+                                 saved.text("File Saved!");
+                                 saved.setPosition(500, 300);
+                                 saved.setWidth(250);
+                                 saved.button("Ok", true);
+                                 stage.addActor(saved);
+                             }
+                             return true;
+                         });
+                        table.add(saveButton);
+                        saveDialog.addActor(saveButton);
 
-                        saveDialog.button("Save").addListener(new ClickListener() {
-                            @Override
-                            public void clicked(InputEvent event, float x, float y){
-
-                                Dialog saved = new Dialog("", skin);
-                                saved.setMovable(true);
-                                saved.text("File Saved!");
-                                saved.setPosition(500, 300);
-                                saved.setWidth(250);
-                                saved.button("Ok",true);
-                                stage.addActor(saved);
+                        var cancelButton = new TextButton("Cancel", skin);
+                        cancelButton.setPosition(140, 3);
+                        cancelButton.addListener(e -> {
+                            if (cancelButton.isPressed()) {
+                                saveDialog.hide();
                             }
+                            return true;
                         });
-                        ;
-                        saveDialog.button("Cancel", true);
+                        table.add(cancelButton);
+                        saveDialog.addActor(cancelButton);
+
+                        // saveDialog.button("Cancel", true);
 
                         saveDialog.addActor(nameLabel1);
                         saveDialog.addActor(fileName1);
