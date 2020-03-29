@@ -16,6 +16,7 @@ public class AppState
     public HashMap<UUID, CelestialBody> bodies = new HashMap<>();
 
     public float speed = 1;
+    public boolean paused = false;
     public float zoom = 0.6f;
 
     static class CelestialBody

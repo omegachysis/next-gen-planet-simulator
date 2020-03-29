@@ -117,6 +117,19 @@ public class MenuBar {
                         table.add(fileName1);
                         table.add(nameLabel2);
                         table.add(fileName2);
+
+                        // var saveButton = new TextButton("Save", textButtonStyle);
+                        // saveButton.addListener(e -> {
+                        //     Dialog saved = new Dialog("", skin);
+                        //     saved.setMovable(true);
+                        //     saved.text("File Saved!");
+                        //     saved.setPosition(500, 300);
+                        //     saved.setWidth(250);
+                        //     saved.button("Ok",true);
+                        //     stage.addActor(saved);
+                        // });
+                        // table.add(saveButton);
+
                         saveDialog.button("Save").addListener(new ClickListener() {
                             @Override
                             public void clicked(InputEvent event, float x, float y){
@@ -466,6 +479,8 @@ public class MenuBar {
         button1 = new TextButton("Play/Pause", skin, "default");
         button1.setSize(100, 35);
         button1.setPosition(1170, 680);
+        // TODO: play pause in app state
+        //  e.g. appState.paused = !appState.paused
 
         font = new BitmapFont();
         textButtonStyle = new TextButton.TextButtonStyle();
