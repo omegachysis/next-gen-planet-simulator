@@ -392,31 +392,47 @@ public class MenuBar {
                         changeDialog.setWidth(250);
                         changeDialog.text("Change celestial body selection...");
 
-                        changeDialog.button("Change").addListener(new ClickListener() {
-                            @Override
-                            public void clicked(InputEvent event, float x, float y) {
-
+                        var changeButton = new TextButton("Change", skin);
+                        changeButton.setPosition(60, 3);
+                        changeButton.addListener(e -> {
+                            if (changeButton.isPressed()) {
                                 Dialog newCB = new Dialog("New Celestial Body", skin);
                                 newCB.setMovable(true);
-                                newCB.text("Assume this as new CB for now");
+                                newCB.text("Assume this as New CB for now...");
                                 newCB.setPosition(500, 300);
                                 newCB.setWidth(250);
                                 newCB.button("Ok", true);
                                 stage.addActor(newCB);
+                                changeDialog.hide();
                             }
+                            return true;
                         });
 
-                    {
-                        if (Gdx.input.isTouched()) {
-                            Dialog newCB = new Dialog("CB", skin);
-                            newCB.setMovable(true);
-                            newCB.setPosition(500, 500);
-                            stage.addActor(newCB);
-                        }
+                        Table table1 = new Table(skin);
+                        table1.add(changeButton);
+                        changeDialog.addActor(changeButton);
 
-                    }
+                        var cancelButton = new TextButton("Cancel", skin);
+                        cancelButton.setPosition(140, 3);
+                        cancelButton.addListener(e -> {
+                            if (cancelButton.isPressed()) {
+                                changeDialog.hide();
+                            }
+                            return true;
+                        });
 
-                    changeDialog.button("Close", false);
+                        table1.add(cancelButton);
+                        changeDialog.addActor(cancelButton);
+
+                 //   {
+                 //       if (Gdx.input.isTouched()) {
+                 //           Dialog newCB = new Dialog("CB", skin);
+                 //           newCB.setMovable(true);
+                 //           newCB.setPosition(500, 500);
+                 //           stage.addActor(newCB);
+                 //       }
+                 //   }
+
                     stage.addActor(changeDialog);
                     viewSelect.setSelectedIndex(0);
                     break;
