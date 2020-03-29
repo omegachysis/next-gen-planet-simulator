@@ -65,34 +65,42 @@ public class MenuBar {
                         newDialog.setWidth(250);
                         newDialog.text("Create a new celestial body? \n You'll lose all unsaved changes." );
 
-                        newDialog.button("Yes").addListener(new ClickListener() {
-                            @Override
-                            public void clicked(InputEvent event, float x, float y){
+                        Table table2 = new Table(skin);
+                        table2.add(newDialog);
 
-                                Dialog help = new Dialog("CB", skin);
-                                help.setMovable(true);
-                                help.text("Assume this as new CB for now");
-                                help.setPosition(500, 300);
-                                help.setWidth(250);
-                                help.button("Ok",true);
-                                stage.addActor(help);
+                        var newButton = new TextButton("Yes", skin);
+                        newButton.setPosition(90, 3);
+                        newButton.addListener(e -> {
+                            if (newButton.isPressed()) {
+                                Dialog New = new Dialog("", skin);
+                                New.setMovable(true);
+                                New.text("Assume this as new CB for now");
+                                New.setPosition(500, 300);
+                                New.setWidth(250);
+                                New.button("Ok", true);
+                                newDialog.hide();
+                                stage.addActor(New);
                             }
+                            return true;
                         });
+                        table2.add(newButton);
+                        newDialog.addActor(newButton);
 
-                        {
-                            if (Gdx.input.isTouched()) {
-                                Dialog help = new Dialog("CB", skin);
-                                help.setMovable(true);
-                                help.setPosition(500, 500);
-                                stage.addActor(help);
+                        var noButton = new TextButton("No", skin);
+                        noButton.setPosition(140, 3);
+                        noButton.addListener(e -> {
+                            if (noButton.isPressed()) {
+                                newDialog.hide();
                             }
-
-                    }
-                        newDialog.button("No",true);
+                            return true;
+                        });
+                        table2.add(noButton);
+                        newDialog.addActor(noButton);
 
                         stage.addActor(newDialog);
                         fileSelect.setSelectedIndex(0);
                         break;
+
                     case "Save As":
                         final Dialog saveDialog = new Dialog("Save as", skin);
                         saveDialog.setMovable(true);
