@@ -87,31 +87,44 @@ public class PlanetRenderTest implements ApplicationListener {
         // We'll get some input map of elevations by latitude/longitude:
         float[] elevationMap = new float[latitudes * longitudes];
         // These are stand-ins for values the program will pass into the generation loop
-        float terrainEccentricity = 0.2f;
-        float terrainRoughness = 0.5f;
+        float terrainEccentricity = 1.0f;
+        float terrainRoughness = 0.8f;
         float planetRadius = 5f;
+        // Seeds the planet model with mountain peaks
         for (int i = 0; i < elevationMap.length; i++)
         {
-        	double val = terrainEccentricity * rand.nextDouble();
-            elevationMap[i] = planetRadius;
-            elevationMap[i] += val;
-            if (i > longitudes)
+            if (rand.nextDouble() <= terrainRoughness)
             {
-            	float avgElevation = (elevationMap[i-1] + elevationMap[i-longitudes] + elevationMap[i-longitudes+1] + elevationMap[i-longitudes-1]) / 4;
-            	float localRoughness = avgElevation - planetRadius;
-            	if (avgElevation < 7)
-            	{
-            		System.out.println(avgElevation);
-            	}
-            	if (rand.nextDouble() <= (terrainRoughness + localRoughness))
+            	double val = terrainEccentricity * rand.nextDouble();
+                elevationMap[i] = planetRadius;
+                elevationMap[i] += val;
+            }
+            else
+            {
+            	elevationMap[i] = planetRadius;
+            }
+        }
+        for (int i = 0; i < elevationMap.length; i++)
+        {
+            if (i > longitudes && i < ((latitudes * longitudes) - longitudes - 1))
+            {
+            	float peakN = elevationMap[i-longitudes];
+            	float peakS = elevationMap[i+longitudes];
+            	float peakE = elevationMap[i+1];
+            	float peakW = elevationMap[i-1];
+            	float peakNE = elevationMap[i-longitudes+1];
+            	float peakNW = elevationMap[i-longitudes-1];
+            	float peakSE = elevationMap[i+longitudes+1];
+            	float peakSW = elevationMap[i+longitudes-1];
+            	float avgElevation = (peakN + peakS + peakE + peakW + peakNE + peakNW + peakSE + peakSW) / 8;
+            	if (elevationMap[i] < avgElevation)
             	{
             		elevationMap[i] = avgElevation;
-            		elevationMap[i] += val;
             	}
-            	else
-            	{
-            		//elevationMap[i] = (elevationMap[i] + avgElevation)/2;
-            	}
+            }
+            else
+            {
+            	elevationMap[i] = planetRadius;
             }
         }
         boolean useMap = true;
