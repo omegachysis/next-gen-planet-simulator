@@ -98,11 +98,20 @@ public class PlanetRenderTest implements ApplicationListener {
             if (i > longitudes)
             {
             	float avgElevation = (elevationMap[i-1] + elevationMap[i-longitudes] + elevationMap[i-longitudes+1] + elevationMap[i-longitudes-1]) / 4;
-            	if (rand.nextDouble() <= terrainRoughness)
+            	float localRoughness = avgElevation - planetRadius;
+            	if (avgElevation < 7)
             	{
-            		elevationMap[i] = avgElevation + terrainEccentricity;
+            		System.out.println(avgElevation);
             	}
-            	
+            	if (rand.nextDouble() <= (terrainRoughness + localRoughness))
+            	{
+            		elevationMap[i] = avgElevation;
+            		elevationMap[i] += val;
+            	}
+            	else
+            	{
+            		//elevationMap[i] = (elevationMap[i] + avgElevation)/2;
+            	}
             }
         }
         boolean useMap = true;
