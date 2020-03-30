@@ -86,11 +86,24 @@ public class PlanetRenderTest implements ApplicationListener {
         float[] elevationMapTester = new float[latitudes * longitudes];
         // We'll get some input map of elevations by latitude/longitude:
         float[] elevationMap = new float[latitudes * longitudes];
+        // These are stand-ins for values the program will pass into the generation loop
+        float terrainEccentricity = 0.2f;
+        float terrainRoughness = 0.5f;
+        float planetRadius = 5f;
         for (int i = 0; i < elevationMap.length; i++)
         {
-            elevationMap[i] = 1f;
-            elevationMap[i] += (float)Math.sin((i / 180) * 0.4f) * 0.02f;
-            elevationMap[i] += (float)Math.sin((i % 180) * 0.4f) * 0.02f;
+        	double val = terrainEccentricity * rand.nextDouble();
+            elevationMap[i] = planetRadius;
+            elevationMap[i] += val;
+            if (i > longitudes)
+            {
+            	float avgElevation = (elevationMap[i-1] + elevationMap[i-longitudes] + elevationMap[i-longitudes+1] + elevationMap[i-longitudes-1]) / 4;
+            	if (rand.nextDouble() <= terrainRoughness)
+            	{
+            		elevationMap[i] = avgElevation + terrainEccentricity;
+            	}
+            	
+            }
         }
         boolean useMap = true;
         
