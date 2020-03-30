@@ -87,8 +87,8 @@ public class PlanetRenderTest implements ApplicationListener {
         // We'll get some input map of elevations by latitude/longitude:
         float[] elevationMap = new float[latitudes * longitudes];
         // These are stand-ins for values the program will pass into the generation loop
-        float terrainEccentricity = 1.0f;
-        float terrainRoughness = 0.8f;
+        float terrainEccentricity = 0.4f;
+        float terrainRoughness = 0.01f;
         float planetRadius = 5f;
         // Seeds the planet model with mountain peaks
         for (int i = 0; i < elevationMap.length; i++)
@@ -101,9 +101,12 @@ public class PlanetRenderTest implements ApplicationListener {
             }
             else
             {
-            	elevationMap[i] = planetRadius;
+        		double val = terrainEccentricity * rand.nextDouble() * 0.2f;
+                elevationMap[i] = planetRadius;
+                elevationMap[i] += val;
             }
         }
+        // Generates mountain ranges
         for (int i = 0; i < elevationMap.length; i++)
         {
             if (i > longitudes && i < ((latitudes * longitudes) - longitudes - 1))
@@ -116,17 +119,25 @@ public class PlanetRenderTest implements ApplicationListener {
             	float peakNW = elevationMap[i-longitudes-1];
             	float peakSE = elevationMap[i+longitudes+1];
             	float peakSW = elevationMap[i+longitudes-1];
-            	float avgElevation = (peakN + peakS + peakE + peakW + peakNE + peakNW + peakSE + peakSW) / 8;
+            	float peaks[] = {peakN, peakS, peakE, peakW, peakNE, peakNW, peakSE, peakSW};
+            	float sumElevation = 0;
+            	float peakTallest = 0;
+            	for (int j = 0; j < peaks.length; j++)
+            	{
+            		sumElevation = sumElevation + peaks[j];
+            		if (peaks[j] > peakTallest)
+            		{
+            			peakTallest = peaks[j];
+            		}
+            	}
+            	float avgElevation = sumElevation / 8;
             	if (elevationMap[i] < avgElevation)
             	{
-            		elevationMap[i] = avgElevation;
+            		elevationMap[i] = ((avgElevation + peakTallest)/2);
             	}
             }
-            else
-            {
-            	elevationMap[i] = planetRadius;
-            }
         }
+        
         boolean useMap = true;
         
         var planetCenter = new Vector3();
