@@ -59,13 +59,7 @@ public class PlanetRenderTest implements ApplicationListener {
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.1f, 0.1f, 0.1f, 1f));
         environment.add(new DirectionalLight().set(1f, 1f, 1f, 1f, 0.2f, 0.2f));
  
-        ModelBuilder modelBuilder = new ModelBuilder();
-        /*
-        model = modelBuilder.createBox(5f, 5f, 5f, 
-            new Material(ColorAttribute.createDiffuse(Color.WHITE)),
-            Usage.Position | Usage.Normal);
-        instance = new ModelInstance(model);
-        */
+        var modelBuilder = new ModelBuilder();
         
         int latitudes = 180;
         int longitudes = 180;
@@ -74,13 +68,13 @@ public class PlanetRenderTest implements ApplicationListener {
                 new Material(ColorAttribute.createDiffuse(Color.WHITE)),
                 Usage.Position | Usage.Normal | Usage.TextureCoordinates);
 
-        Random rand = new Random();
+        var rand = new Random();
 
         mesh1 = model1.meshes.first();
         
-        FileHandle imageFileHandle = Gdx.files.getFileHandle("textest2.jpg", Files.FileType.Internal);
+        var imageFileHandle = Gdx.files.getFileHandle("textest2.jpg", Files.FileType.Internal);
         texture1 = new Texture(imageFileHandle);
-        TextureAttribute textureAttribute1 = new TextureAttribute(TextureAttribute.Diffuse, texture1);
+        var textureAttribute1 = new TextureAttribute(TextureAttribute.Diffuse, texture1);
 
         // Our model1 usage flags are Usage.Position and Usage.Normal,
         // thus every vertex has a Position vector and a Normal vector.
@@ -98,53 +92,61 @@ public class PlanetRenderTest implements ApplicationListener {
             elevationMap[i] += (float)Math.sin((i / 180) * 0.4f) * 0.02f;
             elevationMap[i] += (float)Math.sin((i % 180) * 0.4f) * 0.02f;
         }
+        boolean useMap = false;
         
-        //System.out.println(mesh1.getNumVertices());
-        //System.out.println(verticesHolder.length);
-        Vector3 planetCenter = new Vector3();
+        var planetCenter = new Vector3();
 
-        for (int i = 0; i < verticesHolder.length / 8; i++)
+        // for generating using elevationMap
+        if (useMap)
         {
-        	float px = verticesHolder[i * 8 + 0];
-            float py = verticesHolder[i * 8 + 1];
-            float pz = verticesHolder[i * 8 + 2];
-            float nx = verticesHolder[i * 8 + 3];
-            float ny = verticesHolder[i * 8 + 4];
-            float nz = verticesHolder[i * 8 + 5];
-            float tx = verticesHolder[i * 8 + 6];
-            float ty = verticesHolder[i * 8 + 7];
-            
-            Vector3 workVector = new Vector3(nx, ny, nz);
-            workVector = workVector.scl(elevationMap[i]);
-            verticesHolder[i * 8 + 0] = workVector.x;
-            verticesHolder[i * 8 + 1] = workVector.y;
-            verticesHolder[i * 8 + 2] = workVector.z;
-            px = workVector.x;
-            py = workVector.y;
-            pz = workVector.z;
+	        for (int i = 0; i < verticesHolder.length / 8; i++)
+	        {
+	        	float px = verticesHolder[i * 8 + 0];
+	            float py = verticesHolder[i * 8 + 1];
+	            float pz = verticesHolder[i * 8 + 2];
+	            float nx = verticesHolder[i * 8 + 3];
+	            float ny = verticesHolder[i * 8 + 4];
+	            float nz = verticesHolder[i * 8 + 5];
+	            float tx = verticesHolder[i * 8 + 6];
+	            float ty = verticesHolder[i * 8 + 7];
+	            
+	            Vector3 workVector = new Vector3(nx, ny, nz);
+	            workVector = workVector.scl(elevationMap[i]);
+	            verticesHolder[i * 8 + 0] = workVector.x;
+	            verticesHolder[i * 8 + 1] = workVector.y;
+	            verticesHolder[i * 8 + 2] = workVector.z;
+	            px = workVector.x;
+	            py = workVector.y;
+	            pz = workVector.z;
+	        }
         }
-                
+              
+        // for generating procedurally
+        else
+        {
+	        for (int i = 0; i < verticesHolder.length / 8; i++)
+	        {
+	        	float px = verticesHolder[i * 8 + 0];
+	            float py = verticesHolder[i * 8 + 1];
+	            float pz = verticesHolder[i * 8 + 2];
+	            float nx = verticesHolder[i * 8 + 3];
+	            float ny = verticesHolder[i * 8 + 4];
+	            float nz = verticesHolder[i * 8 + 5];
+	            float tx = verticesHolder[i * 8 + 6];
+	            float ty = verticesHolder[i * 8 + 7];
+	
+	        }
+        }
+        
+        // for terrain smoothing and seam-fixing; this should ALWAYS run
         int f = 0;
         for (int i = 0; i < verticesHolder.length / 8; i++)
         {
-        	/*
-        	if (i == 23)
-        	{
-        	verticesHolder[(i-longitudes+1) * 8 + 0] += 0.5f;
-        	verticesHolder[(i-longitudes+1) * 8 + 1] += 0.5f;
-        	verticesHolder[(i-longitudes+1) * 8 + 2] += 0.5f;
-        	verticesHolder[i * 8 + 0] = verticesHolder[(i-longitudes+1) * 8 + 0];
-        	verticesHolder[i * 8 + 1] = verticesHolder[(i-longitudes+1) * 8 + 1];
-        	verticesHolder[i * 8 + 2] = verticesHolder[(i-longitudes+1) * 8 + 2];
-        	}
-        	*/
-        	    
             // Note: this does not work on the pole vertices (e.g. for latitude = 4 and longitude = 4, verticesHolder[0]
             // actually corresponds to verticesHolder[3], not verticesHolder[4]; likewise verticesHolder[21] corresponds
             // to verticesHolder[24], not verticesHolder[20].
         	
         	// This condition connects the last longitude with the first longitude to share the same vertex per latitude.
-        	
         	if ((i+1) % (longitudes) == 0 && i != 0)
         	{
         		verticesHolder[i * 8 + 0] = verticesHolder[(i - longitudes + 1) * 8 + 0];
@@ -167,58 +169,7 @@ public class PlanetRenderTest implements ApplicationListener {
                 verticesHolder[i * 8 + 1] = verticesHolder[(longitudes * (latitudes + 1)) * 8 + 1];
                 verticesHolder[i * 8 + 2] = verticesHolder[(longitudes * (latitudes + 1)) * 8 + 2];
         	}
-        	else
-        	{
-                // Don't worry about the normal vectors yet... it gets pretty complicated 
-                // and it only affects lighting.
-        		//double val = 0.02f * rand.nextDouble();
-        		//float val = 1.0f;
-        		
-        		
-        		/*
-                verticesHolder[i * 8 + 0] += val;
-                verticesHolder[i * 8 + 1] += val;
-                verticesHolder[i * 8 + 2] += val;
-                
-                
-                // test code
-        		
-        		verticesHolder[i * 8 + 0] = verticesHolder[i * 8 + 3] + val;
-                verticesHolder[i * 8 + 1] = verticesHolder[i * 8 + 4] + val;
-                verticesHolder[i * 8 + 2] = verticesHolder[i * 8 + 5] + val;
-                
-                
-                
-               	if (verticesHolder[i * 8 + 0] > 0)
-               	{
-               		verticesHolder[i * 8 + 0] += val;
-               	}
-               	else if (verticesHolder[i * 8 + 0] < 0)
-               	{
-               		verticesHolder[i * 8 + 0] -= val;
-               	}
-               	if (verticesHolder[i * 8 + 1] > 0)
-               	{
-               		verticesHolder[i * 8 + 1] += val;
-               	}
-               	else if (verticesHolder[i * 8 + 1] < 0)
-               	{
-               		verticesHolder[i * 8 + 1] -= val;
-               	}
-               	if (verticesHolder[i * 8 + 2] > 0)
-               	{
-               		verticesHolder[i * 8 + 2] += val;
-               	}
-               	else if (verticesHolder[i * 8 + 2] < 0)
-               	{
-               		verticesHolder[i * 8 + 2] -= val;
-               	}   
-               	*/
-        	}
-        	
-        	
-        	
-        	
+
         	// Vertex format goes like pppnnnpppnnn...
             // where p are position components, n are normal components.
         	
@@ -230,19 +181,8 @@ public class PlanetRenderTest implements ApplicationListener {
             float nz = verticesHolder[i * 8 + 5];
             float tx = verticesHolder[i * 8 + 6];
             float ty = verticesHolder[i * 8 + 7];
-            /*
-            Vector3 workVector = new Vector3(nx, ny, nz);
-            workVector = workVector.scl(elevationMap[i]);
-            verticesHolder[i * 8 + 0] = workVector.x;
-            verticesHolder[i * 8 + 1] = workVector.y;
-            verticesHolder[i * 8 + 2] = workVector.z;
-            px = workVector.x;
-            py = workVector.y;
-            pz = workVector.z;
-            */
-            
-            
-            // This if-else passes the result of planetCenter.dst(x, y, z) to the elevationMap[].
+
+            // This if-else passes the result of planetCenter.dst(x, y, z) to the elevationMapTester[].
             // I (Danny Ruan) will clean this up at some point because I don't like using empty thens
             // in if-elses. The first three conditions prevent reassignment of elevations to already-
             // existing coordinates.
@@ -265,29 +205,16 @@ public class PlanetRenderTest implements ApplicationListener {
         }
         
         // Test code to check that the elevationMap is storing values correctly
-        
+        /*
         for (int i = 0; i < f; i++)
         {
         	System.out.println(elevationMapTester[i]);
         }
-        
-        
-        mesh1.setVertices(verticesHolder);
-       
-
-        // model1.meshes.set(0, mesh1);
-        
-        instance1 = new ModelInstance(model1, 0f, 0f, 0f);
-        
-        Material tempMaterial = instance1.materials.get(0);
-        tempMaterial.set(textureAttribute1);
-        
-        /*
-        model2 = modelBuilder.createCone(4f, 3f, 4f, 10,
-                new Material(ColorAttribute.createDiffuse(Color.RED)),
-                Usage.Position | Usage.Normal);
-        instance2 = new ModelInstance(model2, 0f, 5f, 0f);
         */
+        mesh1.setVertices(verticesHolder);
+        instance1 = new ModelInstance(model1, 0f, 0f, 0f);
+        var tempMaterial = instance1.materials.get(0);
+        tempMaterial.set(textureAttribute1);
     }
     
     @Override
@@ -298,18 +225,14 @@ public class PlanetRenderTest implements ApplicationListener {
         camController.update();
 
         modelBatch.begin(cam);
-        //modelBatch.render(instance, environment);
         modelBatch.render(instance1, environment);
-        //modelBatch.render(instance2, environment);
         modelBatch.end();
     }
 
     @Override
     public void dispose () {
     	modelBatch.dispose();
-    	//model.dispose();
     	model1.dispose();
-    	//model2.dispose();
     }
 
     @Override
