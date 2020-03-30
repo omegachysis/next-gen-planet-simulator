@@ -51,7 +51,7 @@ public class PlanetSim extends ApplicationAdapter
         // final CelestialBody earth = new CelestialBody(
         //     Metrics.kg(5.97e24), // mass
         //     Metrics.m(6378.1e3), // radius
-        //     Vector3.Zero, Vector3.Zero, 
+        //     Vector3.Zero, Vector3.Zero,
         //     new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f), // spin
         //     "earth.jpg");
         // add(earth);

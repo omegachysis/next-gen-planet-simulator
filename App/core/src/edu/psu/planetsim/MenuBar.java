@@ -231,13 +231,17 @@ public class MenuBar {
                         addButton.setPosition(115, 10);
                         addButton.addListener(e -> {
                             if (addButton.isPressed()) {
-                                String name = textField1.getText();
-
                                 Dialog wrong = new Dialog("Incorrect entry", skin);
                                 wrong.text("One or more of your values is invalid. \n Please try again.");
                                 wrong.setPosition(500, 500);
                                 wrong.setWidth(400);
                                 wrong.button("Close");
+
+                                try {
+                                    String name = textField1.getText();
+                                } catch (NullPointerException n){
+                                    stage.addActor(wrong);
+                                }
 
                                 try {
                                     double radius = Double.parseDouble(textField2.getText());
@@ -246,7 +250,7 @@ public class MenuBar {
                                     double mass = Double.parseDouble(textField5.getText());
                                 } catch (NumberFormatException n) {
                                         stage.addActor(wrong);
-                                    return false;
+                                    return true;
                                 }
 
 //                                try{
@@ -507,6 +511,10 @@ public class MenuBar {
         button1.setPosition(1170, 680);
         // TODO: play pause in app state
         //  e.g. appState.paused = !appState.paused
+        button1.addListener(e ->{
+            appState.paused = !appState.paused;
+            return true;
+        });
 
         font = new BitmapFont();
         textButtonStyle = new TextButton.TextButtonStyle();
