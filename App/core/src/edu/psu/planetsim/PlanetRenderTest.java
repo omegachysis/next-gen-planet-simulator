@@ -87,7 +87,7 @@ public class PlanetRenderTest implements ApplicationListener {
         // We'll get some input map of elevations by latitude/longitude:
         float[] elevationMap = new float[latitudes * longitudes];
         // These are stand-ins for values the program will pass into the generation loop
-        float terrainEccentricity = 0.4f;
+        float terrainEccentricity = 0.75f;
         float terrainRoughness = 0.01f;
         float planetRadius = 5f;
         // Seeds the planet model with mountain peaks
@@ -134,6 +134,42 @@ public class PlanetRenderTest implements ApplicationListener {
             	if (elevationMap[i] < avgElevation)
             	{
             		elevationMap[i] = ((avgElevation + peakTallest)/2);
+            	}
+            }
+        }
+        // Second loop necessary to improve mountain range cohesion
+        for (int i = elevationMap.length-1; i >= 0; i--)
+        {
+            if (i > longitudes && i < ((latitudes * longitudes) - longitudes - 1))
+            {
+            	float peakN = elevationMap[i-longitudes];
+            	float peakS = elevationMap[i+longitudes];
+            	float peakE = elevationMap[i+1];
+            	float peakW = elevationMap[i-1];
+            	float peakNE = elevationMap[i-longitudes+1];
+            	float peakNW = elevationMap[i-longitudes-1];
+            	float peakSE = elevationMap[i+longitudes+1];
+            	float peakSW = elevationMap[i+longitudes-1];
+            	float peaks[] = {peakN, peakS, peakE, peakW, peakNE, peakNW, peakSE, peakSW};
+            	float sumElevation = 0;
+            	float peakTallest = 0;
+            	for (int j = 0; j < peaks.length; j++)
+            	{
+            		sumElevation = sumElevation + peaks[j];
+            		if (peaks[j] > peakTallest)
+            		{
+            			peakTallest = peaks[j];
+            		}
+            	}
+            	float avgElevation = sumElevation / 8;
+            	if (elevationMap[i] < avgElevation)
+            	{
+            		elevationMap[i] = ((avgElevation + peakTallest)/2);
+            	}
+            	// Attempt to fix needle mountain peaks
+            	else if (elevationMap[i] > peakTallest)
+            	{
+            		elevationMap[i] = elevationMap[i] * 0.99f;
             	}
             }
         }
