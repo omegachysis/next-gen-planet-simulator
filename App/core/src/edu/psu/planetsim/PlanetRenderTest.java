@@ -92,7 +92,7 @@ public class PlanetRenderTest implements ApplicationListener {
             elevationMap[i] += (float)Math.sin((i / 180) * 0.4f) * 0.02f;
             elevationMap[i] += (float)Math.sin((i % 180) * 0.4f) * 0.02f;
         }
-        boolean useMap = false;
+        boolean useMap = true;
         
         var planetCenter = new Vector3();
 
@@ -110,7 +110,7 @@ public class PlanetRenderTest implements ApplicationListener {
 	            float tx = verticesHolder[i * 8 + 6];
 	            float ty = verticesHolder[i * 8 + 7];
 	            
-	            Vector3 workVector = new Vector3(nx, ny, nz);
+	            var workVector = new Vector3(nx, ny, nz);
 	            workVector = workVector.scl(elevationMap[i]);
 	            verticesHolder[i * 8 + 0] = workVector.x;
 	            verticesHolder[i * 8 + 1] = workVector.y;
@@ -134,7 +134,12 @@ public class PlanetRenderTest implements ApplicationListener {
 	            float nz = verticesHolder[i * 8 + 5];
 	            float tx = verticesHolder[i * 8 + 6];
 	            float ty = verticesHolder[i * 8 + 7];
-	
+	            
+	        	double val = 0.04f * rand.nextDouble();
+        		
+                verticesHolder[i * 8 + 0] += val;
+                verticesHolder[i * 8 + 1] += val;
+                verticesHolder[i * 8 + 2] += val;
 	        }
         }
         
