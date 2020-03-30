@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -130,16 +131,34 @@ public class MenuBar {
                         saveButton.setPosition(90, 3);
                          saveButton.addListener(e -> {
                              if (saveButton.isPressed()) {
+
                                  Dialog saved = new Dialog("", skin);
                                  saved.setMovable(true);
                                  saved.text("File Saved!");
-                                 saved.setPosition(500, 300);
+                                 saved.setPosition(500, 500);
                                  saved.setWidth(250);
-                                 saved.button("Ok", true);
+                                 //saved.button("Ok", true);
+
+                                 /*MoveToAction savedAction = new MoveToAction();
+                                 savedAction.setPosition(300f, 100f);
+                                 savedAction.setDuration(2f);
+                                 saved.addAction(savedAction);
+                                  */
+
                                  stage.addActor(saved);
+                                 saveDialog.hide();
+
+                                 Timer.schedule(new Timer.Task() {
+                                     @Override
+                                     public void run() {
+                                         saved.hide();
+                                     }
+                                 }, 1);
+
                              }
                              return true;
                          });
+
                         table.add(saveButton);
                         saveDialog.addActor(saveButton);
 
@@ -171,8 +190,15 @@ public class MenuBar {
                         save.setPosition(500, 500);
                         save.setWidth(250);
                         save.text("File Saved!" );
-                        save.button("Ok",true);
+                        //save.button("Ok",true);
                         stage.addActor(save);
+
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                save.hide();
+                            }
+                        }, 1);
 
                         fileSelect.setSelectedIndex(0);
                         break;
