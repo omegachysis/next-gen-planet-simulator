@@ -18,6 +18,7 @@ public class AppState
     public float speed = 1;
     public boolean paused = false;
     public float zoom = 0.6f;
+    public String inputtext = "Input text will be displayed here...";
 
     static class CelestialBody
     {

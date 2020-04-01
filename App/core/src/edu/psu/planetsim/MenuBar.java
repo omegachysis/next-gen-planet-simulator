@@ -29,6 +29,7 @@ public class MenuBar {
     private TextField speedbutton;
     private TextButton button4;
     private TextButton button5;
+    private TextButton inputButton;
     private TextButton.TextButtonStyle textButtonStyle;
     private Slider zoomSlider;
     BitmapFont font;
@@ -131,7 +132,6 @@ public class MenuBar {
                         saveButton.setPosition(90, 3);
                          saveButton.addListener(e -> {
                              if (saveButton.isPressed()) {
-
                                  Dialog saved = new Dialog("", skin);
                                  saved.setMovable(true);
                                  saved.text("File Saved!");
@@ -550,20 +550,28 @@ public class MenuBar {
         button2.setSize(150, 80);
         button2.setPosition(940, 655);
 
-        //button3 = new TextButton("100", skin, "default");
-        //button3.setSize(60, 35);
-        //button3.setPosition(1105, 680);
+        inputButton = new TextButton("Input text will be displayed here...", textButtonStyle);
+        inputButton.setSize(150, 60);
+        inputButton.setPosition(50, 0);
+        inputButton.setText(appState.inputtext);
+        inputButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+
+                _appState.inputtext = inputButton.toString();
+            }
+         });
+
 
         speedbutton = new TextField("",skin);
         speedbutton.setSize(110,35);
         speedbutton.setPosition(1050,680);
         speedbutton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                try 
+                try
                 {
                     _appState.speed = (float)Double.parseDouble(speedbutton.getText());
-                } 
-                catch (NumberFormatException e) 
+                }
+                catch (NumberFormatException e)
                 {
                     _appState.speed = 0.6f;
                 }
@@ -595,6 +603,7 @@ public class MenuBar {
         stage.addActor(button1);
         stage.addActor(button2);
         stage.addActor(speedbutton);
+        stage.addActor(inputButton);
         stage.addActor(button4);
         stage.addActor(button5);
         stage.addActor(zoomText);
@@ -620,5 +629,11 @@ public class MenuBar {
     public float getZoom() 
     {
         return zoomSlider.getValue();
+    }
+
+    public String getText()
+    {
+        return inputButton.toString();
+
     }
 }
