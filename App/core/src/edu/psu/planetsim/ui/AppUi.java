@@ -228,8 +228,14 @@ public class AppUi {
 
                         Label addLabel1 = new Label("Name:", skin);
                         addLabel1.setPosition(5,240);
-                        TextField textField1 = new TextField("",skin);
+                        final TextField textField1 = new TextField("",skin);
                         textField1.setPosition(160,240);
+ //                       textField1.addListener(new ChangeListener() {
+ //                           @Override
+ //                           public void changed(ChangeEvent event, Actor actor) {
+ //                               name = textField1.getText();
+  //                          }
+  //                      });
 
                         Label addLabel2 = new Label("Radius (km):", skin);
                         addLabel2.setPosition(5,195);
@@ -300,11 +306,17 @@ public class AppUi {
 //                                    stage.addActor(wrong);
 //                                }
 
+
+                                button4 = new TextButton("Earth", skin, "default");
+                                button4.setSize(110, 30);
+                                button4.setPosition(30, 635);
+
                                 Dialog success = new Dialog("Correct entry", skin);
                                 success.setPosition(500, 500);
                                 success.setWidth(400);
                                 success.text("Your celestial body has been added.");
                                 success.button("Close");
+                                stage.addActor(button4);
                                 stage.addActor(success);
                                 addDialog.hide();
                             }
@@ -577,9 +589,9 @@ public class AppUi {
             }
         });
 
-        button4 = new TextButton("Earth", skin, "default");
-        button4.setSize(110, 30);
-        button4.setPosition(30, 635);
+//        button4 = new TextButton("Earth", skin, "default");
+//        button4.setSize(110, 30);
+//        button4.setPosition(30, 635);
 
         button5 = new TextButton("Luna", skin, "default");
         button5.setSize(80, 30);
@@ -603,7 +615,7 @@ public class AppUi {
         stage.addActor(button2);
         stage.addActor(speedbutton);
         stage.addActor(inputButton);
-        stage.addActor(button4);
+//        stage.addActor(button4);
         stage.addActor(button5);
         stage.addActor(zoomText);
         stage.addActor(zoomSlider);
