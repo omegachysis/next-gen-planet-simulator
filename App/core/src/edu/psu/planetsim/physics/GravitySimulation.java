@@ -1,6 +1,8 @@
-package edu.psu.planetsim;
+package edu.psu.planetsim.physics;
 
 import com.badlogic.gdx.math.Vector3;
+
+import edu.psu.planetsim.Metrics;
 
 import java.util.ArrayList;
 

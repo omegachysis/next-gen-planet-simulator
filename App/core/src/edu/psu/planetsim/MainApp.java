@@ -9,34 +9,27 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 
-public class PlanetSim extends ApplicationAdapter 
+import edu.psu.planetsim.physics.CelestialSim;
+import edu.psu.planetsim.ui.AppUi;
+
+public class MainApp extends ApplicationAdapter 
 {
-	AppState appState;
-	MenuBar menuBar;
-	Stage stage;
-	CelestialSim _cRenderer;
+	private AppState _appState;
+	private Stage _stage;
+	private CelestialSim _sim;
 
 	public void create() 
 	{
-		appState = new AppState();
+		// Set up app state.
+		_appState = new AppState();
 
-		stage = new Stage();
-
+		// Set up UI and input controls.
+		_stage = new Stage();
 		final var multiplexer = new InputMultiplexer();
-		multiplexer.addProcessor(stage);
-
+		multiplexer.addProcessor(_stage);
 		Gdx.input.setInputProcessor(multiplexer);
-		// Gdx.input.setInputProcessor(stage);
-
-		menuBar = new MenuBar(stage, appState);
-
-		// sideBar = new SideBar(stage);
-		// selectBox = new SelectBox(style);
-		// selectBox = new SelectBox(style);
+		new AppUi(_stage, _appState);
 
 		final var planet1 = new AppState.CelestialBody();
         planet1.id = UUID.randomUUID();
@@ -46,7 +39,7 @@ public class PlanetSim extends ApplicationAdapter
         planet1.velocity = new Vector3();
         planet1.spin = new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f);
 		planet1.orientation = new Quaternion().setFromCross(Vector3.Y, planet1.spin);
-		appState.bodies.put(planet1.id, planet1);
+		_appState.bodies.put(planet1.id, planet1);
 
 		final var moon1 = new AppState.CelestialBody();
         moon1.id = UUID.randomUUID();
@@ -56,7 +49,7 @@ public class PlanetSim extends ApplicationAdapter
         moon1.velocity = new Vector3();
         moon1.spin = new Vector3();
 		moon1.orientation = new Quaternion();
-		appState.bodies.put(moon1.id, moon1);
+		_appState.bodies.put(moon1.id, moon1);
 
 		planet1.satellites.add(moon1.id);
 
@@ -76,13 +69,13 @@ public class PlanetSim extends ApplicationAdapter
         //     "luna.jpg");
         // add(luna);
 
-		_cRenderer = new CelestialSim(appState);
-		_cRenderer.setCurrentCelestialBody(planet1.id);
+		_sim = new CelestialSim(_appState);
+		_sim.setCurrentCelestialBody(planet1.id);
 	}
 
 	public void resize(final int width, final int height)
 	{
-		stage.getViewport().update(width, height, true);
+		_stage.getViewport().update(width, height, true);
 	}
 
 	public void render() 
@@ -90,15 +83,15 @@ public class PlanetSim extends ApplicationAdapter
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		
-		_cRenderer.render();
+		_sim.render();
 
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
+        _stage.act(Gdx.graphics.getDeltaTime());
+        _stage.draw();
 	}
 	
 	public void dispose() 
 	{
-		stage.dispose();
-		_cRenderer.dispose();
+		_stage.dispose();
+		_sim.dispose();
     }
 }

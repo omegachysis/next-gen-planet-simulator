@@ -4,7 +4,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import edu.psu.planetsim.PlanetRenderTest;
-import edu.psu.planetsim.PlanetSim;
+import edu.psu.planetsim.MainApp;
 import edu.psu.planetsim.ThermalTest;
 
 public class DesktopLauncher {
@@ -18,7 +18,7 @@ public class DesktopLauncher {
 		var config = new LwjglApplicationConfiguration();
 		config.width = 1280;
 		config.height = 720;
-		new LwjglApplication(new PlanetSim(), config);
+		new LwjglApplication(new MainApp(), config);
 		//new LwjglApplication(new ThermalTest(), config);
 		//new LwjglApplication(new PlanetRenderTest(), config);
 	}

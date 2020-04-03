@@ -1,4 +1,4 @@
-package edu.psu.planetsim;
+package edu.psu.planetsim.ui;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Input;
@@ -16,13 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 
+import edu.psu.planetsim.AppState;
+
 import java.util.TimerTask;
 
-public class MenuBar {
-
-    private AppState _appState;
-    private Stage stage;
-    private Skin skin;
+public class AppUi {
+    private final AppState _appState;
+    private final Skin skin;
 
     private TextButton button1;
     private TextButton button2;
@@ -34,8 +34,7 @@ public class MenuBar {
     private Slider zoomSlider;
     BitmapFont font;
 
-
-    public MenuBar(final Stage stage, AppState appState) {
+    public AppUi(final Stage stage, AppState appState) {
 
         _appState = appState;
         skin = new Skin(Gdx.files.internal("uiskin.json"));

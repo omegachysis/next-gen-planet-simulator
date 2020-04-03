@@ -1,4 +1,4 @@
-package edu.psu.planetsim;
+package edu.psu.planetsim.physics;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -11,6 +11,9 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.dynamics.*;
+
+import edu.psu.planetsim.AppState;
+import edu.psu.planetsim.Metrics;
 
 public class CelestialSim 
 {

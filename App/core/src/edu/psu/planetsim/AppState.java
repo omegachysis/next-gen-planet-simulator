@@ -20,7 +20,7 @@ public class AppState
     public float zoom = 0.6f;
     public String inputtext = "Input text will be displayed here...";
 
-    static class CelestialBody
+    public static class CelestialBody
     {
         public UUID id;
         public String name;

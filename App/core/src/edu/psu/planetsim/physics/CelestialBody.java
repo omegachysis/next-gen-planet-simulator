@@ -1,6 +1,5 @@
-package edu.psu.planetsim;
+package edu.psu.planetsim.physics;
 
-import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
@@ -16,6 +15,9 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.bullet.linearmath.*;
+
+import edu.psu.planetsim.AppState;
+import edu.psu.planetsim.Metrics;
 
 public class CelestialBody extends KinematicObject 
 {

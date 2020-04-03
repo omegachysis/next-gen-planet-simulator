@@ -1,4 +1,4 @@
-package edu.psu.planetsim;
+package edu.psu.planetsim.physics;
 
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
