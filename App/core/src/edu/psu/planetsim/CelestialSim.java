@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.physics.bullet.dynamics.*;
 
-public class CelestialRenderer 
+public class CelestialSim 
 {
     private final PerspectiveCamera _cam;
     private final ModelBatch _modelBatch;
@@ -20,6 +20,7 @@ public class CelestialRenderer
     private final GravitySimulation _gravitySim;
     private final Environment _environment;
     private final btCollisionDispatcher _dispatcher;
+    private final btDefaultCollisionConfiguration _config;
     private final btDbvtBroadphase _pairCache;
     private final btSequentialImpulseConstraintSolver _solver;
     private final ArrayList<CelestialBody> _bodies = new ArrayList<>();
@@ -33,7 +34,7 @@ public class CelestialRenderer
      */
     public int zoomTo = -1;
 
-    public CelestialRenderer(final AppState appState) 
+    public CelestialSim(final AppState appState) 
     {
         Bullet.init();
 
@@ -48,11 +49,11 @@ public class CelestialRenderer
         _environment = new Environment();
         _environment.add(new DirectionalLight().set(1, 1, 1, 1, 2, 0));
 
-        final var config = new btDefaultCollisionConfiguration();
-        _dispatcher = new btCollisionDispatcher(config);
+        _config = new btDefaultCollisionConfiguration();
+        _dispatcher = new btCollisionDispatcher(_config);
         _pairCache = new btDbvtBroadphase();
         _solver = new btSequentialImpulseConstraintSolver();
-        _world = new btSimpleDynamicsWorld(_dispatcher, _pairCache, _solver, config);
+        _world = new btSimpleDynamicsWorld(_dispatcher, _pairCache, _solver, _config);
         _world.setGravity(Vector3.Zero);
 
         _gravitySim = new GravitySimulation();

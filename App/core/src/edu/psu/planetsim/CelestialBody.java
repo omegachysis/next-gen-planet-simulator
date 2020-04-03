@@ -24,7 +24,7 @@ public class CelestialBody extends KinematicObject
 
     public CelestialBody(final AppState.CelestialBody dto)
     {
-        final var radius = Metrics.m(5.0e6);
+        final var radius = Metrics.m(1.0e6);
 
         // Build the model.
         _modelBase = new ModelBuilder().createSphere(

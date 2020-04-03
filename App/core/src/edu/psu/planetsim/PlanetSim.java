@@ -18,7 +18,7 @@ public class PlanetSim extends ApplicationAdapter
 	AppState appState;
 	MenuBar menuBar;
 	Stage stage;
-	CelestialRenderer _cRenderer;
+	CelestialSim _cRenderer;
 
 	public void create() 
 	{
@@ -41,12 +41,24 @@ public class PlanetSim extends ApplicationAdapter
 		final var planet1 = new AppState.CelestialBody();
         planet1.id = UUID.randomUUID();
         planet1.name = "Planet 1";
-        planet1.mass = 1.0e24;
+        planet1.mass = Metrics.kg(1.0e24);
         planet1.position = new Vector3();
         planet1.velocity = new Vector3();
         planet1.spin = new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f);
 		planet1.orientation = new Quaternion().setFromCross(Vector3.Y, planet1.spin);
 		appState.bodies.put(planet1.id, planet1);
+
+		final var moon1 = new AppState.CelestialBody();
+        moon1.id = UUID.randomUUID();
+        moon1.name = "Moon 1";
+        moon1.mass = Metrics.kg(1.0e22);
+        moon1.position = new Vector3(Metrics.m(10.0e6), 0, 0);
+        moon1.velocity = new Vector3();
+        moon1.spin = new Vector3();
+		moon1.orientation = new Quaternion();
+		appState.bodies.put(moon1.id, moon1);
+
+		planet1.satellites.add(moon1.id);
 
         // final CelestialBody earth = new CelestialBody(
         //     Metrics.kg(5.97e24), // mass
@@ -64,7 +76,7 @@ public class PlanetSim extends ApplicationAdapter
         //     "luna.jpg");
         // add(luna);
 
-		_cRenderer = new CelestialRenderer(appState);
+		_cRenderer = new CelestialSim(appState);
 		_cRenderer.setCurrentCelestialBody(planet1.id);
 	}
 
