@@ -230,12 +230,18 @@ public class AppUi {
                         addLabel1.setPosition(5,240);
                         final TextField textField1 = new TextField("",skin);
                         textField1.setPosition(160,240);
- //                       textField1.addListener(new ChangeListener() {
- //                           @Override
- //                           public void changed(ChangeEvent event, Actor actor) {
- //                               name = textField1.getText();
-  //                          }
-  //                      });
+                        textField1.addListener(new ChangeListener() {
+                            @Override
+                            public void changed(ChangeEvent event, Actor actor) {
+                                 textField1.getText();
+                                //String test = textField1.getText();
+                                //System.out.println(test);
+                                button4 = new TextButton(textField1.getText(), skin);
+                                button4.setSize(110, 30);
+                                button4.setPosition(30, 635);
+
+                            }
+                        });
 
                         Label addLabel2 = new Label("Radius (km):", skin);
                         addLabel2.setPosition(5,195);
@@ -305,11 +311,6 @@ public class AppUi {
 //                                }catch(NumberFormatException n){
 //                                    stage.addActor(wrong);
 //                                }
-
-
-                                button4 = new TextButton("Earth", skin, "default");
-                                button4.setSize(110, 30);
-                                button4.setPosition(30, 635);
 
                                 Dialog success = new Dialog("Correct entry", skin);
                                 success.setPosition(500, 500);
