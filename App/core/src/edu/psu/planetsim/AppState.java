@@ -17,12 +17,28 @@ public class AppState
 
     public float speed = 1;
     public boolean paused = false;
+
+    /** The current PARENT celestial body, do not put satellites in here! */
+    public UUID currentCelestialBody = null;
+    public ViewingMode viewingMode = ViewingMode.MainCelestialBody;
+
+    /** Set the index of the satellite to zoom to, if in satellite mode. */
+    public int satelliteFocusedIndex = 0;
+
     public float zoom = 0.6f;
     public String inputtext = "Input text will be displayed here...";
+
+    public static enum ViewingMode
+    {
+        CenterOfMass,
+        MainCelestialBody,
+        NaturalSatellite
+    }
 
     public static class CelestialBody
     {
         public UUID id;
+        public boolean isSatellite;
         public String name;
         public double mass;
         public Vector3 position;

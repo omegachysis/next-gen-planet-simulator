@@ -33,15 +33,8 @@ public class CelestialSim
     private final btSequentialImpulseConstraintSolver _solver;
     private final ArrayList<CelestialBody> _bodies = new ArrayList<>();
     private final AppState _appState;
-    private UUID _currentCelestialBody;
+    private UUID _currentCelestialBody = null;
     
-    /** Which body to actually zoom to in the simulation.
-     * Specify -1 to zoom to the center of mass.
-     * Specify 0 to zoom to the main celestial body.
-     * Specify a number >= 1 to zoom to that indexed natural satellite.
-     */
-    public int zoomTo = -1;
-
     public CelestialSim(final AppState appState, final InputMultiplexer multiplexer) 
     {
         Bullet.init();
@@ -78,16 +71,12 @@ public class CelestialSim
         _gravitySim = new GravitySimulation();
     }
 
-    public UUID getCurrentCelestialBody()
+    private void updateCurrentCelestialBody(UUID value)
     {
-        return _currentCelestialBody;
-    }
-    
-    public void setCurrentCelestialBody(UUID value)
-    {
-        zoomTo = 0;
-        clear();
+        if (_currentCelestialBody != null && _currentCelestialBody.equals(value))
+            return;
 
+        clear();
         _currentCelestialBody = value;
         if (_appState.bodies.containsKey(value))
         {
@@ -128,6 +117,8 @@ public class CelestialSim
 
     public void render() 
     {
+        updateCurrentCelestialBody(_appState.currentCelestialBody);
+
         _modelBatch.begin(_cam);
         for (final var body : _bodies) 
         {
@@ -138,18 +129,13 @@ public class CelestialSim
         _gravitySim.applyGravityForces();
         _world.stepSimulation(Gdx.graphics.getDeltaTime() * _appState.speed);
 
-        final Vector3 target;
-        if (zoomTo == -1) 
-        {
+        Vector3 target = new Vector3(0, 0, 0);
+        if (_appState.viewingMode == AppState.ViewingMode.CenterOfMass)
             target = _gravitySim.getCenterOfMass();
-        }
-        else
-        {
-            if (zoomTo < _bodies.size())
-                target = _bodies.get(zoomTo).getPosition();
-            else
-                target = Vector3.Zero;
-        }
+        else if (_appState.viewingMode == AppState.ViewingMode.MainCelestialBody)
+            target = _bodies.get(0).getPosition();
+        else if (_appState.viewingMode == AppState.ViewingMode.NaturalSatellite)
+            target = _bodies.get(_appState.satelliteFocusedIndex + 1).getPosition();
 
         _camControl.update();
         

@@ -40,6 +40,7 @@ public class MainApp extends ApplicationAdapter
         planet1.spin = new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f);
 		planet1.orientation = new Quaternion().setFromCross(Vector3.Y, planet1.spin);
 		_appState.bodies.put(planet1.id, planet1);
+		_appState.currentCelestialBody = planet1.id;
 
 		final var moon1 = new AppState.CelestialBody();
         moon1.id = UUID.randomUUID();
@@ -70,7 +71,6 @@ public class MainApp extends ApplicationAdapter
         // add(luna);
 
 		_sim = new CelestialSim(_appState, multiplexer);
-		_sim.setCurrentCelestialBody(planet1.id);
 	}
 
 	public void resize(final int width, final int height)
