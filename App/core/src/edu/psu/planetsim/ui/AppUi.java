@@ -373,8 +373,32 @@ public class AppUi {
                         deleteDialog.setPosition(500, 500);
                         deleteDialog.setWidth(310);
                         deleteDialog.text("Are you sure to delete a celestial body? \n Remember: You'll lose this celestial body.");
-                        deleteDialog.button("Yes", true);
-                        deleteDialog.button("No", false);
+
+                        var deleteButton = new TextButton("Yes", skin);
+                        deleteButton.setPosition(110, 3);
+                        deleteButton.addListener(e -> {
+                            if (deleteButton.isPressed()) {
+                                button4.remove();
+                                deleteDialog.hide();
+                            }
+                            return true;
+                        });
+
+                        var NoButton = new TextButton("No", skin);
+                        NoButton.setPosition(160, 3);
+                        NoButton.addListener(e -> {
+                            if (NoButton.isPressed()) {
+                                deleteDialog.hide();
+                            }
+                            return true;
+                        });
+
+                        Table table3 = new Table(skin);
+                        table3.add(deleteButton);
+                        table3.add(NoButton);
+
+                        deleteDialog.addActor(deleteButton);
+                        deleteDialog.addActor(NoButton);
                         stage.addActor(deleteDialog);
                         editSelect.setSelectedIndex(0);
                         break;
@@ -443,9 +467,9 @@ public class AppUi {
                         changeDialog.text("Change celestial body selection...");
 
                         var changeButton = new TextButton("Change", skin);
-                        changeButton.setPosition(60, 3);
-                        changeButton.addListener(e -> {
-                            if (changeButton.isPressed()) {
+                                changeButton.setPosition(60, 3);
+                                changeButton.addListener(e -> {
+                                    if (changeButton.isPressed()) {
                                 Dialog newCB = new Dialog("New Celestial Body", skin);
                                 newCB.setMovable(true);
                                 newCB.text("Assume this as New CB for now...");
@@ -616,7 +640,6 @@ public class AppUi {
         stage.addActor(button2);
         stage.addActor(speedbutton);
         stage.addActor(inputButton);
-//        stage.addActor(button4);
         stage.addActor(button5);
         stage.addActor(zoomText);
         stage.addActor(zoomSlider);
