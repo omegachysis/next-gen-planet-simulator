@@ -69,7 +69,7 @@ public class MainApp extends ApplicationAdapter
         //     "luna.jpg");
         // add(luna);
 
-		_sim = new CelestialSim(_appState);
+		_sim = new CelestialSim(_appState, multiplexer);
 		_sim.setCurrentCelestialBody(planet1.id);
 	}
 
