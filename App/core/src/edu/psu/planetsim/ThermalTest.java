@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -18,7 +20,8 @@ public class ThermalTest extends ApplicationAdapter
 {
     ShaderProgram shader;
     SpriteBatch batch;
-    Texture img;
+    Texture thermal;
+    Texture diffusivity;
     FrameBuffer fbo;
     Mesh mesh;
 
@@ -50,13 +53,16 @@ public class ThermalTest extends ApplicationAdapter
         });
         mesh.setIndices(new short[] { 0, 2, 1, 1, 2, 3 });
         
-        fbo = new FrameBuffer(Format.RGB888, 128, 128, false);
+        fbo = new FrameBuffer(Format.RGB888, 16 * 16, 16, false);
         batch = new SpriteBatch();
-        img = new Texture("heat.png");
+        thermal = new Texture("heat.png");
+        thermal.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
+
+        diffusivity = new Texture("diffusivity.png");
 
         fbo.begin();
         batch.begin();
-        batch.draw(img, 0, 0, 1280, 800);
+        batch.draw(thermal, 0, 0, 1280, 800);
         batch.end();
         fbo.end();
 	}
@@ -67,17 +73,28 @@ public class ThermalTest extends ApplicationAdapter
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         fbo.begin();
-        fbo.getColorBufferTexture().bind(0);
         shader.begin();
+
+        // Bind heat storage texture.
+        fbo.getColorBufferTexture().bind(0);
         shader.setUniformi("u_texture", 0);
-        shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime());
+
+        // Bind the texture describing the thermal diffusivity.
+        diffusivity.bind(1);
+        shader.setUniformi("u_diffusivity", 1);
+
+        // Bind uniforms for discrete time evolution and sizes.
+        shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime() / 10f);
         shader.setUniformf("u_dx", 1f / fbo.getWidth());
+        shader.setUniformf("u_len", 16f);
+
+        // Calcualte the heat equation approximation by drawing to the shader.
         mesh.render(shader, GL20.GL_TRIANGLES, 0, 6);
         shader.end();
         fbo.end();
 
         batch.begin();
-        batch.draw(fbo.getColorBufferTexture(), 0, 0, 1280, 800);
+        batch.draw(fbo.getColorBufferTexture(), 0, 400, 1280, 1280 / 16);
         batch.end();
 	}
 
@@ -85,7 +102,7 @@ public class ThermalTest extends ApplicationAdapter
     {
         batch.dispose();
         shader.dispose();
-        img.dispose();
+        thermal.dispose();
         mesh.dispose();
         fbo.dispose();
     }

@@ -1,8 +1,10 @@
 #version 110
 varying vec2 f_position;
 uniform sampler2D u_texture;
+uniform sampler2D u_diffusivity;
 uniform float u_dx;
 uniform float u_dt;
+uniform float u_len;
 
 // Do a base-255 conversion between RGB values and a single packed value.
 float getF(vec3 pixel)
@@ -26,18 +28,23 @@ vec3 getColor(float f)
 
 void main()
 {
-    // Fetch nearby pixel values for calculating derivatives.
+    // Fetch nearby pixel values for the laplacian.
     float c = getF(texture2D(u_texture, vec2(f_position.x, f_position.y)).rgb);
     float w = getF(texture2D(u_texture, vec2(f_position.x - u_dx, f_position.y)).rgb);
     float e = getF(texture2D(u_texture, vec2(f_position.x + u_dx, f_position.y)).rgb);
     float n = getF(texture2D(u_texture, vec2(f_position.x, f_position.y - u_dx)).rgb);
     float s = getF(texture2D(u_texture, vec2(f_position.x, f_position.y + u_dx)).rgb);
+    float u = getF(texture2D(u_texture, vec2(f_position.x + u_dx * u_len, f_position.y)).rgb);
+    float d = getF(texture2D(u_texture, vec2(f_position.x - u_dx * u_len, f_position.y)).rgb);
 
-    // Calculate laplacian.
-    float laplacian = (w + e + n + s) * 0.25 - c;
+    // Fetch the thermal diffusivity at this location.
+    float perm = texture2D(u_diffusivity, vec2(f_position.x, f_position.y)).r;
 
-    // Calculate heat equation.
-    float df_dt = 0.5 * laplacian * u_dt;
+    // Estimate the laplacian.
+    float laplacian = (w + e + n + s + u + d) / 6.0 - c;
+
+    // Estimate the discrete time evolution heat equation.
+    float df_dt = perm * laplacian * u_dt;
 
     gl_FragColor = vec4(getColor(c + df_dt), 1);
 }

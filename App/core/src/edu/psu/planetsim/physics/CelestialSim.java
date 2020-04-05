@@ -126,8 +126,11 @@ public class CelestialSim
         }
         _modelBatch.end();
 
-        _gravitySim.applyGravityForces();
-        _world.stepSimulation(Gdx.graphics.getDeltaTime() * _appState.speed);
+        if (!_appState.paused)
+        {
+            _gravitySim.applyGravityForces();
+            _world.stepSimulation(Gdx.graphics.getDeltaTime() * _appState.speed);
+        }
 
         Vector3 target = new Vector3(0, 0, 0);
         if (_appState.viewingMode == AppState.ViewingMode.CenterOfMass)
