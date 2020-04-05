@@ -267,7 +267,7 @@ public class AppUi {
                                 wrong.text("One or more of your values is invalid. \n Please try again.");
                                 wrong.setPosition(500, 500);
                                 wrong.setWidth(400);
-                                wrong.button("Close");
+                                wrong.setHeight(100);
 
                                 try {
                                     String name = textField1.getText();
@@ -282,36 +282,26 @@ public class AppUi {
                                     double mass = Double.parseDouble(textField5.getText());
                                 } catch (NumberFormatException n) {
                                         stage.addActor(wrong);
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            wrong.hide();
+                                        }
+                                    }, 1);
                                     return true;
                                 }
 
-//                                try{
-//                                    double radius = Double.parseDouble(textField2.getText());
-//                                }catch(NumberFormatException n){
-//                                    stage.addActor(wrong);
-//                                    return false;
-//                                }
-//                                try{
-//                                    double distance = Double.parseDouble(textField3.getText());
-//                                }catch(NumberFormatException n){
-//                                    stage.addActor(wrong);
-//                                }
-//                                try{
-//                                    double velocity = Double.parseDouble(textField4.getText());
-//                                }catch(NumberFormatException n){
-//                                    stage.addActor(wrong);
-//                                }
-//                                try{
-//                                    double mass = Double.parseDouble(textField5.getText());
-//                                }catch(NumberFormatException n){
-//                                    stage.addActor(wrong);
-//                                }
-
                                 Dialog success = new Dialog("Correct entry", skin);
                                 success.setPosition(500, 500);
-                                success.setWidth(400);
+                                success.setWidth(300);
+                                success.setHeight(100);
                                 success.text("Your celestial body has been added.");
-                                success.button("Close");
+                                Timer.schedule(new Timer.Task() {
+                                    @Override
+                                    public void run() {
+                                        success.hide();
+                                    }
+                                }, 2);
                                 stage.addActor(button4);
                                 stage.addActor(success);
                                 addDialog.hide();
@@ -626,15 +616,30 @@ public class AppUi {
         });
 
 
-        button5 = new TextButton("Luna", skin, "default");
+        button5 = new TextButton("Add Satellite", skin, "default");
         button5.setSize(80, 30);
         button5.setPosition(40, 600);
         button5.addListener(e -> {
+            if (_appState.bodies.size() == 2){
+                button5.isVisible();
+            }
             if (button5.isPressed()){
                 var currentBody = _appState.bodies.get(_appState.bodies.keySet().toArray()[1]);
                 button5.setText(currentBody.name);
             }
             return true;
+        });
+
+        var button6 = new TextButton(null, skin, "default");
+        button6.setVisible(false);
+        button6.setSize(80, 30);
+        button6.setPosition(40, 535);
+        button6.addListener(e ->
+        {
+            if (_appState.bodies.size() == 3){
+                button6.isVisible();
+            }
+           return true;
         });
 
         TextButton zoomText;
