@@ -425,28 +425,69 @@ public class AppUi {
                         Dialog sideDialog = new Dialog("Side panel", skin);
                         sideDialog.setMovable(true);
                         sideDialog.setResizable(true);
-                        sideDialog.setPosition(10, 250);
-                        sideDialog.setWidth(250);
-                        sideDialog.setHeight(350);
+                        sideDialog.setPosition(10, 200);
+                        sideDialog.setWidth(280);
+                        sideDialog.setHeight(400);
                         sideDialog.button("Done", true);
                         sideDialog.button("Close", true);
 
                         sideDialog.row();
                         Label nameLabel = new Label("Select Physical Properties:", skin);
-                        nameLabel.setPosition(5, 300);
+                        nameLabel.setPosition(5, 350);
                         CheckBox check1 = new CheckBox("Initial distance from star(AU)", skin);
-                        check1.setPosition(10, 280);
+                        check1.setPosition(10, 330);
                         CheckBox check2 = new CheckBox("Initial velocity(km/s)", skin);
-                        check2.setPosition(10, 260);
+                        check2.setPosition(10, 310);
                         CheckBox check3 = new CheckBox("PhysicalProperty-3", skin);
-                        check3.setPosition(10, 240);
+                        check3.setPosition(10, 290);
+
+
+                        Label nameLabel1 = new Label("Modify Physical Properties:", skin);
+                        nameLabel1.setPosition(5, 250);
+
+                        Label pp1 = new Label("Initial Distance (AU):", skin);
+                        pp1.setPosition(7,210);
+                        TextField Tpp1 = new TextField("",skin);
+                        Tpp1.setPosition(160,210);
+                        Tpp1.setWidth(100);
+                        Tpp1.setHeight(20);
+
+                        Label pp2 = new Label("Velocity (km/s):", skin);
+                        pp2.setPosition(7,180);
+                        TextField Tpp2 = new TextField("",skin);
+                        Tpp2.setPosition(160,180);
+                        Tpp2.setWidth(100);
+                        Tpp2.setHeight(20);
+
+                        Label pp3 = new Label("Mass (M⊕):",skin);
+                        pp3.setPosition(7, 150);
+                        TextField Tpp3 = new TextField("",skin);
+                        Tpp3.setPosition(160,150);
+                        Tpp3.setWidth(100);
+                        Tpp3.setHeight(20);
+
 
                         Table table = new Table(skin);
                         table.add(nameLabel);
                         table.add(check1);
                         table.add(check2);
                         table.add(check3);
+                        table.add(nameLabel1);
+                        table.add(pp1);
+                        table.add(pp2);
+                        table.add(pp3);
+                        table.add(Tpp1);
+                        table.add(Tpp2);
+                        table.add(Tpp3);
 
+
+                        sideDialog.addActor(nameLabel1);
+                        sideDialog.addActor(pp1);
+                        sideDialog.addActor(pp2);
+                        sideDialog.addActor(pp3);
+                        sideDialog.addActor(Tpp1);
+                        sideDialog.addActor(Tpp2);
+                        sideDialog.addActor(Tpp3);
                         sideDialog.addActor(check1);
                         sideDialog.addActor(check2);
                         sideDialog.addActor(check3);
