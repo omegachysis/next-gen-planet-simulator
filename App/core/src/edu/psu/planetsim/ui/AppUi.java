@@ -1,15 +1,9 @@
 package edu.psu.planetsim.ui;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -19,7 +13,6 @@ import com.badlogic.gdx.utils.Timer;
 import edu.psu.planetsim.AppState;
 
 import java.util.Map;
-import java.util.TimerTask;
 import java.util.UUID;
 
 public class AppUi {
@@ -620,15 +613,14 @@ public class AppUi {
 //        UUID key = entries.getKey();
 //        AppState.CelestialBody newPlanet = entries.getValue();
 
+
         button4 = new TextButton("Add Planet", skin, "default");
         button4.setSize(110, 30);
         button4.setPosition(30, 635);
         button4.addListener(e -> {
             if (button4.isPressed()){
-                Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
-                UUID key = entries.getKey();
-                AppState.CelestialBody newPlanet = entries.getValue();
-                button4.setText(newPlanet.name);
+                var currentBody = _appState.bodies.get(_appState.bodies.keySet().toArray()[0]);
+                button4.setText(currentBody.name);
             }
             return true;
         });
@@ -637,6 +629,13 @@ public class AppUi {
         button5 = new TextButton("Luna", skin, "default");
         button5.setSize(80, 30);
         button5.setPosition(40, 600);
+        button5.addListener(e -> {
+            if (button5.isPressed()){
+                var currentBody = _appState.bodies.get(_appState.bodies.keySet().toArray()[1]);
+                button5.setText(currentBody.name);
+            }
+            return true;
+        });
 
         TextButton zoomText;
         zoomText = new TextButton("Zoom", textButtonStyle);
@@ -665,6 +664,15 @@ public class AppUi {
         stage.addActor(viewSelect);
         stage.addActor(inspectSelect);
     }
+
+//    public String getName(){
+//        Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
+//        UUID key = entries.getKey();
+//        AppState.CelestialBody newPlanet = entries.getValue();
+//        return newPlanet.name;
+//        var celBodies = _appState.bodies.values().toArray();
+//        return celBodies
+//    }
 
     public int getSpeedFactor() 
     {
