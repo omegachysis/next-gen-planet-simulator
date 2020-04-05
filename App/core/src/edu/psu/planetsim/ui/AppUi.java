@@ -8,9 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Select;
 import com.badlogic.gdx.utils.Timer;
 
 import edu.psu.planetsim.AppState;
+import org.w3c.dom.Text;
 
 import java.util.Map;
 import java.util.UUID;
@@ -389,12 +391,19 @@ public class AppUi {
                         break;
 
                     case "Duplicate":
+//                        var dupDialog = new Dialog("Duplicate", skin);
+//                        dupDialog.setMovable(true);
+//                        dupDialog.setPosition(500, 500);
+//                        dupDialog.setWidth(400);
+//                        var dupSelect = new SelectBox<>(skin);
+//                        dupSelect.setItems();
+
                         editSelect.setSelectedIndex(0);
                 }
             }
         });
 
-        final SelectBox<String> viewSelect= new SelectBox<>(skin);
+        final SelectBox<String> viewSelect = new SelectBox<>(skin);
         viewSelect.setItems("View","Show Side Panel", "Change Celestial Body");
         viewSelect.setPosition(180, 680);
         viewSelect.setWidth(75);
@@ -447,41 +456,95 @@ public class AppUi {
                         Dialog changeDialog = new Dialog("Change Celestial Body", skin);
                         changeDialog.setMovable(true);
                         changeDialog.setResizable(true);
-                        changeDialog.setPosition(500, 500);
-                        changeDialog.setWidth(250);
-                        changeDialog.text("Change celestial body selection...");
+                        changeDialog.setPosition(500, 450);
+                        changeDialog.setWidth(300);
+                        changeDialog.setHeight(150);
 
-                        var changeButton = new TextButton("Change", skin);
-                                changeButton.setPosition(60, 3);
-                                changeButton.addListener(e -> {
-                                    if (changeButton.isPressed()) {
-                                Dialog newCB = new Dialog("New Celestial Body", skin);
-                                newCB.setMovable(true);
-                                newCB.text("Assume this as New CB for now...");
-                                newCB.setPosition(500, 300);
-                                newCB.setWidth(250);
-                                newCB.button("Ok", true);
-                                stage.addActor(newCB);
+                        var changeLabel = new Label("Change selection", skin);
+                        changeLabel.setPosition(50, 85);
+                        changeDialog.addActor(changeLabel);
+
+                        var changeSelect = new SelectBox<>(skin);
+                        changeSelect.setItems("Select");
+                        changeSelect.setPosition(50, 50);
+                        changeSelect.setWidth(200);
+                        changeDialog.addActor(changeSelect);
+
+                        var change = new TextButton("Change", skin);
+                        change.setPosition(135, 3);
+                        change.addListener(e -> {
+                            if (change.isPressed()) {
+                                var selected = changeSelect.getSelected();
+                                if (selected == "Select"){
+                                    changeDialog.hide();
+                                    Dialog error = new Dialog ("Invalid entry", skin);
+                                    error.setPosition(500, 500);
+                                    error.setHeight(100);
+                                    error.text("Invalid Selection \n Please try again.");
+                                    stage.addActor(error);
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            error.hide();
+                                        }
+                                    }, 1);
+                                }
+                            }
+                            return true;
+                        });
+                        changeDialog.addActor(change);
+
+                        var close = new TextButton("Close", skin);
+                        close.setPosition(80, 3);
+                        close.addListener(e -> {
+                            if (close.isPressed()){
                                 changeDialog.hide();
                             }
                             return true;
                         });
+                        changeDialog.addActor(close);
 
-                        Table table1 = new Table(skin);
-                        table1.add(changeButton);
-                        changeDialog.addActor(changeButton);
-
-                        var cancelButton = new TextButton("Cancel", skin);
-                        cancelButton.setPosition(140, 3);
-                        cancelButton.addListener(e -> {
-                            if (cancelButton.isPressed()) {
-                                changeDialog.hide();
+                        changeSelect.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y){
+                                Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
+                                AppState.CelestialBody newPlanet = entries.getValue();
+                                changeSelect.setItems("Select", newPlanet.name);
+                                changeSelect.showList();
                             }
-                            return true;
                         });
 
-                        table1.add(cancelButton);
-                        changeDialog.addActor(cancelButton);
+//                        var changeButton = new TextButton("Change", skin);
+//                                changeButton.setPosition(60, 3);
+//                                changeButton.addListener(e -> {
+//                                    if (changeButton.isPressed()) {
+//                                Dialog newCB = new Dialog("New Celestial Body", skin);
+//                                newCB.setMovable(true);
+//                                newCB.text("Assume this as New CB for now...");
+//                                newCB.setPosition(500, 300);
+//                                newCB.setWidth(250);
+//                                newCB.button("Ok", true);
+//                                stage.addActor(newCB);
+//                                changeDialog.hide();
+//                            }
+//                            return true;
+//                        });
+
+//                        Table table1 = new Table(skin);
+//                        table1.add(changeButton);
+//                        changeDialog.addActor(changeButton);
+//
+//                        var cancelButton = new TextButton("Cancel", skin);
+//                        cancelButton.setPosition(140, 3);
+//                        cancelButton.addListener(e -> {
+//                            if (cancelButton.isPressed()) {
+//                                changeDialog.hide();
+//                            }
+//                            return true;
+//                        });
+//
+//                        table1.add(cancelButton);
+//                        changeDialog.addActor(cancelButton);
 
                  //   {
                  //       if (Gdx.input.isTouched()) {
@@ -602,7 +665,6 @@ public class AppUi {
 //        Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
 //        UUID key = entries.getKey();
 //        AppState.CelestialBody newPlanet = entries.getValue();
-
 
         button4 = new TextButton("Add Planet", skin, "default");
         button4.setSize(110, 30);
