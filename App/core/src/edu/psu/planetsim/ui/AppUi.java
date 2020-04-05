@@ -26,6 +26,7 @@ public class AppUi {
     private TextField speedbutton;
     private TextButton button4;
     private TextButton button5;
+    private TextButton button7;
     private TextButton inputButton;
     private TextButton.TextButtonStyle textButtonStyle;
     private Slider zoomSlider;
@@ -233,9 +234,9 @@ public class AppUi {
                                  textField1.getText();
                                 //String test = textField1.getText();
                                 //System.out.println(test);
-                                button4 = new TextButton(textField1.getText(), skin);
-                                button4.setSize(110, 30);
-                                button4.setPosition(30, 635);
+                                button7 = new TextButton(textField1.getText(), skin);
+                                button7.setSize(110, 30);
+                                button7.setPosition(30, 565);
 
                             }
                         });
@@ -304,7 +305,9 @@ public class AppUi {
                                         success.hide();
                                     }
                                 }, 2);
-                                stage.addActor(button4);
+
+
+                                stage.addActor(button7);
                                 stage.addActor(success);
                                 addDialog.hide();
                             }
@@ -386,6 +389,7 @@ public class AppUi {
 
                         deleteDialog.addActor(deleteButton);
                         deleteDialog.addActor(NoButton);
+                        deleteDialog.addActor(table3);
                         stage.addActor(deleteDialog);
                         editSelect.setSelectedIndex(0);
                         break;
@@ -666,6 +670,7 @@ public class AppUi {
 //        UUID key = entries.getKey();
 //        AppState.CelestialBody newPlanet = entries.getValue();
 
+
         button4 = new TextButton("Add Planet", skin, "default");
         button4.setSize(110, 30);
         button4.setPosition(30, 635);
@@ -679,8 +684,8 @@ public class AppUi {
 
 
         button5 = new TextButton("Add Satellite", skin, "default");
-        button5.setSize(80, 30);
-        button5.setPosition(40, 600);
+        button5.setSize(110, 30);
+        button5.setPosition(30, 600);
         button5.addListener(e -> {
             if (_appState.bodies.size() == 2){
                 button5.isVisible();
@@ -717,6 +722,17 @@ public class AppUi {
                 _appState.zoom = zoomSlider.getValue();
             }
         });
+
+
+        Table CBtable = new Table(skin);
+        CBtable.setPosition(110,635);
+        CBtable.setSize(300, 300);
+        CBtable.add(button4);
+        CBtable.add(button5);
+        CBtable.add(button7);
+
+        stage.addActor(CBtable);
+
 
         stage.addActor(button1);
         stage.addActor(button2);
