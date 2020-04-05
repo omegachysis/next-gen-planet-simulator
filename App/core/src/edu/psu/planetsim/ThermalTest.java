@@ -20,18 +20,20 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 public class ThermalTest extends ApplicationAdapter 
 {
     ShaderProgram shader;
+    ShaderProgram visionShader;
     SpriteBatch batch;
     Texture thermal;
     Texture diffusivity;
     FrameBuffer fbo;
+    FrameBuffer visionFbo;
     Mesh mesh;
     int len = 100;
 
-    public static ShaderProgram loadShader(final String name) 
+    public static ShaderProgram loadShader(final String vert, final String frag) 
     {
         final var res = new ShaderProgram(
-			Gdx.files.getFileHandle(name + ".vert", Files.FileType.Internal),
-			Gdx.files.getFileHandle(name + ".frag", Files.FileType.Internal));
+			Gdx.files.getFileHandle(vert + ".vert", Files.FileType.Internal),
+			Gdx.files.getFileHandle(frag + ".frag", Files.FileType.Internal));
 		if (!res.isCompiled())
 			throw new GdxRuntimeException(res.getLog());
 		System.out.print(res.getLog());
@@ -40,7 +42,8 @@ public class ThermalTest extends ApplicationAdapter
 
     public void create() 
     {
-        shader = loadShader("thermal");
+        shader = loadShader("thermal", "thermal");
+        visionShader = loadShader("thermal", "thermal_vision");
 
         // Create a quad for performing the draw instruction that calculates 
         // the heat equation on the graphics card.
@@ -56,6 +59,7 @@ public class ThermalTest extends ApplicationAdapter
         mesh.setIndices(new short[] { 0, 2, 1, 1, 2, 3 });
         
         fbo = new FrameBuffer(Format.RGB888, len * len, len, false);
+        visionFbo = new FrameBuffer(Format.RGB888, len * len, len, false);
         batch = new SpriteBatch();
 
         // Procedurally generate a thermal texture.
@@ -130,11 +134,18 @@ public class ThermalTest extends ApplicationAdapter
         shader.end();
         fbo.end();
 
+        // Render to the thermal vision view.
+        visionFbo.begin();
+        visionShader.begin();
+        fbo.getColorBufferTexture().bind(0);
+        shader.setUniformi("u_texture", 0);
+        mesh.render(shader, GL20.GL_TRIANGLES, 0, 6);
+        visionFbo.end();
+
+        // Render the result as several texture strips.
         batch.begin();
         for (int i = 0; i < 800 / len; i++)
-        {
-            batch.draw(fbo.getColorBufferTexture(), -i * len * 1280 / len, i * len);
-        }
+            batch.draw(visionFbo.getColorBufferTexture(), -i * len * 1280 / len, i * len);
         batch.end();
 	}
 
