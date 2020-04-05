@@ -1,8 +1,6 @@
 package edu.psu.planetsim;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -13,7 +11,7 @@ import com.badlogic.gdx.math.Vector3;
  */
 public class AppState
 {
-    public HashMap<UUID, CelestialBody> bodies = new HashMap<>();
+    public HashMap<UUID, CelestialBody> bodies = new LinkedHashMap<>();
 
     public float speed = 1;
     public boolean paused = false;

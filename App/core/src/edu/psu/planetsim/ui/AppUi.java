@@ -18,7 +18,9 @@ import com.badlogic.gdx.utils.Timer;
 
 import edu.psu.planetsim.AppState;
 
+import java.util.Map;
 import java.util.TimerTask;
+import java.util.UUID;
 
 public class AppUi {
     private final AppState _appState;
@@ -592,7 +594,6 @@ public class AppUi {
         inputButton.setText(appState.inputtext);
         inputButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-
                 _appState.inputtext = inputButton.toString();
             }
          });
@@ -614,9 +615,24 @@ public class AppUi {
             }
         });
 
-//        button4 = new TextButton("Earth", skin, "default");
-//        button4.setSize(110, 30);
-//        button4.setPosition(30, 635);
+
+//        Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
+//        UUID key = entries.getKey();
+//        AppState.CelestialBody newPlanet = entries.getValue();
+
+        button4 = new TextButton("Add Planet", skin, "default");
+        button4.setSize(110, 30);
+        button4.setPosition(30, 635);
+        button4.addListener(e -> {
+            if (button4.isPressed()){
+                Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
+                UUID key = entries.getKey();
+                AppState.CelestialBody newPlanet = entries.getValue();
+                button4.setText(newPlanet.name);
+            }
+            return true;
+        });
+
 
         button5 = new TextButton("Luna", skin, "default");
         button5.setSize(80, 30);
@@ -640,6 +656,7 @@ public class AppUi {
         stage.addActor(button2);
         stage.addActor(speedbutton);
         stage.addActor(inputButton);
+        stage.addActor(button4);
         stage.addActor(button5);
         stage.addActor(zoomText);
         stage.addActor(zoomSlider);
