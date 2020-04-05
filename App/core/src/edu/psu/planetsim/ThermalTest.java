@@ -5,10 +5,11 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,6 +25,7 @@ public class ThermalTest extends ApplicationAdapter
     Texture diffusivity;
     FrameBuffer fbo;
     Mesh mesh;
+    int len = 100;
 
     public static ShaderProgram loadShader(final String name) 
     {
@@ -53,12 +55,47 @@ public class ThermalTest extends ApplicationAdapter
         });
         mesh.setIndices(new short[] { 0, 2, 1, 1, 2, 3 });
         
-        fbo = new FrameBuffer(Format.RGB888, 16 * 16, 16, false);
+        fbo = new FrameBuffer(Format.RGB888, len * len, len, false);
         batch = new SpriteBatch();
-        thermal = new Texture("heat.png");
+
+        // Procedurally generate a thermal texture.
+        var pix = new Pixmap(len * len, len, Format.RGB888);
+        pix.setFilter(Filter.NearestNeighbour);
+        pix.setColor(0f, 0f, 0f, 1f);
+        pix.fill();
+        pix.setColor(1f, 1f, 1f, 1f);
+        pix.fillCircle(len * len / 2 + len / 2, len / 2, len / 5);
+        thermal = new Texture(pix);
         thermal.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
 
-        diffusivity = new Texture("diffusivity.png");
+        // Procedurally generate a diffusivity texture that doesn't allow heat 
+        // to leak through the boundaries.
+        pix = new Pixmap(len * len, len, Format.RGB888);
+        pix.setColor(0f, 0f, 0f, 1f);
+        pix.fill();
+        // Procedurally create a spherical body for heat mapping.
+        pix.setColor(1f, 1f, 1f, 1f);
+        for (int z = 0; z < len; z++)
+        {
+            for (int y = 0; y < len; y++)
+            {
+                for (int x = 0; x < len; x++)
+                {
+                    // Test whether the point is in the 3D sphere.
+                    final var radius = (len / 2f - 2f) * Math.sin(Math.PI * z / len);
+                    final var centerX = len / 2f;
+                    final var centerY = len / 2f;
+                    final var dist = Math.sqrt(
+                        Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+                    if (dist < radius)
+                    {
+                        // Inside the sphere.
+                        pix.drawPixel(z * len + x, y);
+                    }
+                }
+            }
+        }
+        diffusivity = new Texture(pix);
 
         fbo.begin();
         batch.begin();
@@ -84,17 +121,20 @@ public class ThermalTest extends ApplicationAdapter
         shader.setUniformi("u_diffusivity", 1);
 
         // Bind uniforms for discrete time evolution and sizes.
-        shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime() / 10f);
+        shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime() * 0.5f);
         shader.setUniformf("u_dx", 1f / fbo.getWidth());
-        shader.setUniformf("u_len", 16f);
+        shader.setUniformf("u_len", len);
 
-        // Calcualte the heat equation approximation by drawing to the shader.
+        // Calculate the heat equation approximation by drawing to the shader.
         mesh.render(shader, GL20.GL_TRIANGLES, 0, 6);
         shader.end();
         fbo.end();
 
         batch.begin();
-        batch.draw(fbo.getColorBufferTexture(), 0, 400, 1280, 1280 / 16);
+        for (int i = 0; i < 800 / len; i++)
+        {
+            batch.draw(fbo.getColorBufferTexture(), -i * len * 1280 / len, i * len);
+        }
         batch.end();
 	}
 

@@ -21,7 +21,7 @@ float getF(vec3 pixel)
 vec3 getColor(float f)
 {
     float b = mod(f, 256.0);
-    float g = mod(floor(f / 256.0), 256.0 * 256.0);
+    float g = mod(floor(f / 256.0), 256.0);
     float r = floor(f / 256.0 / 256.0);
     return vec3(r / 255.0, g / 255.0, b / 255.0);
 }
@@ -34,8 +34,8 @@ void main()
     float e = getF(texture2D(u_texture, vec2(f_position.x + u_dx, f_position.y)).rgb);
     float n = getF(texture2D(u_texture, vec2(f_position.x, f_position.y - u_dx)).rgb);
     float s = getF(texture2D(u_texture, vec2(f_position.x, f_position.y + u_dx)).rgb);
-    float u = getF(texture2D(u_texture, vec2(f_position.x + u_dx * u_len, f_position.y)).rgb);
-    float d = getF(texture2D(u_texture, vec2(f_position.x - u_dx * u_len, f_position.y)).rgb);
+    float u = getF(texture2D(u_texture, vec2(f_position.x + 1.0 / u_len, f_position.y)).rgb);
+    float d = getF(texture2D(u_texture, vec2(f_position.x - 1.0 / u_len, f_position.y)).rgb);
 
     // Fetch the thermal diffusivity at this location.
     float perm = texture2D(u_diffusivity, vec2(f_position.x, f_position.y)).r;
