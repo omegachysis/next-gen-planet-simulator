@@ -6,7 +6,6 @@ buildscript {
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://repo.spongepowered.org/maven/" }
         jcenter()
         google()
     }
@@ -35,7 +34,6 @@ allprojects {
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-        maven { url "https://repo.spongepowered.org/maven/" }
     }
 }
 
@@ -61,7 +59,6 @@ project(":core") {
 
 
     dependencies {
-    	api "org.spongepowered:noise:2.0.0-SNAPSHOT"
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
