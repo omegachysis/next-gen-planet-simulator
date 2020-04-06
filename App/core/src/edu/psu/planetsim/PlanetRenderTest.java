@@ -1,11 +1,9 @@
 package edu.psu.planetsim;
 
 import java.util.Random;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
@@ -22,9 +20,10 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
+import org.spongepowered.noise.Noise;
+import org.spongepowered.noise.NoiseQuality;
+
 
 public class PlanetRenderTest implements ApplicationListener {
 	
@@ -82,6 +81,29 @@ public class PlanetRenderTest implements ApplicationListener {
         // has 6 floats for every vertex:
         float[] verticesHolder = new float[mesh1.getNumVertices() * 8];
         mesh1.getVertices(verticesHolder);
+        
+        for (int i = 0; i < verticesHolder.length / 8; i++)
+        {
+        	float px = verticesHolder[i * 8 + 0];
+            float py = verticesHolder[i * 8 + 1];
+            float pz = verticesHolder[i * 8 + 2];
+            float nx = verticesHolder[i * 8 + 3];
+            float ny = verticesHolder[i * 8 + 4];
+            float nz = verticesHolder[i * 8 + 5];
+            float tx = verticesHolder[i * 8 + 6];
+            float ty = verticesHolder[i * 8 + 7];
+            
+            double noise = Noise.gradientCoherentNoise3D((double)px, (double)py, (double)pz, 2, NoiseQuality.BEST);
+            
+            var workVector = new Vector3(nx, ny, nz);
+            workVector = workVector.scl((float)noise);
+            verticesHolder[i * 8 + 0] = workVector.x;
+            verticesHolder[i * 8 + 1] = workVector.y;
+            verticesHolder[i * 8 + 2] = workVector.z;
+            px = workVector.x;
+            py = workVector.y;
+            pz = workVector.z;
+        }
 
         float[] elevationMapTester = new float[latitudes * longitudes];
         // We'll get some input map of elevations by latitude/longitude:
@@ -174,7 +196,7 @@ public class PlanetRenderTest implements ApplicationListener {
             }
         }
         
-        boolean useMap = true;
+        boolean useMap = false;
         
         var planetCenter = new Vector3();
 
