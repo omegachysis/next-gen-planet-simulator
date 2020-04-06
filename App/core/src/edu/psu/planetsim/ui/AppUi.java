@@ -431,6 +431,32 @@ public class AppUi {
                         sideDialog.button("Done", true);
                         sideDialog.button("Close", true);
 
+                        var modifyButton = new TextButton("Modify", skin);
+                        modifyButton.setPosition(100, 110);
+                        modifyButton.addListener(e -> {
+                            if (modifyButton.isPressed()) {
+                                Dialog modified = new Dialog("", skin);
+                                modified.setMovable(true);
+                                modified.text("Physical Properties Modified");
+                                modified.setPosition(600, 600);
+                                modified.setWidth(250);
+                                modified.setHeight(60);
+
+                                stage.addActor(modified);
+
+                                Timer.schedule(new Timer.Task() {
+                                    @Override
+                                    public void run() {
+                                        modified.hide();
+                                    }
+                                }, 1);
+                            }
+                            return true;
+                        });
+
+                        sideDialog.addActor(modifyButton);
+
+
                         sideDialog.row();
                         Label nameLabel = new Label("Select Physical Properties:", skin);
                         nameLabel.setPosition(5, 350);
