@@ -690,10 +690,10 @@ public class AppUi {
         button1 = new TextButton("Play/Pause", skin, "default");
         button1.setSize(100, 35);
         button1.setPosition(1170, 680);
-        // TODO: play pause in app state
-        //  e.g. appState.paused = !appState.paused
         button1.addListener(e ->{
-            appState.paused = !appState.paused;
+            if (button1.isPressed()) {
+                appState.paused = !appState.paused;
+            }
             return true;
         });
 
