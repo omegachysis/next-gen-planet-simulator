@@ -81,8 +81,18 @@ public class PlanetRenderTest implements ApplicationListener {
         // has 6 floats for every vertex:
         float[] verticesHolder = new float[mesh1.getNumVertices() * 8];
         mesh1.getVertices(verticesHolder);
-        
-        for (int i = 0; i < verticesHolder.length / 8; i++)
+
+        float[] elevationMapTester = new float[latitudes * longitudes];
+        // We'll get some input map of elevations by latitude/longitude:
+        float[] elevationMap = new float[latitudes * longitudes];
+        // These are stand-ins for values the program will pass into the generation loop
+        int terrainEccentricity = 2;
+        //int terrainRoughness = 1;
+        float planetRadius = 12f;
+        var planetCenter = new Vector3();
+        int planetSeed = rand.nextInt();
+        // Generate terrain noise
+        for (int i = 0; i < elevationMap.length; i++)
         {
         	float px = verticesHolder[i * 8 + 0];
             float py = verticesHolder[i * 8 + 1];
@@ -90,31 +100,15 @@ public class PlanetRenderTest implements ApplicationListener {
             float nx = verticesHolder[i * 8 + 3];
             float ny = verticesHolder[i * 8 + 4];
             float nz = verticesHolder[i * 8 + 5];
-            float tx = verticesHolder[i * 8 + 6];
-            float ty = verticesHolder[i * 8 + 7];
             
-            double noise = Noise.gradientCoherentNoise3D((double)px, (double)py, (double)pz, 2, NoiseQuality.BEST);
-            
+            double noise = Noise.gradientCoherentNoise3D((double)px, (double)py, (double)pz, planetSeed, NoiseQuality.FAST);
             var workVector = new Vector3(nx, ny, nz);
-            workVector = workVector.scl((float)noise);
-            verticesHolder[i * 8 + 0] = workVector.x;
-            verticesHolder[i * 8 + 1] = workVector.y;
-            verticesHolder[i * 8 + 2] = workVector.z;
-            px = workVector.x;
-            py = workVector.y;
-            pz = workVector.z;
-        }
-
-        float[] elevationMapTester = new float[latitudes * longitudes];
-        // We'll get some input map of elevations by latitude/longitude:
-        float[] elevationMap = new float[latitudes * longitudes];
-        // These are stand-ins for values the program will pass into the generation loop
-        float terrainEccentricity = 0.75f;
-        float terrainRoughness = 0.01f;
-        float planetRadius = 5f;
-        // Seeds the planet model with mountain peaks
-        for (int i = 0; i < elevationMap.length; i++)
-        {
+            float noiseScalar = (float)noise+0.5f;
+            noiseScalar = (float)Math.pow((double)noiseScalar,terrainEccentricity);
+            workVector = workVector.scl(noiseScalar+planetRadius);
+            elevationMap[i] = planetCenter.dst(workVector);
+        	
+            /*
             if (rand.nextDouble() <= terrainRoughness)
             {
             	double val = terrainEccentricity * rand.nextDouble();
@@ -127,8 +121,10 @@ public class PlanetRenderTest implements ApplicationListener {
                 elevationMap[i] = planetRadius;
                 elevationMap[i] += val;
             }
+            */
         }
         // Generates mountain ranges
+        /*
         for (int i = 0; i < elevationMap.length; i++)
         {
             if (i > longitudes && i < ((latitudes * longitudes) - longitudes - 1))
@@ -195,58 +191,19 @@ public class PlanetRenderTest implements ApplicationListener {
             	}
             }
         }
-        
-        boolean useMap = false;
-        
-        var planetCenter = new Vector3();
+        */
+	    for (int i = 0; i < verticesHolder.length / 8; i++)
+	    {
+	    	float nx = verticesHolder[i * 8 + 3];
+	    	float ny = verticesHolder[i * 8 + 4];
+	    	float nz = verticesHolder[i * 8 + 5];
 
-        // for generating using elevationMap
-        if (useMap)
-        {
-	        for (int i = 0; i < verticesHolder.length / 8; i++)
-	        {
-	        	float px = verticesHolder[i * 8 + 0];
-	            float py = verticesHolder[i * 8 + 1];
-	            float pz = verticesHolder[i * 8 + 2];
-	            float nx = verticesHolder[i * 8 + 3];
-	            float ny = verticesHolder[i * 8 + 4];
-	            float nz = verticesHolder[i * 8 + 5];
-	            float tx = verticesHolder[i * 8 + 6];
-	            float ty = verticesHolder[i * 8 + 7];
-	            
-	            var workVector = new Vector3(nx, ny, nz);
-	            workVector = workVector.scl(elevationMap[i]);
-	            verticesHolder[i * 8 + 0] = workVector.x;
-	            verticesHolder[i * 8 + 1] = workVector.y;
-	            verticesHolder[i * 8 + 2] = workVector.z;
-	            px = workVector.x;
-	            py = workVector.y;
-	            pz = workVector.z;
-	        }
-        }
-              
-        // for generating procedurally
-        else
-        {
-	        for (int i = 0; i < verticesHolder.length / 8; i++)
-	        {
-	        	float px = verticesHolder[i * 8 + 0];
-	            float py = verticesHolder[i * 8 + 1];
-	            float pz = verticesHolder[i * 8 + 2];
-	            float nx = verticesHolder[i * 8 + 3];
-	            float ny = verticesHolder[i * 8 + 4];
-	            float nz = verticesHolder[i * 8 + 5];
-	            float tx = verticesHolder[i * 8 + 6];
-	            float ty = verticesHolder[i * 8 + 7];
-	            
-	        	double val = 0.04f * rand.nextDouble();
-        		
-                verticesHolder[i * 8 + 0] += val;
-                verticesHolder[i * 8 + 1] += val;
-                verticesHolder[i * 8 + 2] += val;
-	        }
-        }
-        
+	    	var workVector = new Vector3(nx, ny, nz);
+	    	workVector = workVector.scl(elevationMap[i]);
+	    	verticesHolder[i * 8 + 0] = workVector.x;
+	        verticesHolder[i * 8 + 1] = workVector.y;
+	        verticesHolder[i * 8 + 2] = workVector.z;
+	    }
         // for terrain smoothing and seam-fixing; this should ALWAYS run
         int f = 0;
         for (int i = 0; i < verticesHolder.length / 8; i++)
