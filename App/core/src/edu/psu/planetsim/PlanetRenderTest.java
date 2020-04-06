@@ -75,10 +75,6 @@ public class PlanetRenderTest implements ApplicationListener {
         texture1 = new Texture(imageFileHandle);
         var textureAttribute1 = new TextureAttribute(TextureAttribute.Diffuse, texture1);
 
-        // Our model1 usage flags are Usage.Position and Usage.Normal,
-        // thus every vertex has a Position vector and a Normal vector.
-        // Each of these has three float components, thus the whole vertex array 
-        // has 6 floats for every vertex:
         float[] verticesHolder = new float[mesh1.getNumVertices() * 8];
         mesh1.getVertices(verticesHolder);
 
@@ -87,7 +83,6 @@ public class PlanetRenderTest implements ApplicationListener {
         float[] elevationMap = new float[latitudes * longitudes];
         // These are stand-ins for values the program will pass into the generation loop
         int terrainEccentricity = 2;
-        //int terrainRoughness = 1;
         float planetRadius = 12f;
         var planetCenter = new Vector3();
         int planetSeed = rand.nextInt();
@@ -107,91 +102,8 @@ public class PlanetRenderTest implements ApplicationListener {
             noiseScalar = (float)Math.pow((double)noiseScalar,terrainEccentricity);
             workVector = workVector.scl(noiseScalar+planetRadius);
             elevationMap[i] = planetCenter.dst(workVector);
-        	
-            /*
-            if (rand.nextDouble() <= terrainRoughness)
-            {
-            	double val = terrainEccentricity * rand.nextDouble();
-                elevationMap[i] = planetRadius;
-                elevationMap[i] += val;
-            }
-            else
-            {
-        		double val = terrainEccentricity * rand.nextDouble() * 0.2f;
-                elevationMap[i] = planetRadius;
-                elevationMap[i] += val;
-            }
-            */
         }
-        // Generates mountain ranges
-        /*
-        for (int i = 0; i < elevationMap.length; i++)
-        {
-            if (i > longitudes && i < ((latitudes * longitudes) - longitudes - 1))
-            {
-            	float peakN = elevationMap[i-longitudes];
-            	float peakS = elevationMap[i+longitudes];
-            	float peakE = elevationMap[i+1];
-            	float peakW = elevationMap[i-1];
-            	float peakNE = elevationMap[i-longitudes+1];
-            	float peakNW = elevationMap[i-longitudes-1];
-            	float peakSE = elevationMap[i+longitudes+1];
-            	float peakSW = elevationMap[i+longitudes-1];
-            	float peaks[] = {peakN, peakS, peakE, peakW, peakNE, peakNW, peakSE, peakSW};
-            	float sumElevation = 0;
-            	float peakTallest = 0;
-            	for (int j = 0; j < peaks.length; j++)
-            	{
-            		sumElevation = sumElevation + peaks[j];
-            		if (peaks[j] > peakTallest)
-            		{
-            			peakTallest = peaks[j];
-            		}
-            	}
-            	float avgElevation = sumElevation / 8;
-            	if (elevationMap[i] < avgElevation)
-            	{
-            		elevationMap[i] = ((avgElevation + peakTallest)/2);
-            	}
-            }
-        }
-        // Second loop necessary to improve mountain range cohesion
-        for (int i = elevationMap.length-1; i >= 0; i--)
-        {
-            if (i > longitudes && i < ((latitudes * longitudes) - longitudes - 1))
-            {
-            	float peakN = elevationMap[i-longitudes];
-            	float peakS = elevationMap[i+longitudes];
-            	float peakE = elevationMap[i+1];
-            	float peakW = elevationMap[i-1];
-            	float peakNE = elevationMap[i-longitudes+1];
-            	float peakNW = elevationMap[i-longitudes-1];
-            	float peakSE = elevationMap[i+longitudes+1];
-            	float peakSW = elevationMap[i+longitudes-1];
-            	float peaks[] = {peakN, peakS, peakE, peakW, peakNE, peakNW, peakSE, peakSW};
-            	float sumElevation = 0;
-            	float peakTallest = 0;
-            	for (int j = 0; j < peaks.length; j++)
-            	{
-            		sumElevation = sumElevation + peaks[j];
-            		if (peaks[j] > peakTallest)
-            		{
-            			peakTallest = peaks[j];
-            		}
-            	}
-            	float avgElevation = sumElevation / 8;
-            	if (elevationMap[i] < avgElevation)
-            	{
-            		elevationMap[i] = ((avgElevation + peakTallest)/2);
-            	}
-            	// Attempt to fix needle mountain peaks
-            	else if (elevationMap[i] > peakTallest)
-            	{
-            		elevationMap[i] = elevationMap[i] * 0.99f;
-            	}
-            }
-        }
-        */
+
 	    for (int i = 0; i < verticesHolder.length / 8; i++)
 	    {
 	    	float nx = verticesHolder[i * 8 + 3];
@@ -208,10 +120,6 @@ public class PlanetRenderTest implements ApplicationListener {
         int f = 0;
         for (int i = 0; i < verticesHolder.length / 8; i++)
         {
-            // Note: this does not work on the pole vertices (e.g. for latitude = 4 and longitude = 4, verticesHolder[0]
-            // actually corresponds to verticesHolder[3], not verticesHolder[4]; likewise verticesHolder[21] corresponds
-            // to verticesHolder[24], not verticesHolder[20].
-        	
         	// This condition connects the last longitude with the first longitude to share the same vertex per latitude.
         	if ((i+1) % (longitudes) == 0 && i != 0)
         	{
@@ -235,18 +143,10 @@ public class PlanetRenderTest implements ApplicationListener {
                 verticesHolder[i * 8 + 1] = verticesHolder[(longitudes * (latitudes + 1)) * 8 + 1];
                 verticesHolder[i * 8 + 2] = verticesHolder[(longitudes * (latitudes + 1)) * 8 + 2];
         	}
-
-        	// Vertex format goes like pppnnnpppnnn...
-            // where p are position components, n are normal components.
         	
             float px = verticesHolder[i * 8 + 0];
             float py = verticesHolder[i * 8 + 1];
             float pz = verticesHolder[i * 8 + 2];
-            float nx = verticesHolder[i * 8 + 3];
-            float ny = verticesHolder[i * 8 + 4];
-            float nz = verticesHolder[i * 8 + 5];
-            float tx = verticesHolder[i * 8 + 6];
-            float ty = verticesHolder[i * 8 + 7];
 
             // This if-else passes the result of planetCenter.dst(x, y, z) to the elevationMapTester[].
             // I (Danny Ruan) will clean this up at some point because I don't like using empty thens
