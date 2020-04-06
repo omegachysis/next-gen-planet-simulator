@@ -1,6 +1,5 @@
 package edu.psu.planetsim;
 
-import java.io.Console;
 import java.util.Random;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Files;
@@ -23,6 +22,8 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
+
+import edu.psu.planetsim.FastNoise.FractalType;
 
 public class PlanetRenderTest implements ApplicationListener {
 
@@ -82,16 +83,22 @@ public class PlanetRenderTest implements ApplicationListener {
         // We'll get some input map of elevations by latitude/longitude:
         float[] elevationMap = new float[latitudes * longitudes];
         // These are stand-ins for values the program will pass into the generation loop
-        var planetCenter = new Vector3();
         int planetSeed = rand.nextInt();
 
         // Create noise generation modules.
         var lumpsGen = new FastNoise(planetSeed);
         lumpsGen.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-        lumpsGen.SetFractalOctaves(3);
+        // Fractal brownian motion for nice lumps and things:
+        lumpsGen.SetFractalType(FractalType.FBM);
+        lumpsGen.SetFractalOctaves(6);
         lumpsGen.SetFrequency(0.2f);
-        // var mountainsGen = new RidgedMulti();
-        // mountainsGen.setSeed(planetSeed);
+
+        var mountainGen = new FastNoise(planetSeed);
+        mountainGen.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        // Ridged multi-fractals for mountains and valleys:
+        mountainGen.SetFractalType(FractalType.RigidMulti);
+        mountainGen.SetFractalOctaves(12);
+        mountainGen.SetFrequency(0.7f);
 
         // Generate terrain noise
         for (int i = 0; i < elevationMap.length; i++)
@@ -99,14 +106,10 @@ public class PlanetRenderTest implements ApplicationListener {
         	float px = verticesHolder[i * 8 + 0];
             float py = verticesHolder[i * 8 + 1];
             float pz = verticesHolder[i * 8 + 2];
-            // float nx = verticesHolder[i * 8 + 3];
-            // float ny = verticesHolder[i * 8 + 4];
-            // float nz = verticesHolder[i * 8 + 5];
 
-            // double noise = Noise.gradientCoherentNoise3D((double)px, (double)py, (double)pz, planetSeed, NoiseQuality.FAST);
             var lumps = (lumpsGen.GetNoise(px, py, pz) + 1f) * 0.5f;
-            // var mountains = mountainsGen.GetNoise(px, py, pz);
-            var noise = lumps;
+            var mountains = (mountainGen.GetNoise(px, py, pz) + 1f) * 0.5f;
+            var noise = lumps + mountains * 0.2f;
             
             var elev = noise + 1f;
             elevationMap[i] = elev;
@@ -114,6 +117,10 @@ public class PlanetRenderTest implements ApplicationListener {
             verticesHolder[i * 8 + 1] *= elev;
             verticesHolder[i * 8 + 2] *= elev;
         }
+
+        // We won't need to use this seam-matching stuff for now since 
+        // the fact that we access the 3D noise in spherical coordinates 
+        // takes care of that for us, but we will probably need this again soon.
 
 	    // for (int i = 0; i < verticesHolder.length / 8; i++)
 	    // {
