@@ -78,7 +78,6 @@ public class ThermalTest extends ApplicationAdapter
         pix.setColor(0f, 0f, 0f, 1f);
         pix.fill();
         // Procedurally create a spherical body for heat mapping.
-        pix.setColor(1f, 1f, 1f, 1f);
         for (int z = 0; z < len; z++)
         {
             for (int y = 0; y < len; y++)
@@ -91,8 +90,17 @@ public class ThermalTest extends ApplicationAdapter
                     final var centerY = len / 2f;
                     final var dist = Math.sqrt(
                         Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
-                    if (dist < radius)
+                    if (dist < radius / 4)
                     {
+                        pix.setColor(0f, 0f, 0f, 1f);
+
+                        // Inside the sphere.
+                        pix.drawPixel(z * len + x, y);
+                    }
+                    else if (dist < radius)
+                    {
+                        pix.setColor(1f, 1f, 1f, 1f);
+
                         // Inside the sphere.
                         pix.drawPixel(z * len + x, y);
                     }
@@ -135,17 +143,17 @@ public class ThermalTest extends ApplicationAdapter
         fbo.end();
 
         // Render to the thermal vision view.
-        visionFbo.begin();
-        visionShader.begin();
-        fbo.getColorBufferTexture().bind(0);
-        shader.setUniformi("u_texture", 0);
-        mesh.render(shader, GL20.GL_TRIANGLES, 0, 6);
-        visionFbo.end();
+        // visionFbo.begin();
+        // visionShader.begin();
+        // fbo.getColorBufferTexture().bind(0);
+        // shader.setUniformi("u_texture", 0);
+        // mesh.render(shader, GL20.GL_TRIANGLES, 0, 6);
+        // visionFbo.end();
 
         // Render the result as several texture strips.
         batch.begin();
         for (int i = 0; i < 800 / len; i++)
-            batch.draw(visionFbo.getColorBufferTexture(), -i * len * 1280 / len, i * len);
+            batch.draw(fbo.getColorBufferTexture(), -i * len * 1280 / len, i * len);
         batch.end();
 	}
 

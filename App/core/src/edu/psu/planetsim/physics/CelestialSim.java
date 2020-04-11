@@ -132,22 +132,25 @@ public class CelestialSim
             _world.stepSimulation(Gdx.graphics.getDeltaTime() * _appState.speed);
         }
 
-        Vector3 target = new Vector3(0, 0, 0);
-        if (_appState.viewingMode == AppState.ViewingMode.CenterOfMass)
-            target = _gravitySim.getCenterOfMass();
-        else if (_appState.viewingMode == AppState.ViewingMode.MainCelestialBody)
-            target = _bodies.get(0).getPosition();
-        else if (_appState.viewingMode == AppState.ViewingMode.NaturalSatellite)
-            target = _bodies.get(_appState.satelliteFocusedIndex + 1).getPosition();
-
-        _camControl.update();
-        
-        final var interp = Interpolation.pow4Out;
-        final var camDist = interp.apply(Metrics.m(1e9), Metrics.m(1e3), _appState.zoom);
-        _cam.position.set(_fakeCam.position.cpy().nor().scl(camDist).add(target));
-        _cam.direction.set(_fakeCam.direction);
-        _cam.up.set(_fakeCam.up);
-        _cam.update();
+        if (_bodies.size() > 0)
+        {
+            Vector3 target = new Vector3(0, 0, 0);
+            if (_appState.viewingMode == AppState.ViewingMode.CenterOfMass)
+                target = _gravitySim.getCenterOfMass();
+            else if (_appState.viewingMode == AppState.ViewingMode.MainCelestialBody)
+                target = _bodies.get(0).getPosition();
+            else if (_appState.viewingMode == AppState.ViewingMode.NaturalSatellite)
+                target = _bodies.get(_appState.satelliteFocusedIndex + 1).getPosition();
+    
+            _camControl.update();
+            
+            final var interp = Interpolation.pow4Out;
+            final var camDist = interp.apply(Metrics.m(1e9), Metrics.m(1e3), _appState.zoom);
+            _cam.position.set(_fakeCam.position.cpy().nor().scl(camDist).add(target));
+            _cam.direction.set(_fakeCam.direction);
+            _cam.up.set(_fakeCam.up);
+            _cam.update();
+        }
     }
 
     public void dispose() 
