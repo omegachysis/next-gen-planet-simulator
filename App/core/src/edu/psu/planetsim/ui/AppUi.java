@@ -432,7 +432,7 @@ public class AppUi {
                         sideDialog.button("Close", true);
 
                         var modifyButton = new TextButton("Modify", skin);
-                        modifyButton.setPosition(100, 110);
+                        modifyButton.setPosition(100, 210);
                         modifyButton.addListener(e -> {
                             if (modifyButton.isPressed()) {
                                 Dialog modified = new Dialog("", skin);
@@ -456,48 +456,32 @@ public class AppUi {
 
                         sideDialog.addActor(modifyButton);
 
-
-                        sideDialog.row();
-                        Label nameLabel = new Label("Select Physical Properties:", skin);
-                        nameLabel.setPosition(5, 350);
-                        CheckBox check1 = new CheckBox("Initial distance from star(AU)", skin);
-                        check1.setPosition(10, 330);
-                        CheckBox check2 = new CheckBox("Initial velocity(km/s)", skin);
-                        check2.setPosition(10, 310);
-                        CheckBox check3 = new CheckBox("PhysicalProperty-3", skin);
-                        check3.setPosition(10, 290);
-
-
                         Label nameLabel1 = new Label("Modify Physical Properties:", skin);
-                        nameLabel1.setPosition(5, 250);
+                        nameLabel1.setPosition(5, 350);
 
                         Label pp1 = new Label("Initial Distance (AU):", skin);
-                        pp1.setPosition(7,210);
+                        pp1.setPosition(7,310);
                         TextField Tpp1 = new TextField("",skin);
-                        Tpp1.setPosition(160,210);
+                        Tpp1.setPosition(160,310);
                         Tpp1.setWidth(100);
                         Tpp1.setHeight(20);
 
                         Label pp2 = new Label("Velocity (km/s):", skin);
-                        pp2.setPosition(7,180);
+                        pp2.setPosition(7,280);
                         TextField Tpp2 = new TextField("",skin);
-                        Tpp2.setPosition(160,180);
+                        Tpp2.setPosition(160,280);
                         Tpp2.setWidth(100);
                         Tpp2.setHeight(20);
 
                         Label pp3 = new Label("Mass (M⊕):",skin);
-                        pp3.setPosition(7, 150);
+                        pp3.setPosition(7, 250);
                         TextField Tpp3 = new TextField("",skin);
-                        Tpp3.setPosition(160,150);
+                        Tpp3.setPosition(160,250);
                         Tpp3.setWidth(100);
                         Tpp3.setHeight(20);
 
 
                         Table table = new Table(skin);
-                        table.add(nameLabel);
-                        table.add(check1);
-                        table.add(check2);
-                        table.add(check3);
                         table.add(nameLabel1);
                         table.add(pp1);
                         table.add(pp2);
@@ -514,11 +498,7 @@ public class AppUi {
                         sideDialog.addActor(Tpp1);
                         sideDialog.addActor(Tpp2);
                         sideDialog.addActor(Tpp3);
-                        sideDialog.addActor(check1);
-                        sideDialog.addActor(check2);
-                        sideDialog.addActor(check3);
                         sideDialog.addActor(table);
-                        sideDialog.addActor(nameLabel);
                         stage.addActor(sideDialog);
                         viewSelect.setSelectedIndex(0);
 
@@ -847,3 +827,28 @@ public class AppUi {
 
     }
 }
+
+/*         // Incase if we need checkbox :
+
+                        sideDialog.row();
+                        Label nameLabel = new Label("Select Physical Properties:", skin);
+                        nameLabel.setPosition(5, 350);
+                        CheckBox check1 = new CheckBox("Initial distance from star(AU)", skin);
+                        check1.setPosition(10, 330);
+                        CheckBox check2 = new CheckBox("Initial velocity(km/s)", skin);
+                        check2.setPosition(10, 310);
+                        CheckBox check3 = new CheckBox("PhysicalProperty-3", skin);
+                        check3.setPosition(10, 290);
+
+                        table.add(nameLabel);
+                        table.add(check1);
+                        table.add(check2);
+                        table.add(check3);
+
+                        sideDialog.addActor(check1);
+                        sideDialog.addActor(check2);
+                        sideDialog.addActor(check3);
+                        sideDialog.addActor(nameLabel);
+
+
+ */
