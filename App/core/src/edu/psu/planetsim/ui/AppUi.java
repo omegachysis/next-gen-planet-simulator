@@ -1,6 +1,8 @@
 package edu.psu.planetsim.ui;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,6 +14,7 @@ import com.badlogic.gdx.utils.Select;
 import com.badlogic.gdx.utils.Timer;
 
 import edu.psu.planetsim.AppState;
+import edu.psu.planetsim.Metrics;
 import org.w3c.dom.Text;
 
 import java.util.Map;
@@ -62,7 +65,7 @@ public class AppUi {
                         newDialog.setMovable(true);
                         newDialog.setPosition(500, 500);
                         newDialog.setWidth(250);
-                        newDialog.text("Create a new celestial body? \n You'll lose all unsaved changes." );
+                        newDialog.text("Start a new file? \n You'll lose all unsaved changes.");
 
                         Table table2 = new Table(skin);
                         table2.add(newDialog);
@@ -210,6 +213,7 @@ public class AppUi {
         editSelect.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 editSelect.showList();
+                System.out.println(_appState.bodies.size());
             }
         });
         editSelect.addListener(new ChangeListener() {
@@ -274,15 +278,12 @@ public class AppUi {
 
                                 try {
                                     String name = textField1.getText();
-                                } catch (NullPointerException n){
-                                    stage.addActor(wrong);
-                                }
-
-                                try {
                                     double radius = Double.parseDouble(textField2.getText());
                                     double distance = Double.parseDouble(textField3.getText());
                                     double velocity = Double.parseDouble(textField4.getText());
                                     double mass = Double.parseDouble(textField5.getText());
+
+                                    addPlanet();
                                 } catch (NumberFormatException n) {
                                         stage.addActor(wrong);
                                     Timer.schedule(new Timer.Task() {
@@ -565,38 +566,6 @@ public class AppUi {
                             }
                         });
 
-//                        var changeButton = new TextButton("Change", skin);
-//                                changeButton.setPosition(60, 3);
-//                                changeButton.addListener(e -> {
-//                                    if (changeButton.isPressed()) {
-//                                Dialog newCB = new Dialog("New Celestial Body", skin);
-//                                newCB.setMovable(true);
-//                                newCB.text("Assume this as New CB for now...");
-//                                newCB.setPosition(500, 300);
-//                                newCB.setWidth(250);
-//                                newCB.button("Ok", true);
-//                                stage.addActor(newCB);
-//                                changeDialog.hide();
-//                            }
-//                            return true;
-//                        });
-
-//                        Table table1 = new Table(skin);
-//                        table1.add(changeButton);
-//                        changeDialog.addActor(changeButton);
-//
-//                        var cancelButton = new TextButton("Cancel", skin);
-//                        cancelButton.setPosition(140, 3);
-//                        cancelButton.addListener(e -> {
-//                            if (cancelButton.isPressed()) {
-//                                changeDialog.hide();
-//                            }
-//                            return true;
-//                        });
-//
-//                        table1.add(cancelButton);
-//                        changeDialog.addActor(cancelButton);
-
                  //   {
                  //       if (Gdx.input.isTouched()) {
                  //           Dialog newCB = new Dialog("CB", skin);
@@ -803,6 +772,19 @@ public class AppUi {
 //        var celBodies = _appState.bodies.values().toArray();
 //        return celBodies
 //    }
+
+    public void addPlanet(){
+         final var planet1 = new AppState.CelestialBody();
+         planet1.id = UUID.randomUUID();
+         planet1.name = "Planet 1";
+         planet1.mass = Metrics.kg(1.0e24);
+         planet1.position = new Vector3();
+         planet1.velocity = new Vector3();
+         planet1.spin = new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f);
+         planet1.orientation = new Quaternion().setFromCross(Vector3.Y, planet1.spin);
+         _appState.bodies.put(planet1.id, planet1);
+         _appState.currentCelestialBody = planet1.id;
+    }
 
     public int getSpeedFactor() 
     {
