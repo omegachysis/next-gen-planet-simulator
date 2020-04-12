@@ -138,14 +138,15 @@ public class ThermalTest extends ApplicationAdapter
             {
                 for (int x = 0; x < len; x++)
                 {
-                    if (x == y)
+                    final var radius = (len / 2f - 2f) * Math.sin(Math.PI * z / len);
+                    final var centerX = len / 2f;
+                    final var centerY = len / 2f;
+                    final var dist = Math.sqrt(
+                        Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+                    if (dist < radius && dist > radius * 0.95)
                     {
+                        // Inside the sphere.
                         pix.setColor(0f, 0f, 1f, 1f);
-                        pix.drawPixel(z * len + x, y);
-                    }
-                    else if (x == len - y)
-                    {
-                        pix.setColor(1f, 0f, 0f, 1f);
                         pix.drawPixel(z * len + x, y);
                     }
                 }
@@ -183,7 +184,7 @@ public class ThermalTest extends ApplicationAdapter
         shader.setUniformi("u_radiation", 2);
 
         // Bind uniforms for discrete time evolution and sizes.
-        shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime() * 0.1f);
+        shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime() * 1f);
         shader.setUniformf("u_dx", 1f / fbo.getWidth());
         shader.setUniformf("u_dy", 1f / fbo.getHeight());
         shader.setUniformf("u_len", len);

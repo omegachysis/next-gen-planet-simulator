@@ -59,7 +59,7 @@ void main()
 
     // Apply radiant cooling to locations that are on the surface.
     // Use the Stefan-Boltzmann law for radiant cooling.
-    const float stefanBoltzmannConst = 0.000001;
+    const float stefanBoltzmannConst = 0.000005;
     c -= cooling * pow(stefanBoltzmannConst * c, 4.0) * u_dt;
 
     gl_FragColor = vec4(getColor(c), 1);
