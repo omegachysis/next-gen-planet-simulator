@@ -531,7 +531,7 @@ public class AppUi {
                         sideDialog.button("Close", true);
 
                         var modifyButton = new TextButton("Modify", skin);
-                        modifyButton.setPosition(100, 190);
+                        modifyButton.setPosition(100, 180);
                         modifyButton.addListener(e -> {
                             if (modifyButton.isPressed()) {
                                 Dialog modified = new Dialog("", skin);
@@ -558,33 +558,67 @@ public class AppUi {
                         Label nameLabel1 = new Label("Modify Physical Properties:", skin);
                         nameLabel1.setPosition(5, 350);
 
-                        Label pp1 = new Label("Mass (M⊕):", skin);
+
+                        CheckBox pp1 = new CheckBox("Mass (M⊕):", skin);
                         pp1.setPosition(7,310);
                         TextField Tpp1 = new TextField("",skin);
                         Tpp1.setPosition(160,310);
                         Tpp1.setWidth(100);
                         Tpp1.setHeight(20);
+                        pp1.addListener(e -> {
+                            if (pp1.isChecked()){
+                                Tpp1.setVisible(true);
+                            } else{
+                                Tpp1.setVisible(false);
+                            }
+                            return true;
+                        });
 
-                        Label pp2 = new Label("Position(x,y,z):", skin);
+
+                        CheckBox pp2 = new CheckBox("Position(x,y,z):", skin);
                         pp2.setPosition(7,280);
                         TextField Tpp2 = new TextField("",skin);
                         Tpp2.setPosition(160,280);
                         Tpp2.setWidth(100);
                         Tpp2.setHeight(20);
+                        pp2.addListener(e -> {
+                            if (pp2.isChecked()){
+                                Tpp2.setVisible(true);
+                            } else{
+                                Tpp2.setVisible(false);
+                            }
+                            return true;
+                        });
 
-                        Label pp3 = new Label("Velocity (km/s):",skin);
+                        CheckBox pp3 = new CheckBox("Velocity (km/s):",skin);
                         pp3.setPosition(7, 250);
                         TextField Tpp3 = new TextField("",skin);
                         Tpp3.setPosition(160,250);
                         Tpp3.setWidth(100);
                         Tpp3.setHeight(20);
+                        pp1.addListener(e -> {
+                            if (pp3.isChecked()){
+                                Tpp3.setVisible(true);
+                            } else{
+                                Tpp3.setVisible(false);
+                            }
+                            return true;
+                        });
 
-                        Label pp4 = new Label("Velocity (km/s):",skin);
+                        CheckBox pp4 = new CheckBox("Spin (x,y,z):",skin);
                         pp4.setPosition(7, 220);
                         TextField Tpp4 = new TextField("",skin);
                         Tpp4.setPosition(160,220);
                         Tpp4.setWidth(100);
                         Tpp4.setHeight(20);
+                        pp1.addListener(e -> {
+                            if (pp4.isChecked()){
+                                Tpp4.setVisible(true);
+                            } else{
+                                Tpp4.setVisible(false);
+                            }
+                            return true;
+                        });
 
 
                         Table table = new Table(skin);
