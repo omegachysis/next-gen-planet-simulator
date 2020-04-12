@@ -401,7 +401,6 @@ public class AppUi {
                         deleteDialog.setMovable(true);
                         deleteDialog.setPosition(500, 500);
                         deleteDialog.setWidth(310);
-                       // deleteDialog.text("Are you sure to delete a celestial body? \n Remember: You'll lose this celestial body.");
 
                         var deleteSelect = new SelectBox<>(skin);
                         deleteSelect.setItems("Select");
@@ -429,10 +428,11 @@ public class AppUi {
                             if (deleteButton.isPressed()) {
                                 var selected = deleteSelect.getSelected();
                                 if (selected == "Select"){
-                                    deleteDialog.hide();
+                                   // deleteDialog.hide();
                                     Dialog error = new Dialog ("Invalid entry", skin);
-                                    error.setPosition(500, 500);
+                                    error.setPosition(530, 390);
                                     error.setHeight(100);
+                                    error.setWidth(200);
                                     error.text("Invalid Selection \n Please try again.");
                                     stage.addActor(error);
                                     Timer.schedule(new Timer.Task() {
@@ -441,6 +441,47 @@ public class AppUi {
                                             error.hide();
                                         }
                                     }, 1);
+                                }else{
+
+                                    Dialog confirmDialog = new Dialog("Delete Celestial Body", skin);
+                                    confirmDialog.setResizable(true);
+                                    confirmDialog.setMovable(false);
+                                    confirmDialog.setPosition(520, 340);
+                                    confirmDialog.setWidth(310);
+                                    confirmDialog.text("Are you sure to delete a celestial body? \n Remember: You'll lose this celestial body.");
+
+                                    TextButton yesButton = new TextButton("Yes", skin);
+                                    yesButton.setPosition(100, 10);
+                                    yesButton.addListener(new ClickListener() {
+                                        @Override
+                                        public void clicked(InputEvent event, float x, float y) {
+                                            if (yesButton.isPressed()) {
+                                                confirmDialog.hide();
+                                                deleteDialog.hide();
+                                            }
+                                        }
+                                    });
+
+                                    TextButton noButton = new TextButton("No", skin);
+                                    noButton.setPosition(150, 10);
+                                    noButton.addListener(new ClickListener() {
+                                        @Override
+                                        public void clicked(InputEvent event, float x, float y) {
+                                            if (noButton.isPressed()) {
+                                                deleteDialog.hide();
+                                                confirmDialog.hide();
+                                            }
+                                        }
+                                    });
+
+                                    Table table4 = new Table(skin);
+                                    table4.add(yesButton);
+                                    table4.add(noButton);
+
+                                    confirmDialog.addActor(yesButton);
+                                    confirmDialog.addActor(noButton);
+                                    confirmDialog.addActor(table4);
+                                    stage.addActor(confirmDialog);
                                 }
                             }
                             return true;
@@ -455,32 +496,6 @@ public class AppUi {
                             }
                             return true;
                         });
-
-
-
-                        /*
-                        var deleteButton = new TextButton("Yes", skin);
-                        deleteButton.setPosition(110, 3);
-                        deleteButton.addListener(e -> {
-                            if (deleteButton.isPressed()) {
-                                button4.remove();
-                                deleteDialog.hide();
-                            }
-                            return true;
-                        });
-
-
-/*
-                        var NoButton = new TextButton("No", skin);
-                        NoButton.setPosition(160, 3);
-                        NoButton.addListener(e -> {
-                            if (NoButton.isPressed()) {
-                                deleteDialog.hide();
-                            }
-                            return true;
-                        });
-
-                         */
 
                         Table table3 = new Table(skin);
                         table3.add(deleteButton);
