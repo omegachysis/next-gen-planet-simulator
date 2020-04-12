@@ -27,6 +27,7 @@ public class CelestialSim
     private final btDynamicsWorld _world;
     private final GravitySimulation _gravitySim;
     private final Environment _environment;
+    private final DirectionalLight _solarLight;
     private final btCollisionDispatcher _dispatcher;
     private final btDefaultCollisionConfiguration _config;
     private final btDbvtBroadphase _pairCache;
@@ -59,7 +60,9 @@ public class CelestialSim
         _multiplexer = multiplexer;
 
         _environment = new Environment();
-        _environment.add(new DirectionalLight().set(1, 1, 1, 1, 2, 0));
+        _solarLight = new DirectionalLight();
+        _solarLight.color.set(Color.WHITE);
+        _environment.add(_solarLight);
 
         _config = new btDefaultCollisionConfiguration();
         _dispatcher = new btCollisionDispatcher(_config);
@@ -119,7 +122,7 @@ public class CelestialSim
 
     public void render() 
     {
-        updateCurrentCelestialBody(_appState.currentCelestialBody);
+        updateCurrentCelestialBody(_appState.currentCelestialBodyId);
 
         _modelBatch.begin(_cam);
         for (final var body : _bodies) 
@@ -136,6 +139,10 @@ public class CelestialSim
 
         if (_bodies.size() > 0)
         {
+            // Direct sunlight based on position in the solar system.
+            var main = _appState.getCurrentCelestialBody();
+            _solarLight.direction.set(main.positionRelativeToSun.cpy());
+
             Vector3 target = new Vector3(0, 0, 0);
             if (_appState.viewingMode == AppState.ViewingMode.CenterOfMass)
                 target = _gravitySim.getCenterOfMass();

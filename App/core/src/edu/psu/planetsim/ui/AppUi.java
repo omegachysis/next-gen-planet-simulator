@@ -1026,7 +1026,7 @@ public class AppUi {
          planet1.positionRelativeToSun = new Vector3(Metrics.m(1.496e11), 0, 0); // 1 AU
          planet1.velocityRelativeToSun = new Vector3();
          _appState.bodies.put(planet1.id, planet1);
-         _appState.currentCelestialBody = planet1.id;
+         _appState.currentCelestialBodyId = planet1.id;
     }
 
     public int getSpeedFactor() 

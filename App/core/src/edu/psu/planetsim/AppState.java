@@ -17,7 +17,7 @@ public class AppState
     public boolean paused = false;
 
     /** The current PARENT celestial body, do not put satellites in here! */
-    public UUID currentCelestialBody = null;
+    public UUID currentCelestialBodyId = null;
     public ViewingMode viewingMode = ViewingMode.MainCelestialBody;
 
     /** Set the index of the satellite to zoom to, if in satellite mode. */
@@ -47,5 +47,12 @@ public class AppState
         public ArrayList<UUID> satellites = new ArrayList<>();
         public Vector3 positionRelativeToSun;
         public Vector3 velocityRelativeToSun;
+    }
+
+    public CelestialBody getCurrentCelestialBody()
+    {
+        if (currentCelestialBodyId == null)
+            return null;
+        return bodies.get(currentCelestialBodyId);
     }
 }
