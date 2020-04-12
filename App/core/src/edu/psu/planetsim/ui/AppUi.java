@@ -363,8 +363,39 @@ public class AppUi {
                         deleteDialog.setMovable(true);
                         deleteDialog.setPosition(500, 500);
                         deleteDialog.setWidth(310);
-                        deleteDialog.text("Are you sure to delete a celestial body? \n Remember: You'll lose this celestial body.");
+                       // deleteDialog.text("Are you sure to delete a celestial body? \n Remember: You'll lose this celestial body.");
 
+                        var deleteSelect = new SelectBox<>(skin);
+                        deleteSelect.setItems("Select");
+                        deleteSelect.setPosition(50, 50);
+                        deleteSelect.setWidth(200);
+                        deleteDialog.addActor(deleteSelect);
+
+                        var deleteButton = new TextButton("Delete", skin);
+                        deleteButton.setPosition(110, 3);
+                        deleteButton.addListener(e -> {
+                            if (deleteButton.isPressed()) {
+                                var selected = deleteSelect.getSelected();
+                                if (selected == "Select"){
+                                    deleteDialog.hide();
+                                    Dialog error = new Dialog ("Invalid entry", skin);
+                                    error.setPosition(500, 500);
+                                    error.setHeight(100);
+                                    error.text("Invalid Selection \n Please try again.");
+                                    stage.addActor(error);
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            error.hide();
+                                        }
+                                    }, 1);
+                                }
+                            }
+                            return true;
+                        });
+                        deleteDialog.addActor(deleteButton);
+
+                        /*
                         var deleteButton = new TextButton("Yes", skin);
                         deleteButton.setPosition(110, 3);
                         deleteButton.addListener(e -> {
@@ -375,6 +406,8 @@ public class AppUi {
                             return true;
                         });
 
+
+
                         var NoButton = new TextButton("No", skin);
                         NoButton.setPosition(160, 3);
                         NoButton.addListener(e -> {
@@ -384,12 +417,14 @@ public class AppUi {
                             return true;
                         });
 
+                         */
+
                         Table table3 = new Table(skin);
                         table3.add(deleteButton);
-                        table3.add(NoButton);
+                       // table3.add(NoButton);
 
                         deleteDialog.addActor(deleteButton);
-                        deleteDialog.addActor(NoButton);
+                     //   deleteDialog.addActor(NoButton);
                         deleteDialog.addActor(table3);
                         stage.addActor(deleteDialog);
                         editSelect.setSelectedIndex(0);
