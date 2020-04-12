@@ -74,7 +74,12 @@ public class AppUi {
                         newButton.setPosition(90, 3);
                         newButton.addListener(e -> {
                             if (newButton.isPressed()) {
-                                Dialog New = new Dialog("", skin);
+
+                                button7.remove();
+                                newDialog.hide();
+                               // _appState.bodies.remove();
+
+                                /*Dialog New = new Dialog("", skin);
                                 New.setMovable(true);
                                 New.text("Assume this as new CB for now");
                                 New.setPosition(500, 300);
@@ -82,6 +87,8 @@ public class AppUi {
                                 New.button("Ok", true);
                                 newDialog.hide();
                                 stage.addActor(New);
+
+                                 */
                             }
                             return true;
                         });
@@ -402,6 +409,20 @@ public class AppUi {
                         deleteSelect.setWidth(200);
                         deleteDialog.addActor(deleteSelect);
 
+                        deleteSelect.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y){
+                                if (_appState.bodies.isEmpty()){
+                                    deleteSelect.showList();
+                                }else {
+                                    Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
+                                    AppState.CelestialBody newPlanet = entries.getValue();
+                                    deleteSelect.setItems("Select", newPlanet.name);
+                                    deleteSelect.showList();
+                                }
+                            }
+                        });
+
                         var deleteButton = new TextButton("Delete", skin);
                         deleteButton.setPosition(90, 3);
                         deleteButton.addListener(e -> {
@@ -434,6 +455,8 @@ public class AppUi {
                             }
                             return true;
                         });
+
+
 
                         /*
                         var deleteButton = new TextButton("Yes", skin);
@@ -508,7 +531,7 @@ public class AppUi {
                         sideDialog.button("Close", true);
 
                         var modifyButton = new TextButton("Modify", skin);
-                        modifyButton.setPosition(100, 210);
+                        modifyButton.setPosition(100, 190);
                         modifyButton.addListener(e -> {
                             if (modifyButton.isPressed()) {
                                 Dialog modified = new Dialog("", skin);
@@ -535,26 +558,33 @@ public class AppUi {
                         Label nameLabel1 = new Label("Modify Physical Properties:", skin);
                         nameLabel1.setPosition(5, 350);
 
-                        Label pp1 = new Label("Initial Distance (AU):", skin);
+                        Label pp1 = new Label("Mass (M⊕):", skin);
                         pp1.setPosition(7,310);
                         TextField Tpp1 = new TextField("",skin);
                         Tpp1.setPosition(160,310);
                         Tpp1.setWidth(100);
                         Tpp1.setHeight(20);
 
-                        Label pp2 = new Label("Velocity (km/s):", skin);
+                        Label pp2 = new Label("Position(x,y,z):", skin);
                         pp2.setPosition(7,280);
                         TextField Tpp2 = new TextField("",skin);
                         Tpp2.setPosition(160,280);
                         Tpp2.setWidth(100);
                         Tpp2.setHeight(20);
 
-                        Label pp3 = new Label("Mass (M⊕):",skin);
+                        Label pp3 = new Label("Velocity (km/s):",skin);
                         pp3.setPosition(7, 250);
                         TextField Tpp3 = new TextField("",skin);
                         Tpp3.setPosition(160,250);
                         Tpp3.setWidth(100);
                         Tpp3.setHeight(20);
+
+                        Label pp4 = new Label("Velocity (km/s):",skin);
+                        pp4.setPosition(7, 220);
+                        TextField Tpp4 = new TextField("",skin);
+                        Tpp4.setPosition(160,220);
+                        Tpp4.setWidth(100);
+                        Tpp4.setHeight(20);
 
 
                         Table table = new Table(skin);
@@ -562,18 +592,22 @@ public class AppUi {
                         table.add(pp1);
                         table.add(pp2);
                         table.add(pp3);
+                        table.add(pp4);
                         table.add(Tpp1);
                         table.add(Tpp2);
                         table.add(Tpp3);
+                        table.add(Tpp4);
 
 
                         sideDialog.addActor(nameLabel1);
                         sideDialog.addActor(pp1);
                         sideDialog.addActor(pp2);
                         sideDialog.addActor(pp3);
+                        sideDialog.addActor(pp4);
                         sideDialog.addActor(Tpp1);
                         sideDialog.addActor(Tpp2);
                         sideDialog.addActor(Tpp3);
+                        sideDialog.addActor(Tpp4);
                         sideDialog.addActor(table);
                         stage.addActor(sideDialog);
                         viewSelect.setSelectedIndex(0);
