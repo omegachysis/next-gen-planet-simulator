@@ -399,14 +399,123 @@ public class AppUi {
                     case "Add Satellite":
                         Dialog SatDialog = new Dialog("Add Satellite ", skin);
                         SatDialog.setMovable(true);
-                        SatDialog.setPosition(10, 200);
-                        SatDialog.setWidth(310);
+                        SatDialog.setPosition(10, 250);
+                        SatDialog.setWidth(330);
                         SatDialog.setHeight(400);
                         stage.addActor(SatDialog);
                         editSelect.setSelectedIndex(0);
 
-                        
+                        Label label1 = new Label("Name:", skin);
+                        label1.setPosition(5,340);
+                        final TextField field1 = new TextField("",skin);
+                        field1.setPosition(160,340);
 
+                        Label label2 = new Label("Mass:", skin);
+                        label2.setPosition(5,295);
+                        TextField field2 = new TextField("",skin);
+                        field2.setPosition(160,295);
+
+                        Label label3 = new Label("Position (x, y, z):", skin);
+                        label3.setPosition(5,250);
+                        TextField field3 = new TextField("",skin);
+                        field3.setPosition(160,250);
+
+                        Label label4 = new Label("Velocity (km/s):", skin);
+                        label4.setPosition(5,205);
+                        TextField field4 = new TextField("",skin);
+                        field4.setPosition(160,205);
+
+                        Label label5 = new Label("Spin (x, y, z):",skin);
+                        label5.setPosition(5, 160);
+                        TextField field5 = new TextField("",skin);
+                        field5.setPosition(160,160);
+
+                        TextButton add = new TextButton("Add", skin);
+                        add.setPosition(115, 10);
+                        add.addListener(e -> {
+                            if (add.isPressed()) {
+                                Dialog wrong = new Dialog("Incorrect entry", skin);
+                                wrong.text("One or more of your values is invalid. \n Please try again.");
+                                wrong.setPosition(500, 500);
+                                wrong.setWidth(400);
+                                wrong.setHeight(100);
+
+                                try {
+                                    String name = field1.getText();
+                                    double mass = Double.parseDouble(field2.getText());
+                                    double distance = Double.parseDouble(field3.getText());
+                                    double velocity = Double.parseDouble(field4.getText());
+                                    double spin = Double.parseDouble(field5.getText());
+
+                                    addPlanet();
+                                } catch (NumberFormatException n) {
+                                    stage.addActor(wrong);
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            wrong.hide();
+                                        }
+                                    }, 1);
+                                    return true;
+                                }
+
+                                Dialog success = new Dialog("Correct entry", skin);
+                                success.setPosition(500, 500);
+                                success.setWidth(300);
+                                success.setHeight(100);
+                                success.text("Your satellite has been added.");
+                                Timer.schedule(new Timer.Task() {
+                                    @Override
+                                    public void run() {
+                                        success.hide();
+                                    }
+                                }, 2);
+
+
+                                //                               stage.addActor(button7);
+                                stage.addActor(success);
+                                SatDialog.hide();
+                            }
+                            return true;
+                        });
+
+                        TextButton cancel = new TextButton("Cancel", skin);
+                        cancel.setPosition(160, 10);
+                        cancel.addListener(e -> {
+                            if (cancel.isPressed()) {
+                                SatDialog.hide();
+                            }
+                            return true;
+                        });
+
+                        Table table5 = new Table(skin);
+                        table5.add(label1);
+                        table5.add(field1);
+                        table5.add(label2);
+                        table5.add(field2);
+                        table5.add(label3);
+                        table5.add(field3);
+                        table5.add(label4);
+                        table5.add(field4);
+                        table5.add(label5);
+                        table5.add(field5);
+                        table5.add(add);
+                        table5.add(cancel);
+
+                        SatDialog.addActor(label1);
+                        SatDialog.addActor(field1);
+                        SatDialog.addActor(label2);
+                        SatDialog.addActor(field2);
+                        SatDialog.addActor(label3);
+                        SatDialog.addActor(field3);
+                        SatDialog.addActor(label4);
+                        SatDialog.addActor(field4);
+                        SatDialog.addActor(label5);
+                        SatDialog.addActor(field5);
+                        SatDialog.addActor(add);
+                        SatDialog.addActor(cancel);
+                        stage.addActor(SatDialog);
+                        editSelect.setSelectedIndex(0);
                         break;
 
                     case "Delete Celestial Body":
