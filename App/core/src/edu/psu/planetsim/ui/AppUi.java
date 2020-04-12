@@ -310,7 +310,7 @@ public class AppUi {
                                 }, 2);
 
 
-                                stage.addActor(button7);
+ //                               stage.addActor(button7);
                                 stage.addActor(success);
                                 addDialog.hide();
                             }
