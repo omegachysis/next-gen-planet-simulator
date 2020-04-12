@@ -70,7 +70,6 @@ public class ThermalTest extends ApplicationAdapter
         pix.setFilter(Filter.NearestNeighbour);
         pix.setColor(0f, 0f, 0f, 1f);
         pix.fill();
-        pix.setColor(1f, 1f, 1f, 1f);
         for (int z = 0; z < len; z++)
         {
             for (int y = 0; y < len; y++)
@@ -146,7 +145,10 @@ public class ThermalTest extends ApplicationAdapter
                     if (dist < radius && dist > radius * 0.95)
                     {
                         // Inside the sphere.
-                        pix.setColor(0f, 0f, 1f, 1f);
+                        if (x > len / 2)
+                            pix.setColor(1f, 0f, 1f, 1f);
+                        else
+                            pix.setColor(0f, 0f, 1f, 1f);
                         pix.drawPixel(z * len + x, y);
                     }
                 }
