@@ -231,7 +231,7 @@ public class AppUi {
                     case "Add Celestial Body":
                         Dialog addDialog = new Dialog("Add Celestial Body", skin);
                         addDialog.setMovable(true);
-                        addDialog.setPosition(10, 250);
+                        addDialog.setPosition(10, 200);
                         addDialog.setWidth(330);
                         addDialog.setHeight(400);
 
@@ -252,17 +252,17 @@ public class AppUi {
 //                            }
 //                        });
 
-                        Label addLabel2 = new Label("Mass:", skin);
+                        Label addLabel2 = new Label("Mass (kg):", skin);
                         addLabel2.setPosition(5,295);
                         TextField massField = new TextField("",skin);
                         massField.setPosition(160,295);
 
-                        Label addLabel3 = new Label("Position (x, y, z):", skin);
+                        Label addLabel3 = new Label("Position (m):", skin);
                         addLabel3.setPosition(5,250);
                         TextField positionField = new TextField("",skin);
                         positionField.setPosition(160,250);
 
-                        Label addLabel4 = new Label("Velocity (km/s):", skin);
+                        Label addLabel4 = new Label("Velocity (m/s):", skin);
                         addLabel4.setPosition(5,205);
                         TextField velocityField = new TextField("",skin);
                         velocityField.setPosition(160,205);
@@ -272,7 +272,7 @@ public class AppUi {
                         TextField spinField = new TextField("",skin);
                         spinField.setPosition(160,160);
 
-                       
+
                         var satSelect = new SelectBox<>(skin);
                         satSelect.setItems("Select");
                         satSelect.setPosition(160, 115);
@@ -399,7 +399,7 @@ public class AppUi {
                     case "Add Satellite":
                         Dialog SatDialog = new Dialog("Add Satellite ", skin);
                         SatDialog.setMovable(true);
-                        SatDialog.setPosition(10, 250);
+                        SatDialog.setPosition(10, 200);
                         SatDialog.setWidth(330);
                         SatDialog.setHeight(400);
                         stage.addActor(SatDialog);
@@ -410,17 +410,17 @@ public class AppUi {
                         final TextField field1 = new TextField("",skin);
                         field1.setPosition(160,340);
 
-                        Label label2 = new Label("Mass:", skin);
+                        Label label2 = new Label("Mass (kg):", skin);
                         label2.setPosition(5,295);
                         TextField field2 = new TextField("",skin);
                         field2.setPosition(160,295);
 
-                        Label label3 = new Label("Position (x, y, z):", skin);
+                        Label label3 = new Label("Position (m):", skin);
                         label3.setPosition(5,250);
                         TextField field3 = new TextField("",skin);
                         field3.setPosition(160,250);
 
-                        Label label4 = new Label("Velocity (km/s):", skin);
+                        Label label4 = new Label("Velocity (m/s):", skin);
                         label4.setPosition(5,205);
                         TextField field4 = new TextField("",skin);
                         field4.setPosition(160,205);
