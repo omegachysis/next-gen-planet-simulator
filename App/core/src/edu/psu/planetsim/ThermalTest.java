@@ -25,6 +25,7 @@ public class ThermalTest extends ApplicationAdapter
     SpriteBatch batch;
     Texture thermal;
     Texture diffusivity;
+    Texture radiation;
     FrameBuffer fbo;
     // FrameBuffer visionFbo;
     Mesh mesh;
@@ -82,9 +83,9 @@ public class ThermalTest extends ApplicationAdapter
                     final var centerY = len / 2f;
                     final var dist = Math.sqrt(
                         Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
-                    if (dist < radius / 4)
+                    if (dist < radius)
                     {
-                        pix.setColor(1f, 1f, 1f, 1f);
+                        pix.setColor(1f, 0f, 0f, 1f);
                         pix.drawPixel(z * len + x, y);
                     }
                 }
@@ -100,6 +101,7 @@ public class ThermalTest extends ApplicationAdapter
         pix.setFilter(Filter.NearestNeighbour);
         pix.setColor(0f, 0f, 0f, 1f);
         pix.fill();
+        pix.setColor(1f, 1f, 1f, 1f);
         // Procedurally create a spherical body for heat mapping.
         for (int z = 0; z < len; z++)
         {
@@ -115,8 +117,6 @@ public class ThermalTest extends ApplicationAdapter
                         Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
                     if (dist < radius)
                     {
-                        pix.setColor(1f, 1f, 1f, 1f);
-
                         // Inside the sphere.
                         pix.drawPixel(z * len + x, y);
                     }
@@ -124,7 +124,28 @@ public class ThermalTest extends ApplicationAdapter
             }
         }
         diffusivity = new Texture(pix);
-        diffusivity.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+        diffusivity.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+        // Procedurally generate a radiation texture for mapping radiation input 
+        // and radiant cooling.
+        pix = new Pixmap(len * len, len, Format.RGB888);
+        pix.setFilter(Filter.NearestNeighbour);
+        pix.setColor(0f, 0f, 0f, 1f);
+        pix.fill();
+        for (int z = 0; z < len; z++)
+        {
+            for (int y = 0; y < len; y++)
+            {
+                for (int x = 0; x < len; x++)
+                {
+                    pix.setColor(0f, 0f, 1f, 1f);
+                    if (x == y)
+                        pix.drawPixel(z * len + x, y);
+                }
+            }
+        }
+        radiation = new Texture(pix);
+        radiation.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
         fbo.begin();
         batch.begin();
@@ -150,8 +171,12 @@ public class ThermalTest extends ApplicationAdapter
         diffusivity.bind(1);
         shader.setUniformi("u_diffusivity", 1);
 
+        // Bind the texture describing the radiant input and output.
+        radiation.bind(2);
+        shader.setUniformi("u_radiation", 2);
+
         // Bind uniforms for discrete time evolution and sizes.
-        shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime() * 1.0f);
+        shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime() * 0.1f);
         shader.setUniformf("u_dx", 1f / fbo.getWidth());
         shader.setUniformf("u_dy", 1f / fbo.getHeight());
         shader.setUniformf("u_len", len);

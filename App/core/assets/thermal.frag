@@ -2,6 +2,7 @@
 varying vec2 f_position;
 uniform sampler2D u_texture;
 uniform sampler2D u_diffusivity;
+uniform sampler2D u_radiation;
 uniform float u_dx;
 uniform float u_dy;
 uniform float u_dt;
@@ -39,13 +40,27 @@ void main()
     float d = getF(texture2D(u_texture, vec2(f_position.x - 1.0 / u_len, f_position.y)).rgb);
 
     // Fetch the thermal diffusivity at this location.
-    float perm = texture2D(u_diffusivity, vec2(f_position.x, f_position.y)).r;
+    float diffuse = texture2D(u_diffusivity, vec2(f_position.x, f_position.y)).r;
+
+    // Fetch the radiant input at this location.
+    float heating = texture2D(u_radiation, vec2(f_position.x, f_position.y)).r;
+
+    // Fetch the radiant cooling factor at this location.
+    float cooling = texture2D(u_radiation, vec2(f_position.x, f_position.y)).b;
 
     // Estimate the laplacian.
     float laplacian = (w + e + n + s + u + d) / 6.0 - c;
 
-    // Estimate the discrete time evolution heat equation.
-    float df_dt = perm * laplacian * u_dt;
+    // Estimate the discrete time evolution of the heat equation.
+    c += diffuse * laplacian * u_dt;
 
-    gl_FragColor = vec4(getColor(c + df_dt), 1);
+    // Add radiant energy input (from sources like the sun).
+    c += heating;
+
+    // Apply radiant cooling to locations that are on the surface.
+    // Use the Stefan-Boltzmann law for radiant cooling.
+    const float stefanBoltzmannConst = 0.000001;
+    c -= cooling * pow(stefanBoltzmannConst * c, 4.0) * u_dt;
+
+    gl_FragColor = vec4(getColor(c), 1);
 }
