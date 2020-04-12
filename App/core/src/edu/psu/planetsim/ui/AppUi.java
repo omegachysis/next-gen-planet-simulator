@@ -214,7 +214,7 @@ public class AppUi {
         });
 
         final SelectBox<String> editSelect= new SelectBox<>(skin);
-        editSelect.setItems("Edit", "Add Celestial Body", "Delete Celestial Body", "Duplicate");
+        editSelect.setItems("Edit", "Add Celestial Body", "Add Satellite", "Delete Celestial Body", "Duplicate");
         editSelect.setPosition(100, 680);
         editSelect.setWidth(75);
         editSelect.addListener(new ClickListener() {
@@ -272,6 +272,7 @@ public class AppUi {
                         TextField spinField = new TextField("",skin);
                         spinField.setPosition(160,160);
 
+                       
                         var satSelect = new SelectBox<>(skin);
                         satSelect.setItems("Select");
                         satSelect.setPosition(160, 115);
@@ -393,6 +394,19 @@ public class AppUi {
                         addDialog.addActor(cancelButton);
                         stage.addActor(addDialog);
                         editSelect.setSelectedIndex(0);
+                        break;
+
+                    case "Add Satellite":
+                        Dialog SatDialog = new Dialog("Add Satellite ", skin);
+                        SatDialog.setMovable(true);
+                        SatDialog.setPosition(10, 200);
+                        SatDialog.setWidth(310);
+                        SatDialog.setHeight(400);
+                        stage.addActor(SatDialog);
+                        editSelect.setSelectedIndex(0);
+
+                        
+
                         break;
 
                     case "Delete Celestial Body":
