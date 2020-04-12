@@ -40,9 +40,6 @@ public class AppUi {
         _appState = appState;
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-        //inputManager = new InputMethodManager();
-        //Gdx.input.setInputProcessor(inputManager);
-
         final SelectBox<String> fileSelect= new SelectBox<>(skin);
         fileSelect.setItems("File", "New", "Save As", "Save");
         fileSelect.setPosition(20, 680);
@@ -74,21 +71,8 @@ public class AppUi {
                         newButton.setPosition(90, 3);
                         newButton.addListener(e -> {
                             if (newButton.isPressed()) {
-
-                                button7.remove();
                                 newDialog.hide();
-                               // _appState.bodies.remove();
 
-                                /*Dialog New = new Dialog("", skin);
-                                New.setMovable(true);
-                                New.text("Assume this as new CB for now");
-                                New.setPosition(500, 300);
-                                New.setWidth(250);
-                                New.button("Ok", true);
-                                newDialog.hide();
-                                stage.addActor(New);
-
-                                 */
                             }
                             return true;
                         });
@@ -144,13 +128,6 @@ public class AppUi {
                                  saved.text("File Saved!");
                                  saved.setPosition(500, 500);
                                  saved.setWidth(250);
-                                 //saved.button("Ok", true);
-
-                                 /*MoveToAction savedAction = new MoveToAction();
-                                 savedAction.setPosition(300f, 100f);
-                                 savedAction.setDuration(2f);
-                                 saved.addAction(savedAction);
-                                  */
 
                                  stage.addActor(saved);
                                  saveDialog.hide();
@@ -179,8 +156,6 @@ public class AppUi {
                         });
                         table.add(cancelButton);
                         saveDialog.addActor(cancelButton);
-
-                        // saveDialog.button("Cancel", true);
 
                         saveDialog.addActor(nameLabel1);
                         saveDialog.addActor(fileName1);
@@ -239,18 +214,6 @@ public class AppUi {
                         addLabel1.setPosition(5,340);
                         final TextField nameField = new TextField("",skin);
                         nameField.setPosition(160,340);
-//                        textField1.addListener(new ChangeListener() {
-//                            @Override
-//                            public void changed(ChangeEvent event, Actor actor) {
-//                                 textField1.getText();
-//                                //String test = textField1.getText();
-//                                //System.out.println(test);
-//                                button7 = new TextButton(textField1.getText(), skin);
-//                                button7.setSize(110, 30);
-//                                button7.setPosition(30, 565);
-//
-//                            }
-//                        });
 
                         Label addLabel2 = new Label("Mass (kg):", skin);
                         addLabel2.setPosition(5,295);
@@ -345,8 +308,6 @@ public class AppUi {
                                     }
                                 }, 2);
 
-
- //                               stage.addActor(button7);
                                 stage.addActor(success);
                                 addDialog.hide();
                             }
@@ -1048,15 +1009,6 @@ public class AppUi {
         stage.addActor(viewSelect);
         stage.addActor(inspectSelect);
     }
-
-//    public String getName(){
-//        Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
-//        UUID key = entries.getKey();
-//        AppState.CelestialBody newPlanet = entries.getValue();
-//        return newPlanet.name;
-//        var celBodies = _appState.bodies.values().toArray();
-//        return celBodies
-//    }
 
     public void addPlanet(){
          final var planet1 = new AppState.CelestialBody();
