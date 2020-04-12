@@ -1015,10 +1015,16 @@ public class AppUi {
          planet1.id = UUID.randomUUID();
          planet1.name = "Planet 1";
          planet1.mass = Metrics.kg(1.0e24);
-         planet1.position = new Vector3();
-         planet1.velocity = new Vector3();
+         planet1.position = new Vector3(); // Only set the position for satellites,
+         // we will interpret position for planets as referring to the 
+         // 'positionRelativeToSun' field down lower. For planets that get added,
+         // this should always initialize to new Vector3().
+         planet1.velocity = new Vector3(); // same for velocity, we'll set it relative 
+         // to the sun for planets.
          planet1.spin = new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f);
          planet1.orientation = new Quaternion().setFromCross(Vector3.Y, planet1.spin);
+         planet1.positionRelativeToSun = new Vector3(Metrics.m(1.496e11), 0, 0); // 1 AU
+         planet1.velocityRelativeToSun = new Vector3();
          _appState.bodies.put(planet1.id, planet1);
          _appState.currentCelestialBody = planet1.id;
     }

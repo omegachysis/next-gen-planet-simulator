@@ -82,9 +82,11 @@ public class CelestialSim
         {
             var dto = _appState.bodies.get(value);
             add(new CelestialBody(dto));
+            System.out.println("Adding celestial body to sim");
             for (var satelliteId : dto.satellites)
             {
                 add(new CelestialBody(_appState.bodies.get(satelliteId)));
+                System.out.println("Adding satellite to sim");
             }
         }
     }

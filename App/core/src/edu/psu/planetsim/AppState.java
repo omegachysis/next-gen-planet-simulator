@@ -45,5 +45,7 @@ public class AppState
         public Quaternion orientation;
         public float[] elevationMap;
         public ArrayList<UUID> satellites = new ArrayList<>();
+        public Vector3 positionRelativeToSun;
+        public Vector3 velocityRelativeToSun;
     }
 }
