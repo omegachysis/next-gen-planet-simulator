@@ -265,8 +265,36 @@ public class AppUi {
                         TextField spinField = new TextField("",skin);
                         spinField.setPosition(160,160);
 
-                        CheckBox satellite = new CheckBox("Satellite?", skin);
+                        var satSelect = new SelectBox<>(skin);
+                        satSelect.setItems("Select");
+                        satSelect.setPosition(160, 115);
+                        satSelect.setWidth(150);
+                        satSelect.setVisible(false);
+
+                        satSelect.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y){
+                                if (_appState.bodies.isEmpty()){
+                                    satSelect.showList();
+                                }else {
+                                    Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
+                                    AppState.CelestialBody newPlanet = entries.getValue();
+                                    satSelect.setItems("Select", newPlanet.name);
+                                    satSelect.showList();
+                                }
+                            }
+                        });
+
+                        CheckBox satellite = new CheckBox("  Satellite?", skin);
                         satellite.setPosition(5, 115);
+                        satellite.addListener(e -> {
+                           if (satellite.isChecked()){
+                               satSelect.setVisible(true);
+                           } else{
+                               satSelect.setVisible(false);
+                           }
+                           return true;
+                        });
 
                         TextButton addButton = new TextButton("Add", skin);
                         addButton.setPosition(115, 10);
@@ -338,6 +366,7 @@ public class AppUi {
                         table.add(addLabel5);
                         table.add(spinField);
                         table.add(satellite);
+                        table.add(satSelect);
                         table.add(addButton);
                         table.add(cancelButton);
 
@@ -352,6 +381,7 @@ public class AppUi {
                         addDialog.addActor(addLabel5);
                         addDialog.addActor(spinField);
                         addDialog.addActor(satellite);
+                        addDialog.addActor(satSelect);
                         addDialog.addActor(addButton);
                         addDialog.addActor(cancelButton);
                         stage.addActor(addDialog);
@@ -604,10 +634,14 @@ public class AppUi {
                         changeSelect.addListener(new ClickListener() {
                             @Override
                             public void clicked(InputEvent event, float x, float y){
-                                Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
-                                AppState.CelestialBody newPlanet = entries.getValue();
-                                changeSelect.setItems("Select", newPlanet.name);
-                                changeSelect.showList();
+                                if (_appState.bodies.isEmpty()){
+                                    changeSelect.showList();
+                                }else {
+                                    Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
+                                    AppState.CelestialBody newPlanet = entries.getValue();
+                                    changeSelect.setItems("Select", newPlanet.name);
+                                    changeSelect.showList();
+                                }
                             }
                         });
 
