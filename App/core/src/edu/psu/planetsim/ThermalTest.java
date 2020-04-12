@@ -138,9 +138,16 @@ public class ThermalTest extends ApplicationAdapter
             {
                 for (int x = 0; x < len; x++)
                 {
-                    pix.setColor(0f, 0f, 1f, 1f);
                     if (x == y)
+                    {
+                        pix.setColor(0f, 0f, 1f, 1f);
                         pix.drawPixel(z * len + x, y);
+                    }
+                    else if (x == len - y)
+                    {
+                        pix.setColor(1f, 0f, 0f, 1f);
+                        pix.drawPixel(z * len + x, y);
+                    }
                 }
             }
         }
