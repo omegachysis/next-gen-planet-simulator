@@ -372,7 +372,7 @@ public class AppUi {
                         deleteDialog.addActor(deleteSelect);
 
                         var deleteButton = new TextButton("Delete", skin);
-                        deleteButton.setPosition(110, 3);
+                        deleteButton.setPosition(90, 3);
                         deleteButton.addListener(e -> {
                             if (deleteButton.isPressed()) {
                                 var selected = deleteSelect.getSelected();
@@ -395,6 +395,15 @@ public class AppUi {
                         });
                         deleteDialog.addActor(deleteButton);
 
+                        var closeButton = new TextButton("Close", skin);
+                        closeButton.setPosition(170, 3);
+                        closeButton.addListener(e -> {
+                            if (closeButton.isPressed()) {
+                                deleteDialog.hide();
+                            }
+                            return true;
+                        });
+
                         /*
                         var deleteButton = new TextButton("Yes", skin);
                         deleteButton.setPosition(110, 3);
@@ -407,7 +416,7 @@ public class AppUi {
                         });
 
 
-
+/*
                         var NoButton = new TextButton("No", skin);
                         NoButton.setPosition(160, 3);
                         NoButton.addListener(e -> {
@@ -421,10 +430,10 @@ public class AppUi {
 
                         Table table3 = new Table(skin);
                         table3.add(deleteButton);
-                       // table3.add(NoButton);
+                        table3.add(closeButton);
 
                         deleteDialog.addActor(deleteButton);
-                     //   deleteDialog.addActor(NoButton);
+                        deleteDialog.addActor(closeButton);
                         deleteDialog.addActor(table3);
                         stage.addActor(deleteDialog);
                         editSelect.setSelectedIndex(0);
