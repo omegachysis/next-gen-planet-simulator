@@ -3,6 +3,7 @@ varying vec2 f_position;
 uniform sampler2D u_texture;
 uniform sampler2D u_diffusivity;
 uniform float u_dx;
+uniform float u_dy;
 uniform float u_dt;
 uniform float u_len;
 
@@ -32,8 +33,8 @@ void main()
     float c = getF(texture2D(u_texture, vec2(f_position.x, f_position.y)).rgb);
     float w = getF(texture2D(u_texture, vec2(f_position.x - u_dx, f_position.y)).rgb);
     float e = getF(texture2D(u_texture, vec2(f_position.x + u_dx, f_position.y)).rgb);
-    float n = getF(texture2D(u_texture, vec2(f_position.x, f_position.y - u_dx)).rgb);
-    float s = getF(texture2D(u_texture, vec2(f_position.x, f_position.y + u_dx)).rgb);
+    float n = getF(texture2D(u_texture, vec2(f_position.x, f_position.y - u_dy)).rgb);
+    float s = getF(texture2D(u_texture, vec2(f_position.x, f_position.y + u_dy)).rgb);
     float u = getF(texture2D(u_texture, vec2(f_position.x + 1.0 / u_len, f_position.y)).rgb);
     float d = getF(texture2D(u_texture, vec2(f_position.x - 1.0 / u_len, f_position.y)).rgb);
 
