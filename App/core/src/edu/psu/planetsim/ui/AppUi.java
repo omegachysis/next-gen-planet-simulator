@@ -235,38 +235,6 @@ public class AppUi {
                         TextField spinField = new TextField("",skin);
                         spinField.setPosition(160,160);
 
-
-                        var satSelect = new SelectBox<>(skin);
-                        satSelect.setItems("Select");
-                        satSelect.setPosition(160, 115);
-                        satSelect.setWidth(150);
-                        satSelect.setVisible(false);
-
-                        satSelect.addListener(new ClickListener() {
-                            @Override
-                            public void clicked(InputEvent event, float x, float y){
-                                if (_appState.bodies.isEmpty()){
-                                    satSelect.showList();
-                                }else {
-                                    Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
-                                    AppState.CelestialBody newPlanet = entries.getValue();
-                                    satSelect.setItems("Select", newPlanet.name);
-                                    satSelect.showList();
-                                }
-                            }
-                        });
-
-                        CheckBox satellite = new CheckBox("  Satellite?", skin);
-                        satellite.setPosition(5, 115);
-                        satellite.addListener(e -> {
-                           if (satellite.isChecked()){
-                               satSelect.setVisible(true);
-                           } else{
-                               satSelect.setVisible(false);
-                           }
-                           return true;
-                        });
-
                         TextButton addButton = new TextButton("Add", skin);
                         addButton.setPosition(115, 10);
                         addButton.addListener(e -> {
@@ -284,7 +252,7 @@ public class AppUi {
                                     double velocity = Double.parseDouble(velocityField.getText());
                                     double spin = Double.parseDouble(spinField.getText());
 
-                                    addPlanet();
+                                    addCB(name, mass);
                                 } catch (NumberFormatException n) {
                                         stage.addActor(wrong);
                                     Timer.schedule(new Timer.Task() {
@@ -334,8 +302,6 @@ public class AppUi {
                         table.add(velocityField);
                         table.add(addLabel5);
                         table.add(spinField);
-                        table.add(satellite);
-                        table.add(satSelect);
                         table.add(addButton);
                         table.add(cancelButton);
 
@@ -349,8 +315,6 @@ public class AppUi {
                         addDialog.addActor(velocityField);
                         addDialog.addActor(addLabel5);
                         addDialog.addActor(spinField);
-                        addDialog.addActor(satellite);
-                        addDialog.addActor(satSelect);
                         addDialog.addActor(addButton);
                         addDialog.addActor(cancelButton);
                         stage.addActor(addDialog);
@@ -408,7 +372,7 @@ public class AppUi {
                                     double velocity = Double.parseDouble(field4.getText());
                                     double spin = Double.parseDouble(field5.getText());
 
-                                    addPlanet();
+                                    //addCB(name, mass);
                                 } catch (NumberFormatException n) {
                                     stage.addActor(wrong);
                                     Timer.schedule(new Timer.Task() {
@@ -944,7 +908,6 @@ public class AppUi {
             return true;
         });
 
-
         button5 = new TextButton("Add Satellite", skin, "default");
         button5.setSize(110, 30);
         button5.setPosition(30, 600);
@@ -989,9 +952,9 @@ public class AppUi {
         Table CBtable = new Table(skin);
         CBtable.setPosition(110,635);
         CBtable.setSize(300, 300);
-        CBtable.add(button4);
-        CBtable.add(button5);
-        CBtable.add(button7);
+//        CBtable.add(button4);
+//        CBtable.add(button5);
+//        CBtable.add(button7);
 
         stage.addActor(CBtable);
 
@@ -1000,8 +963,6 @@ public class AppUi {
         stage.addActor(button2);
         stage.addActor(speedbutton);
         stage.addActor(inputButton);
-        stage.addActor(button4);
-        stage.addActor(button5);
         stage.addActor(zoomText);
         stage.addActor(zoomSlider);
         stage.addActor(fileSelect);
@@ -1010,24 +971,39 @@ public class AppUi {
         stage.addActor(inspectSelect);
     }
 
-    public void addPlanet(){
-         final var planet1 = new AppState.CelestialBody();
-         planet1.id = UUID.randomUUID();
-         planet1.name = "Planet 1";
-         planet1.mass = Metrics.kg(1.0e24);
-         planet1.position = new Vector3(); // Only set the position for satellites,
-         // we will interpret position for planets as referring to the 
-         // 'positionRelativeToSun' field down lower. For planets that get added,
-         // this should always initialize to new Vector3().
-         planet1.velocity = new Vector3(); // same for velocity, we'll set it relative 
-         // to the sun for planets.
-         planet1.spin = new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f);
-         planet1.orientation = new Quaternion().setFromCross(Vector3.Y, planet1.spin);
-         planet1.positionRelativeToSun = new Vector3(Metrics.m(1.496e11), 0, 0); // 1 AU
-         planet1.velocityRelativeToSun = new Vector3();
-         _appState.bodies.put(planet1.id, planet1);
-         _appState.currentCelestialBodyId = planet1.id;
+    private void addCB(String name, double mass){
+        final var newCB = new AppState.CelestialBody();
+        newCB.id = UUID.randomUUID();
+        newCB.name = name;
+        newCB.mass = mass;
+        newCB.position = new Vector3();
+        newCB.velocity = new Vector3();
+        newCB.spin = new Vector3();
+        newCB.orientation = new Quaternion().setFromCross(Vector3.Y, newCB.spin);
+        newCB.positionRelativeToSun = new Vector3(Metrics.m(1.496e11), 0, 0); // 1 AU
+        newCB.velocityRelativeToSun = new Vector3();
+        _appState.bodies.put(newCB.id, newCB);
+        _appState.currentCelestialBodyId = newCB.id;
     }
+
+//    private void addPlanet(){
+//         final var planet1 = new AppState.CelestialBody();
+//         planet1.id = UUID.randomUUID();
+//         planet1.name = "Planet 1";
+//         planet1.mass = Metrics.kg(1.0e24);
+//         planet1.position = new Vector3(); // Only set the position for satellites,
+//         // we will interpret position for planets as referring to the
+//         // 'positionRelativeToSun' field down lower. For planets that get added,
+//         // this should always initialize to new Vector3().
+//         planet1.velocity = new Vector3(); // same for velocity, we'll set it relative
+//         // to the sun for planets.
+//         planet1.spin = new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f);
+//         planet1.orientation = new Quaternion().setFromCross(Vector3.Y, planet1.spin);
+//         planet1.positionRelativeToSun = new Vector3(Metrics.m(1.496e11), 0, 0); // 1 AU
+//         planet1.velocityRelativeToSun = new Vector3();
+//         _appState.bodies.put(planet1.id, planet1);
+//         _appState.currentCelestialBodyId = planet1.id;
+//    }
 
     public int getSpeedFactor() 
     {
