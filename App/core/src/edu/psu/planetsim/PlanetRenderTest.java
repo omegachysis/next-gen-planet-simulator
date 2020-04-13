@@ -115,40 +115,64 @@ public class PlanetRenderTest implements ApplicationListener {
             var mountains = (mountainGen.GetNoise(px, py, pz) + 1f) * 0.5f;
             var noise = lumps + mountains * 0.2f;
             
-            var noiseColor = noise;
-            if (noise > 0.75)
-            {
-            	noiseColor = noise - 0.75f;
-            	verticesHolder[i * 12 + 3] = 0.5f + noiseColor;
-                verticesHolder[i * 12 + 4] = 0.5f - noiseColor;
-                verticesHolder[i * 12 + 5] = 0.25f;
-            }
-            else if (noise > 0.5)
-            {
-            	noiseColor = noise - 0.5f;
-            	verticesHolder[i * 12 + 3] = 0.25f + noiseColor;
-                verticesHolder[i * 12 + 4] = 0.75f - noiseColor;
-                verticesHolder[i * 12 + 5] = 0.25f;
-            }
-            else if (noise > 0.25)
-            {
-            	noiseColor = noise - 0.25f;
-            	verticesHolder[i * 12 + 3] = 0.25f;
-                verticesHolder[i * 12 + 4] = 0.5f + noiseColor;
-                verticesHolder[i * 12 + 5] = 0.5f - noiseColor;
-            }
-            else
-            {
-            	verticesHolder[i * 12 + 3] = 0.25f;
-                verticesHolder[i * 12 + 4] = 0.25f + noiseColor;
-                verticesHolder[i * 12 + 5] = 0.75f - noiseColor;
-            }
-            
             var elev = noise + 2f;
             elevationMap[i] = elev;
             verticesHolder[i * 12 + 0] *= elev;
             verticesHolder[i * 12 + 1] *= elev;
             verticesHolder[i * 12 + 2] *= elev;
+        }
+        
+        // Following loops generate colors depending on a variety of inputs; currently it
+        // generates a topography/elevation map depending on elevationMap
+        // The new VertexAttributes changes the structure of the vertex
+        // Now if p stands for position coordinates, n stands for normal coordinates,
+        // t stands for texture coordinates, and r/g/b/a stand for color/alpha values,
+        // then the vertex in the float array is as follows; p p p r g b a n n n t t
+        // The vertex is now 12 values long
+        
+        // These values are needed for the topography map to provide reasonable color
+        // variety, as topography maps are dependent on the difference between maximum elevation
+        // and maximum depth, though sometimes sea level is used. 
+        // For our purposes, I am assuming the planet has no water and thus no sea level.
+        float highestElev = 0f;
+        float lowestElev = 999f;
+        for (int i = 0; i < elevationMap.length; i++)
+        {   
+            if (elevationMap[i] > highestElev)
+            {
+            	highestElev = elevationMap[i];
+            }
+            if (elevationMap[i] < lowestElev)
+            {
+            	lowestElev = elevationMap[i];
+            }
+        }
+        
+        // This is used for calculating the color value.
+        // Colors are in the range of float [0, 1]. Alpha is not used in this iteration, but
+        // the index of the alpha value should be verticesHolder[i * 12 + 6].
+        float medianElev = (highestElev + lowestElev) / 2;
+        for (int i = 0; i < elevationMap.length; i++)
+        {   
+        	float colorModifier; // This determines the actual color saturation.
+        	// colorModifier is assigned a value in the range of float [0, 0.5].
+        	// RGB values are within the range of float [0.25, 0.75]. Values that are too extreme
+        	// tend to be overly bright and saturated. Values over 1.0 interact unpredictably
+        	// with the lighting.
+            if (elevationMap[i] > medianElev)
+            {
+            	colorModifier = ((elevationMap[i] - medianElev) / (highestElev - medianElev)) / 2;
+            	verticesHolder[i * 12 + 3] = 0.25f + colorModifier;
+                verticesHolder[i * 12 + 4] = 0.75f - colorModifier;
+                verticesHolder[i * 12 + 5] = 0.25f;
+            }
+            else
+            {
+            	colorModifier = ((medianElev - elevationMap[i]) / (medianElev - lowestElev)) / 2;
+            	verticesHolder[i * 12 + 3] = 0.25f;
+                verticesHolder[i * 12 + 4] = 0.75f - colorModifier;
+                verticesHolder[i * 12 + 5] = 0.25f + colorModifier;
+            }
         }
 
         // We won't need to use this seam-matching stuff for now since 
