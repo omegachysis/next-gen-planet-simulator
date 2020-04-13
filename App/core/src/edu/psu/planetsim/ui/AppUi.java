@@ -692,7 +692,6 @@ public class AppUi {
                         table.add(Tpp3);
                         table.add(Tpp4);
 
-
                         sideDialog.addActor(nameLabel1);
                         sideDialog.addActor(pp1);
                         sideDialog.addActor(pp2);
@@ -731,9 +730,22 @@ public class AppUi {
                             if (change.isPressed()) {
                                 var selected = changeSelect.getSelected();
                                 if (selected == "Select"){
-                                    changeDialog.hide();
+
+                                    Dialog error = new Dialog ("Invalid entry", skin);
+                                    error.setPosition(530, 390);
+                                    error.setHeight(100);
+                                    error.setWidth(200);
+                                    error.text("Invalid Selection \n Please try again.");
+                                    stage.addActor(error);
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            error.hide();
+                                        }
+                                    }, 2);
                                 }else{
-                                    stage.addActor(cbTable());;
+                                    //changeDialog.hide();
+                                    stage.addActor(cbTable());
                                 }
                             }
                             return true;
@@ -945,6 +957,7 @@ public class AppUi {
         stage.addActor(editSelect);
         stage.addActor(viewSelect);
         stage.addActor(inspectSelect);
+
     }
 
     private void addCB(String name, double mass){
@@ -971,9 +984,12 @@ public class AppUi {
             var newButton = new TextButton(nextCB.name, skin);
             newButton.setSize(110, 30);
             buttonTable.add(newButton);
+
         }
         return buttonTable;
     }
+
+
 
 //    private void addPlanet(){
 //         final var planet1 = new AppState.CelestialBody();
