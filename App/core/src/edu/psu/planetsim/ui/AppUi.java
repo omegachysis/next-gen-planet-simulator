@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.Timer;
 
 import edu.psu.planetsim.AppState;
 import edu.psu.planetsim.Metrics;
+import edu.psu.planetsim.graphics.TerrainBuilder;
+
 import org.w3c.dom.Text;
 
 import java.util.Map;
@@ -972,6 +974,9 @@ public class AppUi {
         newCB.orientation = new Quaternion().setFromCross(Vector3.Y, newCB.spin);
         newCB.positionRelativeToSun = new Vector3(Metrics.m(1.496e11), 0, 0); // 1 AU
         newCB.velocityRelativeToSun = new Vector3();
+        var radius = Metrics.m(1e6);
+        newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
+
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
 
@@ -988,6 +993,9 @@ public class AppUi {
             newSat.orientation = new Quaternion().setFromCross(Vector3.Y, newSat.spin);
             newSat.positionRelativeToSun = new Vector3(Metrics.m(1.296e11), 0, 0); // 1 AU
             newSat.velocityRelativeToSun = new Vector3();
+            var radius = Metrics.m(1e6);
+            newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
+
             _appState.bodies.put(newSat.id, newSat);
             _appState.currentCelestialBodyId = newSat.id;
         }

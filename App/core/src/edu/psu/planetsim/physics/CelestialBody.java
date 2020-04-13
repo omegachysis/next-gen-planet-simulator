@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.bullet.linearmath.*;
 
 import edu.psu.planetsim.AppState;
 import edu.psu.planetsim.Metrics;
+import edu.psu.planetsim.graphics.TerrainBuilder;
 
 public class CelestialBody extends KinematicObject 
 {
@@ -29,10 +30,7 @@ public class CelestialBody extends KinematicObject
         final var radius = Metrics.m(1.0e6);
 
         // Build the model.
-        _modelBase = new ModelBuilder().createSphere(
-            radius * 2, radius * 2, radius * 2, 100, 100,
-            new Material(ColorAttribute.createDiffuse(new Color(.9f, .35f, .35f, 1f))),
-            Usage.Position | Usage.Normal | Usage.TextureCoordinates);
+        _modelBase = TerrainBuilder.BuildTerrainModel(dto.elevationMap);
         model = new ModelInstance(_modelBase);
 
         // Initialize physics.
