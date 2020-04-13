@@ -72,7 +72,6 @@ public class AppUi {
                         newButton.addListener(e -> {
                             if (newButton.isPressed()) {
                                 newDialog.hide();
-
                             }
                             return true;
                         });
@@ -396,8 +395,6 @@ public class AppUi {
                                     }
                                 }, 2);
 
-
-                                //                               stage.addActor(button7);
                                 stage.addActor(success);
                                 SatDialog.hide();
                             }
@@ -496,7 +493,7 @@ public class AppUi {
                                     confirmDialog.setMovable(false);
                                     confirmDialog.setPosition(520, 340);
                                     confirmDialog.setWidth(310);
-                                    confirmDialog.text("Are you sure to delete a celestial body? \n Remember: You'll lose this celestial body.");
+                                    confirmDialog.text("Are you sure to delete this celestial body? \n Remember: You'll lose this celestial body.");
 
                                     TextButton yesButton = new TextButton("Yes", skin);
                                     yesButton.setPosition(100, 10);
@@ -735,17 +732,8 @@ public class AppUi {
                                 var selected = changeSelect.getSelected();
                                 if (selected == "Select"){
                                     changeDialog.hide();
-                                    Dialog error = new Dialog ("Invalid entry", skin);
-                                    error.setPosition(500, 500);
-                                    error.setHeight(100);
-                                    error.text("Invalid Selection \n Please try again.");
-                                    stage.addActor(error);
-                                    Timer.schedule(new Timer.Task() {
-                                        @Override
-                                        public void run() {
-                                            error.hide();
-                                        }
-                                    }, 1);
+                                }else{
+                                    stage.addActor(cbTable());;
                                 }
                             }
                             return true;
@@ -775,15 +763,6 @@ public class AppUi {
                                 }
                             }
                         });
-
-                 //   {
-                 //       if (Gdx.input.isTouched()) {
-                 //           Dialog newCB = new Dialog("CB", skin);
-                 //           newCB.setMovable(true);
-                 //           newCB.setPosition(500, 500);
-                 //           stage.addActor(newCB);
-                 //       }
-                 //   }
 
                     stage.addActor(changeDialog);
                     viewSelect.setSelectedIndex(0);
@@ -949,14 +928,11 @@ public class AppUi {
         });
 
 
-        Table CBtable = new Table(skin);
-        CBtable.setPosition(110,635);
-        CBtable.setSize(300, 300);
-//        CBtable.add(button4);
-//        CBtable.add(button5);
-//        CBtable.add(button7);
+//        Table CBtable = new Table(skin);
+//        CBtable.setPosition(110,635);
+//        CBtable.setSize(300, 300);
 
-        stage.addActor(CBtable);
+//        stage.addActor(CBtable);
 
 
         stage.addActor(button1);
@@ -984,6 +960,19 @@ public class AppUi {
         newCB.velocityRelativeToSun = new Vector3();
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
+    }
+
+    private Table cbTable(){
+        Table buttonTable = new Table();
+        buttonTable.setPosition(110, 635);
+        buttonTable.setSize(300, 300);
+        for (int i = 0; i < _appState.bodies.size(); i++){
+            AppState.CelestialBody nextCB = _appState.bodies.get(_appState.bodies.keySet().toArray()[i]);
+            var newButton = new TextButton(nextCB.name, skin);
+            newButton.setSize(110, 30);
+            buttonTable.add(newButton);
+        }
+        return buttonTable;
     }
 
 //    private void addPlanet(){
