@@ -373,7 +373,7 @@ public class AppUi {
                                     double velocity = Double.parseDouble(field4.getText());
                                     double spin = Double.parseDouble(field5.getText());
 
-                                    addSat(name, mass);
+                                    addCB(name, mass);
                                 } catch (NumberFormatException n) {
                                     stage.addActor(wrong);
                                     Timer.schedule(new Timer.Task() {
@@ -503,6 +503,7 @@ public class AppUi {
                                         @Override
                                         public void clicked(InputEvent event, float x, float y) {
                                             if (yesButton.isPressed()) {
+
                                                 confirmDialog.hide();
                                                 deleteDialog.hide();
                                             }
@@ -976,12 +977,10 @@ public class AppUi {
         newCB.velocityRelativeToSun = new Vector3();
         var radius = Metrics.m(1e6);
         newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
-
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
 
-    }
-        private void addSat (String name,double mass){
+
             final var newSat = new AppState.CelestialBody();
             newSat.id = UUID.randomUUID();
             newSat.name = name;
@@ -993,11 +992,12 @@ public class AppUi {
             newSat.orientation = new Quaternion().setFromCross(Vector3.Y, newSat.spin);
             newSat.positionRelativeToSun = new Vector3(Metrics.m(1.296e11), 0, 0); // 1 AU
             newSat.velocityRelativeToSun = new Vector3();
-            var radius = Metrics.m(1e6);
+            //var radius = Metrics.m(1e6);
             newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
-
             _appState.bodies.put(newSat.id, newSat);
             _appState.currentCelestialBodyId = newSat.id;
+            newCB.satellites.add(newSat.id);
+
         }
 
     private Table cbTable(){
