@@ -996,7 +996,6 @@ public class AppUi {
         var radius = Metrics.m(1e6);
         newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
         _appState.bodies.put(newSat.id, newSat);
-        _appState.currentCelestialBodyId = newSat.id;
          _appState.getCurrentCelestialBody().satellites.add(newSat.id);
     }
 
