@@ -770,6 +770,7 @@ public class AppUi {
                                 }else {
                                     Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
                                     AppState.CelestialBody newPlanet = entries.getValue();
+
                                     changeSelect.setItems("Select", newPlanet.name);
                                     changeSelect.showList();
                                 }
@@ -960,7 +961,7 @@ public class AppUi {
 
     }
 
-    private void addCB(String name, double mass){
+    private void addCB(String name, double mass) {
         final var newCB = new AppState.CelestialBody();
         newCB.id = UUID.randomUUID();
         newCB.name = name;
@@ -973,22 +974,23 @@ public class AppUi {
         newCB.velocityRelativeToSun = new Vector3();
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
-    }
 
-    private void addSat(String name, double mass){
-        final var newSat = new AppState.CelestialBody();
-        newSat.id = UUID.randomUUID();
-        newSat.name = name;
-        newSat.mass = mass;
-        newSat.position = new Vector3();
-        newSat.velocity = new Vector3();
-        newSat.spin = new Vector3();
-        newSat.orientation = new Quaternion().setFromCross(Vector3.Y, newSat.spin);
-        newSat.positionRelativeToSun = new Vector3(Metrics.m(1.496e11), 0, 0); // 1 AU
-        newSat.velocityRelativeToSun = new Vector3();
-        _appState.bodies.put(newSat.id, newSat);
-        _appState.currentCelestialBodyId = newSat.id;
     }
+        private void addSat (String name,double mass){
+            final var newSat = new AppState.CelestialBody();
+            newSat.id = UUID.randomUUID();
+            newSat.name = name;
+            newSat.isSatellite = true;
+            newSat.mass = mass;
+            newSat.position = new Vector3();
+            newSat.velocity = new Vector3();
+            newSat.spin = new Vector3();
+            newSat.orientation = new Quaternion().setFromCross(Vector3.Y, newSat.spin);
+            newSat.positionRelativeToSun = new Vector3(Metrics.m(1.296e11), 0, 0); // 1 AU
+            newSat.velocityRelativeToSun = new Vector3();
+            _appState.bodies.put(newSat.id, newSat);
+            _appState.currentCelestialBodyId = newSat.id;
+        }
 
     private Table cbTable(){
         Table buttonTable = new Table();
@@ -996,6 +998,7 @@ public class AppUi {
         buttonTable.setSize(300, 300);
         for (int i = 0; i < _appState.bodies.size(); i++){
             AppState.CelestialBody nextCB = _appState.bodies.get(_appState.bodies.keySet().toArray()[i]);
+            AppState.CelestialBody nextSat = _appState.bodies.get(_appState.bodies.keySet().toArray()[i]);
             var newButton = new TextButton(nextCB.name, skin);
             newButton.setSize(110, 30);
             buttonTable.add(newButton);
