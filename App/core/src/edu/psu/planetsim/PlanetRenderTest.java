@@ -29,12 +29,12 @@ public class PlanetRenderTest implements ApplicationListener {
 
     public PerspectiveCamera cam;
     public CameraInputController camController;
-    public Model model;
+    // public Model model;
     public Model model1;
-    public Model model2;
-    public ModelInstance instance;
+    // public Model model2;
+    // public ModelInstance instance;
     public ModelInstance instance1;
-    public ModelInstance instance2;
+    // public ModelInstance instance2;
     public ModelBatch modelBatch;
     public Environment environment;
     public Mesh mesh1;
@@ -65,18 +65,18 @@ public class PlanetRenderTest implements ApplicationListener {
 
         model1 = modelBuilder.createSphere(5f, 5f, 5f, longitudes - 1, latitudes - 1,
                 new Material(ColorAttribute.createDiffuse(Color.WHITE)),
-                Usage.Position | Usage.Normal | Usage.TextureCoordinates);
+                Usage.Position | Usage.Normal | Usage.TextureCoordinates | Usage.ColorUnpacked);
 
         var rand = new Random();
 
         mesh1 = model1.meshes.first();
 
-        var imageFileHandle = Gdx.files.getFileHandle("textest2.jpg", Files.FileType.Internal);
-        texture1 = new Texture(imageFileHandle);
-        texture1.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        var textureAttribute1 = new TextureAttribute(TextureAttribute.Diffuse, texture1);
+        // var imageFileHandle = Gdx.files.getFileHandle("textest2.jpg", Files.FileType.Internal);
+        // texture1 = new Texture(imageFileHandle);
+        // texture1.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        // var textureAttribute1 = new TextureAttribute(TextureAttribute.Diffuse, texture1);
 
-        float[] verticesHolder = new float[mesh1.getNumVertices() * 8];
+        float[] verticesHolder = new float[mesh1.getNumVertices() * 12];
         mesh1.getVertices(verticesHolder);
 
         float[] elevationMapTester = new float[latitudes * longitudes];
@@ -97,25 +97,42 @@ public class PlanetRenderTest implements ApplicationListener {
         mountainGen.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
         // Ridged multi-fractals for mountains and valleys:
         mountainGen.SetFractalType(FractalType.RigidMulti);
-        mountainGen.SetFractalOctaves(12);
-        mountainGen.SetFrequency(0.7f);
+        mountainGen.SetFractalOctaves(8);
+        mountainGen.SetFrequency(0.5f);
 
         // Generate terrain noise
         for (int i = 0; i < elevationMap.length; i++)
         {
-        	float px = verticesHolder[i * 8 + 0];
-            float py = verticesHolder[i * 8 + 1];
-            float pz = verticesHolder[i * 8 + 2];
+        	float px = verticesHolder[i * 12 + 0];
+            float py = verticesHolder[i * 12 + 1];
+            float pz = verticesHolder[i * 12 + 2];
+            
+            // float r = verticesHolder[i * 12 + 3];
+            // float g = verticesHolder[i * 12 + 4];
+            // float b = verticesHolder[i * 12 + 5];
 
             var lumps = (lumpsGen.GetNoise(px, py, pz) + 1f) * 0.5f;
             var mountains = (mountainGen.GetNoise(px, py, pz) + 1f) * 0.5f;
             var noise = lumps + mountains * 0.2f;
             
-            var elev = noise + 1f;
+            if (noise > 0.5)
+            {
+            	verticesHolder[i * 12 + 3] = 1.0f - noise;
+                verticesHolder[i * 12 + 4] = 0.0f + noise;
+                verticesHolder[i * 12 + 5] = 0.0f;
+            }
+            else 
+            {
+            	verticesHolder[i * 12 + 3] = 0.0f + noise;
+                verticesHolder[i * 12 + 4] = 0.0f;
+                verticesHolder[i * 12 + 5] = 1.0f - noise;
+            }
+            
+            var elev = noise + 2f;
             elevationMap[i] = elev;
-            verticesHolder[i * 8 + 0] *= elev;
-            verticesHolder[i * 8 + 1] *= elev;
-            verticesHolder[i * 8 + 2] *= elev;
+            verticesHolder[i * 12 + 0] *= elev;
+            verticesHolder[i * 12 + 1] *= elev;
+            verticesHolder[i * 12 + 2] *= elev;
         }
 
         // We won't need to use this seam-matching stuff for now since 
@@ -197,8 +214,8 @@ public class PlanetRenderTest implements ApplicationListener {
         */
         mesh1.setVertices(verticesHolder);
         instance1 = new ModelInstance(model1, 0f, 0f, 0f);
-        var tempMaterial = instance1.materials.get(0);
-        tempMaterial.set(textureAttribute1);
+        // var tempMaterial = instance1.materials.get(0);
+        // tempMaterial.set(textureAttribute1);
     }
     
     @Override
