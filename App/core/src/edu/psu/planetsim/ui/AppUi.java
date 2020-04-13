@@ -249,11 +249,11 @@ public class AppUi {
                                 try {
                                     String name = nameField.getText();
                                     double mass = Double.parseDouble(massField.getText());
-                                    double distance = Double.parseDouble(positionField.getText());
+                                    double position = Double.parseDouble(positionField.getText());
                                     double velocity = Double.parseDouble(velocityField.getText());
                                     double spin = Double.parseDouble(spinField.getText());
 
-                                    addCB(name, mass);
+                                    addCB(name, mass, position);
                                 } catch (NumberFormatException n) {
                                         stage.addActor(wrong);
                                     Timer.schedule(new Timer.Task() {
@@ -369,11 +369,11 @@ public class AppUi {
                                 try {
                                     String name = field1.getText();
                                     double mass = Double.parseDouble(field2.getText());
-                                    double distance = Double.parseDouble(field3.getText());
+                                    double position = Double.parseDouble(field3.getText());
                                     double velocity = Double.parseDouble(field4.getText());
                                     double spin = Double.parseDouble(field5.getText());
 
-                                    addCB(name, mass);
+                                    addSat(name, mass, position);
                                 } catch (NumberFormatException n) {
                                     stage.addActor(wrong);
                                     Timer.schedule(new Timer.Task() {
@@ -964,7 +964,7 @@ public class AppUi {
 
     }
 
-    private void addCB(String name, double mass) {
+    private void addCB(String name, double mass, double position) {
         final var newCB = new AppState.CelestialBody();
         newCB.id = UUID.randomUUID();
         newCB.name = name;
@@ -973,32 +973,32 @@ public class AppUi {
         newCB.velocity = new Vector3();
         newCB.spin = new Vector3();
         newCB.orientation = new Quaternion().setFromCross(Vector3.Y, newCB.spin);
-        newCB.positionRelativeToSun = new Vector3(Metrics.m(1.496e11), 0, 0); // 1 AU
+        newCB.positionRelativeToSun = new Vector3(Metrics.m(position), 0, 0); // 1 AU
         newCB.velocityRelativeToSun = new Vector3();
         var radius = Metrics.m(1e6);
         newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
+    }
 
-
-            final var newSat = new AppState.CelestialBody();
-            newSat.id = UUID.randomUUID();
-            newSat.name = name;
-            newSat.isSatellite = true;
-            newSat.mass = mass;
-            newSat.position = new Vector3();
-            newSat.velocity = new Vector3();
-            newSat.spin = new Vector3();
-            newSat.orientation = new Quaternion().setFromCross(Vector3.Y, newSat.spin);
-            newSat.positionRelativeToSun = new Vector3(Metrics.m(1.296e11), 0, 0); // 1 AU
-            newSat.velocityRelativeToSun = new Vector3();
-            //var radius = Metrics.m(1e6);
-            newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
-            _appState.bodies.put(newSat.id, newSat);
-            _appState.currentCelestialBodyId = newSat.id;
-            newCB.satellites.add(newSat.id);
-
-        }
+    private void addSat(String name,double mass, double position){
+        final var newSat = new AppState.CelestialBody();
+        newSat.id = UUID.randomUUID();
+        newSat.name = name;
+        newSat.isSatellite = true;
+        newSat.mass = mass;
+        newSat.position = new Vector3(Metrics.m(position), 0, 0);
+        newSat.velocity = new Vector3();
+        newSat.spin = new Vector3();
+        newSat.orientation = new Quaternion().setFromCross(Vector3.Y, newSat.spin);
+        newSat.positionRelativeToSun = new Vector3(); // 1 AU
+        newSat.velocityRelativeToSun = new Vector3();
+        var radius = Metrics.m(1e6);
+        newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
+        _appState.bodies.put(newSat.id, newSat);
+        _appState.currentCelestialBodyId = newSat.id;
+         _appState.getCurrentCelestialBody().satellites.add(newSat.id);
+    }
 
     private Table cbTable(){
         Table buttonTable = new Table();
