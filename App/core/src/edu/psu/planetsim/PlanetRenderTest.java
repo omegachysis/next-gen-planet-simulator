@@ -115,17 +115,33 @@ public class PlanetRenderTest implements ApplicationListener {
             var mountains = (mountainGen.GetNoise(px, py, pz) + 1f) * 0.5f;
             var noise = lumps + mountains * 0.2f;
             
-            if (noise > 0.5)
+            var noiseColor = noise;
+            if (noise > 0.75)
             {
-            	verticesHolder[i * 12 + 3] = 1.0f - noise;
-                verticesHolder[i * 12 + 4] = 0.0f + noise;
-                verticesHolder[i * 12 + 5] = 0.0f;
+            	noiseColor = noise - 0.75f;
+            	verticesHolder[i * 12 + 3] = 0.5f + noiseColor;
+                verticesHolder[i * 12 + 4] = 0.5f - noiseColor;
+                verticesHolder[i * 12 + 5] = 0.25f;
             }
-            else 
+            else if (noise > 0.5)
             {
-            	verticesHolder[i * 12 + 3] = 0.0f + noise;
-                verticesHolder[i * 12 + 4] = 0.0f;
-                verticesHolder[i * 12 + 5] = 1.0f - noise;
+            	noiseColor = noise - 0.5f;
+            	verticesHolder[i * 12 + 3] = 0.25f + noiseColor;
+                verticesHolder[i * 12 + 4] = 0.75f - noiseColor;
+                verticesHolder[i * 12 + 5] = 0.25f;
+            }
+            else if (noise > 0.25)
+            {
+            	noiseColor = noise - 0.25f;
+            	verticesHolder[i * 12 + 3] = 0.25f;
+                verticesHolder[i * 12 + 4] = 0.5f + noiseColor;
+                verticesHolder[i * 12 + 5] = 0.5f - noiseColor;
+            }
+            else
+            {
+            	verticesHolder[i * 12 + 3] = 0.25f;
+                verticesHolder[i * 12 + 4] = 0.25f + noiseColor;
+                verticesHolder[i * 12 + 5] = 0.75f - noiseColor;
             }
             
             var elev = noise + 2f;
