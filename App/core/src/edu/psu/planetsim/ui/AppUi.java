@@ -371,7 +371,7 @@ public class AppUi {
                                     double velocity = Double.parseDouble(field4.getText());
                                     double spin = Double.parseDouble(field5.getText());
 
-                                    //addCB(name, mass);
+                                    addSat(name, mass);
                                 } catch (NumberFormatException n) {
                                     stage.addActor(wrong);
                                     Timer.schedule(new Timer.Task() {
@@ -973,6 +973,21 @@ public class AppUi {
         newCB.velocityRelativeToSun = new Vector3();
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
+    }
+
+    private void addSat(String name, double mass){
+        final var newSat = new AppState.CelestialBody();
+        newSat.id = UUID.randomUUID();
+        newSat.name = name;
+        newSat.mass = mass;
+        newSat.position = new Vector3();
+        newSat.velocity = new Vector3();
+        newSat.spin = new Vector3();
+        newSat.orientation = new Quaternion().setFromCross(Vector3.Y, newSat.spin);
+        newSat.positionRelativeToSun = new Vector3(Metrics.m(1.496e11), 0, 0); // 1 AU
+        newSat.velocityRelativeToSun = new Vector3();
+        _appState.bodies.put(newSat.id, newSat);
+        _appState.currentCelestialBodyId = newSat.id;
     }
 
     private Table cbTable(){
