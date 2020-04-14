@@ -238,8 +238,9 @@ public class AppUi {
 
                         TextButton addButton = new TextButton("Add", skin);
                         addButton.setPosition(115, 10);
-                        addButton.addListener(e -> {
-                            if (addButton.isPressed()) {
+                        addButton.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
                                 Dialog wrong = new Dialog("Incorrect entry", skin);
                                 wrong.text("One or more of your values is invalid. \n Please try again.");
                                 wrong.setPosition(500, 500);
@@ -262,7 +263,8 @@ public class AppUi {
                                             wrong.hide();
                                         }
                                     }, 1);
-                                    return true;
+
+                                    return;
                                 }
 
                                 Dialog success = new Dialog("Correct entry", skin);
@@ -280,7 +282,6 @@ public class AppUi {
                                 stage.addActor(success);
                                 addDialog.hide();
                             }
-                            return true;
                         });
 
                         TextButton cancelButton = new TextButton("Cancel", skin);
@@ -358,8 +359,9 @@ public class AppUi {
 
                         TextButton add = new TextButton("Add", skin);
                         add.setPosition(115, 10);
-                        add.addListener(e -> {
-                            if (add.isPressed()) {
+                        add.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
                                 Dialog wrong = new Dialog("Incorrect entry", skin);
                                 wrong.text("One or more of your values is invalid. \n Please try again.");
                                 wrong.setPosition(500, 500);
@@ -382,7 +384,7 @@ public class AppUi {
                                             wrong.hide();
                                         }
                                     }, 1);
-                                    return true;
+                                    return;
                                 }
 
                                 Dialog success = new Dialog("Correct entry", skin);
@@ -400,7 +402,6 @@ public class AppUi {
                                 stage.addActor(success);
                                 SatDialog.hide();
                             }
-                            return true;
                         });
 
                         TextButton cancel = new TextButton("Cancel", skin);
@@ -968,7 +969,7 @@ public class AppUi {
         final var newCB = new AppState.CelestialBody();
         newCB.id = UUID.randomUUID();
         newCB.name = name;
-        newCB.mass = mass;
+        newCB.mass = Metrics.kg(mass);
         newCB.position = new Vector3();
         newCB.velocity = new Vector3();
         newCB.spin = new Vector3();
@@ -987,7 +988,7 @@ public class AppUi {
         newSat.id = UUID.randomUUID();
         newSat.name = name;
         newSat.isSatellite = true;
-        newSat.mass = mass;
+        newSat.mass = Metrics.kg(mass);
         newSat.position = new Vector3(Metrics.m(position), 0, 0);
         newSat.velocity = new Vector3();
         newSat.spin = new Vector3();
