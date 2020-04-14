@@ -979,6 +979,7 @@ public class AppUi {
         newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
+        _appState.needsRefresh = true;
     }
 
     private void addSat(String name,double mass, double position){
@@ -996,7 +997,8 @@ public class AppUi {
         var radius = Metrics.m(1e6);
         newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
         _appState.bodies.put(newSat.id, newSat);
-         _appState.getCurrentCelestialBody().satellites.add(newSat.id);
+        _appState.getCurrentCelestialBody().satellites.add(newSat.id);
+        _appState.needsRefresh = true;
     }
 
     private Table cbTable(){

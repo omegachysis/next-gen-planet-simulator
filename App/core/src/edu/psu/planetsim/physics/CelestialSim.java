@@ -34,7 +34,6 @@ public class CelestialSim
     private final btSequentialImpulseConstraintSolver _solver;
     private final ArrayList<CelestialBody> _bodies = new ArrayList<>();
     private final AppState _appState;
-    private UUID _currentCelestialBody = null;
     
     public CelestialSim(final AppState appState, final InputMultiplexer multiplexer) 
     {
@@ -76,11 +75,7 @@ public class CelestialSim
 
     private void updateCurrentCelestialBody(UUID value)
     {
-        if (_currentCelestialBody != null && _currentCelestialBody.equals(value))
-            return;
-
         clear();
-        _currentCelestialBody = value;
         if (_appState.bodies.containsKey(value))
         {
             var dto = _appState.bodies.get(value);
@@ -122,7 +117,11 @@ public class CelestialSim
 
     public void render() 
     {
-        updateCurrentCelestialBody(_appState.currentCelestialBodyId);
+        if (_appState.needsRefresh)
+        {
+            updateCurrentCelestialBody(_appState.currentCelestialBodyId);
+            _appState.needsRefresh = false;
+        }
 
         _modelBatch.begin(_cam);
         for (final var body : _bodies) 

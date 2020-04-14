@@ -26,6 +26,8 @@ public class AppState
     public float zoom = 0.6f;
     public String inputtext = "Input text will be displayed here...";
 
+    public boolean needsRefresh = false;
+
     public static enum ViewingMode
     {
         CenterOfMass,
