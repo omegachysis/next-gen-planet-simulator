@@ -59,111 +59,11 @@ public class AppUi {
                 String currentSelection = fileSelect.getSelected();
                 switch (currentSelection){
                     case "New":
-                        final Dialog newDialog = new Dialog("New", skin);
-                        newDialog.setResizable(true);
-                        newDialog.setMovable(true);
-                        newDialog.setPosition(500, 500);
-                        newDialog.setWidth(250);
-                        newDialog.text("Start a new file? \n You'll lose all unsaved changes.");
-
-                        Table table2 = new Table(skin);
-                        table2.add(newDialog);
-
-                        var newButton = new TextButton("Yes", skin);
-                        newButton.setPosition(90, 3);
-                        newButton.addListener(e -> {
-                            if (newButton.isPressed()) {
-                                newDialog.hide();
-                            }
-                            return true;
-                        });
-                        table2.add(newButton);
-                        newDialog.addActor(newButton);
-
-                        var noButton = new TextButton("No", skin);
-                        noButton.setPosition(140, 3);
-                        noButton.addListener(e -> {
-                            if (noButton.isPressed()) {
-                                newDialog.hide();
-                            }
-                            return true;
-                        });
-                        table2.add(noButton);
-                        newDialog.addActor(noButton);
-
-                        stage.addActor(newDialog);
-                        fileSelect.setSelectedIndex(0);
+                        new NewDialog(stage, skin, fileSelect);
                         break;
 
                     case "Save As":
-                        final Dialog saveDialog = new Dialog("Save as", skin);
-                        saveDialog.setMovable(true);
-                        saveDialog.setResizable(true);
-                        saveDialog.setPosition(500, 500);
-                        saveDialog.setWidth(300);
-
-                        Label nameLabel1 = new Label("File name:", skin);
-                        nameLabel1.setPosition(5,95);
-                        TextField fileName1 = new TextField("",skin);
-                        fileName1.setPosition(100,95);
-
-                        Label nameLabel2 = new Label("Location:", skin);
-                        nameLabel2.setPosition(5,55);
-                        SelectBox<String> fileName2= new SelectBox<>(skin);
-                        fileName2.setItems("Desktop", "Documents", "Home", "Other Folder");
-                        fileName2.setPosition(100,55);
-                        fileName2.setWidth(90);
-
-                        Table table = new Table(skin);
-                        table.add(nameLabel1);
-                        table.add(fileName1);
-                        table.add(nameLabel2);
-                        table.add(fileName2);
-
-                        var saveButton = new TextButton("Save", skin);
-                        saveButton.setPosition(90, 3);
-                         saveButton.addListener(e -> {
-                             if (saveButton.isPressed()) {
-                                 Dialog saved = new Dialog("", skin);
-                                 saved.setMovable(true);
-                                 saved.text("File Saved!");
-                                 saved.setPosition(500, 500);
-                                 saved.setWidth(250);
-
-                                 stage.addActor(saved);
-                                 saveDialog.hide();
-
-                                 Timer.schedule(new Timer.Task() {
-                                     @Override
-                                     public void run() {
-                                         saved.hide();
-                                     }
-                                 }, 1);
-
-                             }
-                             return true;
-                         });
-
-                        table.add(saveButton);
-                        saveDialog.addActor(saveButton);
-
-                        var cancelButton = new TextButton("Cancel", skin);
-                        cancelButton.setPosition(140, 3);
-                        cancelButton.addListener(e -> {
-                            if (cancelButton.isPressed()) {
-                                saveDialog.hide();
-                            }
-                            return true;
-                        });
-                        table.add(cancelButton);
-                        saveDialog.addActor(cancelButton);
-
-                        saveDialog.addActor(nameLabel1);
-                        saveDialog.addActor(fileName1);
-                        saveDialog.addActor(nameLabel2);
-                        saveDialog.addActor(fileName2);
-                        stage.addActor(saveDialog);
-                        fileSelect.setSelectedIndex(0);
+                        new SaveAsDialog(stage, skin, fileSelect);
                         break;
 
                     case "Save":
@@ -571,7 +471,7 @@ public class AppUi {
         });
 
         final SelectBox<String> viewSelect = new SelectBox<>(skin);
-        viewSelect.setItems("View","Show Side Panel", "Change Celestial Body");
+        viewSelect.setItems("View","Show Side Panel", "Switch Celestial Body");
         viewSelect.setPosition(180, 680);
         viewSelect.setWidth(75);
         viewSelect.addListener(new ClickListener() {
@@ -588,29 +488,29 @@ public class AppUi {
                         new SidePanelDialog(skin, stage, viewSelect);
                         break;
 
-                    case "Change Celestial Body":
-                        Dialog changeDialog = new Dialog("Change Celestial Body", skin);
-                        changeDialog.setMovable(true);
-                        changeDialog.setResizable(true);
-                        changeDialog.setPosition(500, 450);
-                        changeDialog.setWidth(300);
-                        changeDialog.setHeight(150);
+                    case "Switch Celestial Body":
+                        Dialog switchDialog = new Dialog("Switch Celestial Body", skin);
+                        switchDialog.setMovable(true);
+                        switchDialog.setResizable(true);
+                        switchDialog.setPosition(500, 450);
+                        switchDialog.setWidth(300);
+                        switchDialog.setHeight(150);
 
-                        var changeLabel = new Label("Change selection", skin);
-                        changeLabel.setPosition(50, 85);
-                        changeDialog.addActor(changeLabel);
+                        var switchLabel = new Label("Change selection", skin);
+                        switchLabel.setPosition(50, 85);
+                        switchDialog.addActor(switchLabel);
 
-                        var changeSelect = new SelectBox<>(skin);
-                        changeSelect.setItems("Select");
-                        changeSelect.setPosition(50, 50);
-                        changeSelect.setWidth(200);
-                        changeDialog.addActor(changeSelect);
+                        var switchSelect = new SelectBox<>(skin);
+                        switchSelect.setItems("Select");
+                        switchSelect.setPosition(50, 50);
+                        switchSelect.setWidth(200);
+                        switchDialog.addActor(switchSelect);
 
                         var change = new TextButton("Change", skin);
                         change.setPosition(135, 3);
                         change.addListener(e -> {
                             if (change.isPressed()) {
-                                var selected = changeSelect.getSelected();
+                                var selected = switchSelect.getSelected();
                                 if (selected == "Select"){
 
                                     Dialog error = new Dialog ("Invalid entry", skin);
@@ -626,40 +526,40 @@ public class AppUi {
                                         }
                                     }, 2);
                                 }else{
-                                    //changeDialog.hide();
+                                    //switchDialog.hide();
                                     stage.addActor(cbTable());
                                 }
                             }
                             return true;
                         });
-                        changeDialog.addActor(change);
+                        switchDialog.addActor(change);
 
                         var close = new TextButton("Close", skin);
                         close.setPosition(80, 3);
                         close.addListener(e -> {
                             if (close.isPressed()){
-                                changeDialog.hide();
+                                switchDialog.hide();
                             }
                             return true;
                         });
-                        changeDialog.addActor(close);
+                        switchDialog.addActor(close);
 
-                        changeSelect.addListener(new ClickListener() {
+                        switchSelect.addListener(new ClickListener() {
                             @Override
                             public void clicked(InputEvent event, float x, float y){
                                 if (_appState.bodies.isEmpty()){
-                                    changeSelect.showList();
+                                    switchSelect.showList();
                                 }else {
                                     Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
                                     AppState.CelestialBody newPlanet = entries.getValue();
 
-                                    changeSelect.setItems("Select", newPlanet.name);
-                                    changeSelect.showList();
+                                    switchSelect.setItems("Select", newPlanet.name);
+                                    switchSelect.showList();
                                 }
                             }
                         });
 
-                    stage.addActor(changeDialog);
+                    stage.addActor(switchDialog);
                     viewSelect.setSelectedIndex(0);
                     break;
                 }
