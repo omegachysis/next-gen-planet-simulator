@@ -26,7 +26,7 @@ public class AddSatDialog {
         Dialog SatDialog = new Dialog("Add Satellite ", skin);
         SatDialog.setMovable(true);
         SatDialog.setPosition(10, 200);
-        SatDialog.setWidth(550);
+        SatDialog.setWidth(520);
         SatDialog.setHeight(400);
         stage.addActor(SatDialog);
         editSelect.setSelectedIndex(0);
@@ -41,71 +41,67 @@ public class AddSatDialog {
         TextField massField = new TextField("",skin);
         massField.setPosition(160,295);
 
+        Label radiusLabel = new Label("Radius (m): ", skin);
+        radiusLabel.setPosition(5, 250);
+        var radiusField = new TextField("", skin);
+        radiusField.setPosition(160, 250);
+
         Label addLabel3 = new Label("Position (m):", skin);
-        addLabel3.setPosition(5,250);
-
+        addLabel3.setPosition(5,205);
         Label xPos = new Label("x: ", skin);
-        xPos.setPosition(160, 250);
+        xPos.setPosition(160, 205);
         TextField positionXField = new TextField("0",skin);
-        positionXField.setPosition(185,250);
+        positionXField.setPosition(185,205);
         positionXField.setSize(75, 30);
-
         var yPos = new Label("y: ", skin);
-        yPos.setPosition(280, 250);
+        yPos.setPosition(280, 205);
         var positionYField = new TextField("0", skin);
-        positionYField.setPosition(305, 250);
+        positionYField.setPosition(305, 205);
         positionYField.setSize(75, 30);
-
         var zPos = new Label("z: ", skin);
-        zPos.setPosition(400, 250);
+        zPos.setPosition(400, 205);
         var positionZField = new TextField("0", skin);
-        positionZField.setPosition(425, 250);
+        positionZField.setPosition(425, 205);
         positionZField.setSize(75, 30);
 
         Label addLabel4 = new Label("Velocity (m/s):", skin);
-        addLabel4.setPosition(5,205);
-
+        addLabel4.setPosition(5,160);
         Label xVel = new Label("x: ", skin);
-        xVel.setPosition(160, 205);
+        xVel.setPosition(160, 160);
         TextField velocityXField = new TextField("0",skin);
-        velocityXField.setPosition(185,205);
+        velocityXField.setPosition(185,160);
         velocityXField.setSize(75, 30);
-
         var yVel = new Label("y: ", skin);
-        yVel.setPosition(280, 205);
+        yVel.setPosition(280, 160);
         var velocityYField = new TextField("0", skin);
-        velocityYField.setPosition(305, 205);
+        velocityYField.setPosition(305, 160);
         velocityYField.setSize(75, 30);
-
         var zVel = new Label("z: ", skin);
-        zVel.setPosition(400, 205);
+        zVel.setPosition(400, 160);
         var velocityZField = new TextField("0", skin);
-        velocityZField.setPosition(425, 205);
+        velocityZField.setPosition(425, 160);
         velocityZField.setSize(75, 30);
 
         Label addLabel5 = new Label("Spin:", skin);
-        addLabel5.setPosition(5, 160);
-
+        addLabel5.setPosition(5, 115);
         Label xSpin = new Label("x: ", skin);
-        xSpin.setPosition(160, 160);
+        xSpin.setPosition(160, 115);
         TextField spinXField = new TextField("0",skin);
-        spinXField.setPosition(185,160);
+        spinXField.setPosition(185,115);
         spinXField.setSize(75, 30);
-
         var ySpin = new Label("y: ", skin);
-        ySpin.setPosition(280, 160);
+        ySpin.setPosition(280, 115);
         var spinYField = new TextField("0", skin);
-        spinYField.setPosition(305, 160);
+        spinYField.setPosition(305, 115);
         spinYField.setSize(75, 30);
-
         var zSpin = new Label("z: ", skin);
-        zSpin.setPosition(400, 160);
+        zSpin.setPosition(400, 115);
         var spinZField = new TextField("0", skin);
-        spinZField.setPosition(425, 160);
+        spinZField.setPosition(425, 115);
         spinZField.setSize(75, 30);
 
         TextButton add = new TextButton("Add", skin);
-        add.setPosition(115, 10);
+        add.setPosition(215, 10);
         add.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -152,7 +148,7 @@ public class AddSatDialog {
         });
 
         TextButton cancel = new TextButton("Cancel", skin);
-        cancel.setPosition(160, 10);
+        cancel.setPosition(260, 10);
         cancel.addListener(e -> {
             if (cancel.isPressed()) {
                 SatDialog.hide();
@@ -165,6 +161,8 @@ public class AddSatDialog {
         table.add(field1);
         table.add(addLabel2);
         table.add(massField);
+        table.add(radiusLabel);
+        table.add(radiusField);
         table.add(addLabel3);
         table.add(xPos);
         table.add(positionXField);
@@ -193,6 +191,8 @@ public class AddSatDialog {
         SatDialog.addActor(field1);
         SatDialog.addActor(addLabel2);
         SatDialog.addActor(massField);
+        SatDialog.addActor(radiusLabel);
+        SatDialog.addActor(radiusField);
         SatDialog.addActor(addLabel3);
         SatDialog.addActor(xPos);
         SatDialog.addActor(positionXField);
