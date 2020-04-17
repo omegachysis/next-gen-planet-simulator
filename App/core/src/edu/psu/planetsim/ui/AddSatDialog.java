@@ -26,7 +26,7 @@ public class AddSatDialog {
         Dialog SatDialog = new Dialog("Add Satellite ", skin);
         SatDialog.setMovable(true);
         SatDialog.setPosition(10, 200);
-        SatDialog.setWidth(330);
+        SatDialog.setWidth(550);
         SatDialog.setHeight(400);
         stage.addActor(SatDialog);
         editSelect.setSelectedIndex(0);
@@ -36,25 +36,73 @@ public class AddSatDialog {
         final TextField field1 = new TextField("",skin);
         field1.setPosition(160,340);
 
-        Label label2 = new Label("Mass (kg):", skin);
-        label2.setPosition(5,295);
-        TextField field2 = new TextField("",skin);
-        field2.setPosition(160,295);
+        Label addLabel2 = new Label("Mass (kg):", skin);
+        addLabel2.setPosition(5,295);
+        TextField massField = new TextField("",skin);
+        massField.setPosition(160,295);
 
-        Label label3 = new Label("Position (m):", skin);
-        label3.setPosition(5,250);
-        TextField field3 = new TextField("",skin);
-        field3.setPosition(160,250);
+        Label addLabel3 = new Label("Position (m):", skin);
+        addLabel3.setPosition(5,250);
 
-        Label label4 = new Label("Velocity (m/s):", skin);
-        label4.setPosition(5,205);
-        TextField field4 = new TextField("",skin);
-        field4.setPosition(160,205);
+        Label xPos = new Label("x: ", skin);
+        xPos.setPosition(160, 250);
+        TextField positionXField = new TextField("0",skin);
+        positionXField.setPosition(185,250);
+        positionXField.setSize(75, 30);
 
-        Label label5 = new Label("Spin (x, y, z):",skin);
-        label5.setPosition(5, 160);
-        TextField field5 = new TextField("",skin);
-        field5.setPosition(160,160);
+        var yPos = new Label("y: ", skin);
+        yPos.setPosition(280, 250);
+        var positionYField = new TextField("0", skin);
+        positionYField.setPosition(305, 250);
+        positionYField.setSize(75, 30);
+
+        var zPos = new Label("z: ", skin);
+        zPos.setPosition(400, 250);
+        var positionZField = new TextField("0", skin);
+        positionZField.setPosition(425, 250);
+        positionZField.setSize(75, 30);
+
+        Label addLabel4 = new Label("Velocity (m/s):", skin);
+        addLabel4.setPosition(5,205);
+
+        Label xVel = new Label("x: ", skin);
+        xVel.setPosition(160, 205);
+        TextField velocityXField = new TextField("0",skin);
+        velocityXField.setPosition(185,205);
+        velocityXField.setSize(75, 30);
+
+        var yVel = new Label("y: ", skin);
+        yVel.setPosition(280, 205);
+        var velocityYField = new TextField("0", skin);
+        velocityYField.setPosition(305, 205);
+        velocityYField.setSize(75, 30);
+
+        var zVel = new Label("z: ", skin);
+        zVel.setPosition(400, 205);
+        var velocityZField = new TextField("0", skin);
+        velocityZField.setPosition(425, 205);
+        velocityZField.setSize(75, 30);
+
+        Label addLabel5 = new Label("Spin:", skin);
+        addLabel5.setPosition(5, 160);
+
+        Label xSpin = new Label("x: ", skin);
+        xSpin.setPosition(160, 160);
+        TextField spinXField = new TextField("0",skin);
+        spinXField.setPosition(185,160);
+        spinXField.setSize(75, 30);
+
+        var ySpin = new Label("y: ", skin);
+        ySpin.setPosition(280, 160);
+        var spinYField = new TextField("0", skin);
+        spinYField.setPosition(305, 160);
+        spinYField.setSize(75, 30);
+
+        var zSpin = new Label("z: ", skin);
+        zSpin.setPosition(400, 160);
+        var spinZField = new TextField("0", skin);
+        spinZField.setPosition(425, 160);
+        spinZField.setSize(75, 30);
 
         TextButton add = new TextButton("Add", skin);
         add.setPosition(115, 10);
@@ -69,10 +117,10 @@ public class AddSatDialog {
 
                 try {
                     String name = field1.getText();
-                    double mass = Double.parseDouble(field2.getText());
-                    double position = Double.parseDouble(field3.getText());
-                    double velocity = Double.parseDouble(field4.getText());
-                    double spin = Double.parseDouble(field5.getText());
+                    double mass = Double.parseDouble(massField.getText());
+                    double position = Double.parseDouble(positionXField.getText());
+                    double velocity = Double.parseDouble(velocityXField.getText());
+                    double spin = Double.parseDouble(spinXField.getText());
 
                     addSat(_appState, name, mass, position);
                 } catch (NumberFormatException n) {
@@ -112,30 +160,60 @@ public class AddSatDialog {
             return true;
         });
 
-        Table table5 = new Table(skin);
-        table5.add(label1);
-        table5.add(field1);
-        table5.add(label2);
-        table5.add(field2);
-        table5.add(label3);
-        table5.add(field3);
-        table5.add(label4);
-        table5.add(field4);
-        table5.add(label5);
-        table5.add(field5);
-        table5.add(add);
-        table5.add(cancel);
+        Table table = new Table(skin);
+        table.add(label1);
+        table.add(field1);
+        table.add(addLabel2);
+        table.add(massField);
+        table.add(addLabel3);
+        table.add(xPos);
+        table.add(positionXField);
+        table.add(yPos);
+        table.add(positionYField);
+        table.add(zPos);
+        table.add(positionZField);
+        table.add(addLabel4);
+        table.add(xVel);
+        table.add(velocityXField);
+        table.add(yVel);
+        table.add(velocityYField);
+        table.add(zVel);
+        table.add(velocityZField);
+        table.add(addLabel5);
+        table.add(xSpin);
+        table.add(spinXField);
+        table.add(ySpin);
+        table.add(spinYField);
+        table.add(zSpin);
+        table.add(spinZField);
+        table.add(add);
+        table.add(cancel);
 
         SatDialog.addActor(label1);
         SatDialog.addActor(field1);
-        SatDialog.addActor(label2);
-        SatDialog.addActor(field2);
-        SatDialog.addActor(label3);
-        SatDialog.addActor(field3);
-        SatDialog.addActor(label4);
-        SatDialog.addActor(field4);
-        SatDialog.addActor(label5);
-        SatDialog.addActor(field5);
+        SatDialog.addActor(addLabel2);
+        SatDialog.addActor(massField);
+        SatDialog.addActor(addLabel3);
+        SatDialog.addActor(xPos);
+        SatDialog.addActor(positionXField);
+        SatDialog.addActor(yPos);
+        SatDialog.addActor(positionYField);
+        SatDialog.addActor(zPos);
+        SatDialog.addActor(positionZField);
+        SatDialog.addActor(addLabel4);
+        SatDialog.addActor(xVel);
+        SatDialog.addActor(velocityXField);
+        SatDialog.addActor(yVel);
+        SatDialog.addActor(velocityYField);
+        SatDialog.addActor(zVel);
+        SatDialog.addActor(velocityZField);
+        SatDialog.addActor(addLabel5);
+        SatDialog.addActor(xSpin);
+        SatDialog.addActor(spinXField);
+        SatDialog.addActor(ySpin);
+        SatDialog.addActor(spinYField);
+        SatDialog.addActor(zSpin);
+        SatDialog.addActor(spinZField);
         SatDialog.addActor(add);
         SatDialog.addActor(cancel);
         stage.addActor(SatDialog);

@@ -26,7 +26,7 @@ public class AddCBDialog {
         Dialog addDialog = new Dialog("Add Celestial Body", skin);
         addDialog.setMovable(true);
         addDialog.setPosition(10, 200);
-        addDialog.setWidth(330);
+        addDialog.setWidth(550);
         addDialog.setHeight(400);
 
         Label addLabel1 = new Label("Name:", skin);
@@ -41,18 +41,66 @@ public class AddCBDialog {
 
         Label addLabel3 = new Label("Position (m):", skin);
         addLabel3.setPosition(5,250);
-        TextField positionField = new TextField("",skin);
-        positionField.setPosition(160,250);
+
+        Label xPos = new Label("x: ", skin);
+        xPos.setPosition(160, 250);
+        TextField positionXField = new TextField("0",skin);
+        positionXField.setPosition(185,250);
+        positionXField.setSize(75, 30);
+
+        var yPos = new Label("y: ", skin);
+        yPos.setPosition(280, 250);
+        var positionYField = new TextField("0", skin);
+        positionYField.setPosition(305, 250);
+        positionYField.setSize(75, 30);
+
+        var zPos = new Label("z: ", skin);
+        zPos.setPosition(400, 250);
+        var positionZField = new TextField("0", skin);
+        positionZField.setPosition(425, 250);
+        positionZField.setSize(75, 30);
 
         Label addLabel4 = new Label("Velocity (m/s):", skin);
         addLabel4.setPosition(5,205);
-        TextField velocityField = new TextField("",skin);
-        velocityField.setPosition(160,205);
 
-        Label addLabel5 = new Label("Spin (x, y, z):",skin);
+        Label xVel = new Label("x: ", skin);
+        xVel.setPosition(160, 205);
+        TextField velocityXField = new TextField("0",skin);
+        velocityXField.setPosition(185,205);
+        velocityXField.setSize(75, 30);
+
+        var yVel = new Label("y: ", skin);
+        yVel.setPosition(280, 205);
+        var velocityYField = new TextField("0", skin);
+        velocityYField.setPosition(305, 205);
+        velocityYField.setSize(75, 30);
+
+        var zVel = new Label("z: ", skin);
+        zVel.setPosition(400, 205);
+        var velocityZField = new TextField("0", skin);
+        velocityZField.setPosition(425, 205);
+        velocityZField.setSize(75, 30);
+
+        Label addLabel5 = new Label("Spin:", skin);
         addLabel5.setPosition(5, 160);
-        TextField spinField = new TextField("",skin);
-        spinField.setPosition(160,160);
+
+        Label xSpin = new Label("x: ", skin);
+        xSpin.setPosition(160, 160);
+        TextField spinXField = new TextField("0",skin);
+        spinXField.setPosition(185,160);
+        spinXField.setSize(75, 30);
+
+        var ySpin = new Label("y: ", skin);
+        ySpin.setPosition(280, 160);
+        var spinYField = new TextField("0", skin);
+        spinYField.setPosition(305, 160);
+        spinYField.setSize(75, 30);
+
+        var zSpin = new Label("z: ", skin);
+        zSpin.setPosition(400, 160);
+        var spinZField = new TextField("0", skin);
+        spinZField.setPosition(425, 160);
+        spinZField.setSize(75, 30);
 
         TextButton addButton = new TextButton("Add", skin);
         addButton.setPosition(115, 10);
@@ -68,9 +116,9 @@ public class AddCBDialog {
                 try {
                     String name = nameField.getText();
                     double mass = Double.parseDouble(massField.getText());
-                    double position = Double.parseDouble(positionField.getText());
-                    double velocity = Double.parseDouble(velocityField.getText());
-                    double spin = Double.parseDouble(spinField.getText());
+                    double position = Double.parseDouble(positionXField.getText());
+                    double velocity = Double.parseDouble(velocityXField.getText());
+                    double spin = Double.parseDouble(spinXField.getText());
 
                     addCB(_appState, name, mass, position);
                 } catch (NumberFormatException n) {
@@ -117,11 +165,26 @@ public class AddCBDialog {
         table.add(addLabel2);
         table.add(massField);
         table.add(addLabel3);
-        table.add(positionField);
+        table.add(xPos);
+        table.add(positionXField);
+        table.add(yPos);
+        table.add(positionYField);
+        table.add(zPos);
+        table.add(positionZField);
         table.add(addLabel4);
-        table.add(velocityField);
+        table.add(xVel);
+        table.add(velocityXField);
+        table.add(yVel);
+        table.add(velocityYField);
+        table.add(zVel);
+        table.add(velocityZField);
         table.add(addLabel5);
-        table.add(spinField);
+        table.add(xSpin);
+        table.add(spinXField);
+        table.add(ySpin);
+        table.add(spinYField);
+        table.add(zSpin);
+        table.add(spinZField);
         table.add(addButton);
         table.add(cancelButton);
 
@@ -130,11 +193,26 @@ public class AddCBDialog {
         addDialog.addActor(addLabel2);
         addDialog.addActor(massField);
         addDialog.addActor(addLabel3);
-        addDialog.addActor(positionField);
+        addDialog.addActor(xPos);
+        addDialog.addActor(positionXField);
+        addDialog.addActor(yPos);
+        addDialog.addActor(positionYField);
+        addDialog.addActor(zPos);
+        addDialog.addActor(positionZField);
         addDialog.addActor(addLabel4);
-        addDialog.addActor(velocityField);
+        addDialog.addActor(xVel);
+        addDialog.addActor(velocityXField);
+        addDialog.addActor(yVel);
+        addDialog.addActor(velocityYField);
+        addDialog.addActor(zVel);
+        addDialog.addActor(velocityZField);
         addDialog.addActor(addLabel5);
-        addDialog.addActor(spinField);
+        addDialog.addActor(xSpin);
+        addDialog.addActor(spinXField);
+        addDialog.addActor(ySpin);
+        addDialog.addActor(spinYField);
+        addDialog.addActor(zSpin);
+        addDialog.addActor(spinZField);
         addDialog.addActor(addButton);
         addDialog.addActor(cancelButton);
         stage.addActor(addDialog);

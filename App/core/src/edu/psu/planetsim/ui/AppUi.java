@@ -491,14 +491,6 @@ public class AppUi {
             }
         });
 
-
-//        Table CBtable = new Table(skin);
-//        CBtable.setPosition(110,635);
-//        CBtable.setSize(300, 300);
-
-//        stage.addActor(CBtable);
-
-
         stage.addActor(button1);
         stage.addActor(button2);
         stage.addActor(speedbutton);
