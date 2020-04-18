@@ -77,33 +77,85 @@ public class SidePanelDialog {
 
         CheckBox pp2 = new CheckBox("Position:", skin);
         pp2.setPosition(7,250);
-        TextField Tpp2 = new TextField("",skin);
-        Tpp2.setPosition(160,250);
-        Tpp2.setWidth(100);
-        Tpp2.setHeight(20);
-        pp2.addListener(e -> {
+        Label xPos = new Label("x: ", skin);
+        xPos.setPosition(150, 250);
+        TextField posXField = new TextField("",skin);
+        posXField.setPosition(170,250);
+        posXField.setSize(60, 20);
+
+        var yPos = new Label("y: ", skin);
+        yPos.setPosition(250, 250);
+        var posYField = new TextField("", skin);
+        posYField.setPosition(270, 250);
+        posYField.setSize(60, 20);
+
+        var zPos = new Label("z: ", skin);
+        zPos.setPosition(350, 250);
+        var posZField = new TextField("",  skin);
+        posZField.setPosition(370, 250);
+        posZField.setSize(60, 20);
+
+        pp1.addListener(e -> {
             if (pp2.isChecked()){
-                Tpp2.setVisible(true);
+                xPos.setVisible(true);
+                yPos.setVisible(true);
+                zPos.setVisible(true);
+                posXField.setVisible(true);
+                posYField.setVisible(true);
+                posZField.setVisible(true);
             } else{
-                Tpp2.setVisible(false);
+                xPos.setVisible(false);
+                yPos.setVisible(false);
+                zPos.setVisible(false);
+                posXField.setVisible(false);
+                posYField.setVisible(false);
+                posZField.setVisible(false);
             }
             return true;
         });
 
+
+
         CheckBox pp3 = new CheckBox("Velocity (km/s):",skin);
         pp3.setPosition(7, 220);
-        TextField Tpp3 = new TextField("",skin);
-        Tpp3.setPosition(160,220);
-        Tpp3.setWidth(100);
-        Tpp3.setHeight(20);
+        Label xVel = new Label("x: ", skin);
+        xVel.setPosition(150, 220);
+        TextField velXField = new TextField("",skin);
+        velXField.setPosition(170,220);
+        velXField.setSize(60, 20);
+
+        var yVel = new Label("y: ", skin);
+        yVel.setPosition(250, 220);
+        var velYField = new TextField("", skin);
+        velYField.setPosition(270, 220);
+        velYField.setSize(60, 20);
+
+        var zVel = new Label("z: ", skin);
+        zVel.setPosition(350, 220);
+        var velZField = new TextField("",  skin);
+        velZField.setPosition(370, 220);
+        velZField.setSize(60, 20);
+
         pp1.addListener(e -> {
-            if (pp3.isChecked()){
-                Tpp3.setVisible(true);
+            if (pp2.isChecked()){
+                xVel.setVisible(true);
+                yVel.setVisible(true);
+                zVel.setVisible(true);
+                velXField.setVisible(true);
+                velYField.setVisible(true);
+                velZField.setVisible(true);
             } else{
-                Tpp3.setVisible(false);
+                xVel.setVisible(false);
+                yVel.setVisible(false);
+                zVel.setVisible(false);
+                velXField.setVisible(false);
+                velYField.setVisible(false);
+                velZField.setVisible(false);
             }
             return true;
         });
+
+
 
         CheckBox pp4 = new CheckBox("Spin:",skin);
         pp4.setPosition(7, 190);
@@ -153,14 +205,24 @@ public class SidePanelDialog {
         table.add(pp4);
         table.add(pp5);
         table.add(Tpp1);
-        table.add(Tpp2);
-        table.add(Tpp3);
+        table.add(xPos);
+        table.add(yPos);
+        table.add(zPos);
+        table.add(xVel);
+        table.add(yVel);
+        table.add(zVel);
         table.add(xSpin);
         table.add(ySpin);
         table.add(zSpin);
         table.add(spinXField);
         table.add(spinYField);
         table.add(spinZField);
+        table.add(velXField);
+        table.add(velYField);
+        table.add(velZField);
+        table.add(posXField);
+        table.add(posYField);
+        table.add(posZField);
 
         sideDialog.addActor(nameLabel1);
         sideDialog.addActor(pp1);
@@ -169,14 +231,24 @@ public class SidePanelDialog {
         sideDialog.addActor(pp4);
         sideDialog.addActor(pp5);
         sideDialog.addActor(Tpp1);
-        sideDialog.addActor(Tpp2);
-        sideDialog.addActor(Tpp3);
+        sideDialog.addActor(xPos);
+        sideDialog.addActor(yPos);
+        sideDialog.addActor(zPos);
+        sideDialog.addActor(xVel);
+        sideDialog.addActor(yVel);
+        sideDialog.addActor(zVel);
         sideDialog.addActor(xSpin);
         sideDialog.addActor(ySpin);
         sideDialog.addActor(zSpin);
         sideDialog.addActor(spinXField);
         sideDialog.addActor(spinYField);
         sideDialog.addActor(spinZField);
+        sideDialog.addActor(velXField);
+        sideDialog.addActor(velYField);
+        sideDialog.addActor(velZField);
+        sideDialog.addActor(posXField);
+        sideDialog.addActor(posYField);
+        sideDialog.addActor(posZField);
         sideDialog.addActor(table);
         stage.addActor(sideDialog);
         viewSelect.setSelectedIndex(0);
