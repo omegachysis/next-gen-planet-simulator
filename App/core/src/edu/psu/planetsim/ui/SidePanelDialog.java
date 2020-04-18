@@ -111,7 +111,7 @@ public class SidePanelDialog {
         var spinZField = new TextField("",  skin);
         spinZField.setPosition(370, 220);
         spinZField.setSize(60, 20);
-        
+
         pp1.addListener(e -> {
             if (pp4.isChecked()){
                 xSpin.setVisible(true);

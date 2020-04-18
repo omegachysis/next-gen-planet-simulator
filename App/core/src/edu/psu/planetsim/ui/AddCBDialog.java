@@ -95,7 +95,7 @@ public class AddCBDialog {
         var zSpin = new Label("z: ", skin);
         zSpin.setPosition(400, 115);
         var spinZField = new TextField("0", skin);
-        spinZField.setPosition(425, 160);
+        spinZField.setPosition(425, 115);
         spinZField.setSize(75, 30);
 
         TextButton addButton = new TextButton("Add", skin);

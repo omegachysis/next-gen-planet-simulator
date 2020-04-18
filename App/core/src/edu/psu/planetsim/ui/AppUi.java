@@ -439,27 +439,3 @@ public class AppUi {
     }
 }
 
-/*         // Incase if we need checkbox :
-
-                        sideDialog.row();
-                        Label nameLabel = new Label("Select Physical Properties:", skin);
-                        nameLabel.setPosition(5, 350);
-                        CheckBox check1 = new CheckBox("Initial distance from star(AU)", skin);
-                        check1.setPosition(10, 330);
-                        CheckBox check2 = new CheckBox("Initial velocity(km/s)", skin);
-                        check2.setPosition(10, 310);
-                        CheckBox check3 = new CheckBox("PhysicalProperty-3", skin);
-                        check3.setPosition(10, 290);
-
-                        table.add(nameLabel);
-                        table.add(check1);
-                        table.add(check2);
-                        table.add(check3);
-
-                        sideDialog.addActor(check1);
-                        sideDialog.addActor(check2);
-                        sideDialog.addActor(check3);
-                        sideDialog.addActor(nameLabel);
-
-
- */
