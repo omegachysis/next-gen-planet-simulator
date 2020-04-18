@@ -325,18 +325,19 @@ public class AppUi {
         center_button = new TextButton("Barycenter", skin, "default");
         center_button.setSize(90, 35);
         center_button.setPosition(25, 640);
+        center_button.addListener(new TextTooltip("What is Barycenter? \n" + "The center of mass of two or more bodies that orbit one another and it is the point about which the bodies orbit.", skin));
         center_button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                Dialog centerDialog = new Dialog("What is Barycenter?", skin);
-                centerDialog.setMovable(true);
-                centerDialog.setResizable(true);
-                centerDialog.setPosition(450, 500);
-                centerDialog.setWidth(500);
-                centerDialog.setHeight(120);
-                centerDialog.text("The center of mass of two or more bodies that orbit one another \n " +
-                        "and it is the point about which the bodies orbit.");
-                centerDialog.button("Close", true);
-                stage.addActor(centerDialog);
+                //Dialog centerDialog = new Dialog("What is Barycenter?", skin);
+                //centerDialog.setMovable(true);
+                //centerDialog.setResizable(true);
+                //centerDialog.setPosition(450, 500);
+                //centerDialog.setWidth(500);
+                //centerDialog.setHeight(120);
+                //centerDialog.text("The center of mass of two or more bodies that orbit one another \n " +
+                       // "and it is the point about which the bodies orbit.");
+                //centerDialog.button("Close", true);
+                //stage.addActor(centerDialog);
             }
         });
         stage.addActor(center_button);

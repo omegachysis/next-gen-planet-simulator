@@ -28,6 +28,9 @@ com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
 		listStyle: { font: default-font, selection: default-select-selection }
 	}
 },
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+    default: {label: {font: default-font}, background: default-rect , wrapWidth: 400}
+},
 com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
 	default-vertical: { handle: default-splitpane-vertical },
 	default-horizontal: { handle: default-splitpane }
