@@ -35,16 +35,16 @@ public class DeleteDialog {
         deleteDialog.addActor(deleteSelect);
 
         deleteSelect.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                if (_appState.bodies.isEmpty()){
-                    deleteSelect.showList();
-                }else {
-                    Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
-                    AppState.CelestialBody newPlanet = entries.getValue();
-                    deleteSelect.setItems("Select", newPlanet.name);
-                    deleteSelect.showList();
-                }
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
+                        if (_appState.bodies.isEmpty()){
+                            deleteSelect.showList();
+                        }else {
+                            Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
+                            AppState.CelestialBody newPlanet = entries.getValue();
+                            deleteSelect.setItems("Select", newPlanet.name);
+                            deleteSelect.showList();
+                        }
             }
         });
 

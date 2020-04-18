@@ -324,7 +324,19 @@ public class AppUi {
 
         center_button = new TextButton("Barycenter", skin, "default");
         center_button.setSize(90, 35);
-        center_button.setPosition(25, 630);
+        center_button.setPosition(25, 640);
+        center_button.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                Dialog centerDialog = new Dialog("What is Barycenter?", skin);
+                centerDialog.setMovable(true);
+                centerDialog.setResizable(true);
+                centerDialog.setPosition(500, 500);
+                centerDialog.setWidth(250);
+                centerDialog.text("Barycenter description here...");
+                centerDialog.button("Close", true);
+                stage.addActor(centerDialog);
+            }
+        });
         stage.addActor(center_button);
     }
 
