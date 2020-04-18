@@ -330,9 +330,11 @@ public class AppUi {
                 Dialog centerDialog = new Dialog("What is Barycenter?", skin);
                 centerDialog.setMovable(true);
                 centerDialog.setResizable(true);
-                centerDialog.setPosition(500, 500);
-                centerDialog.setWidth(250);
-                centerDialog.text("Barycenter description here...");
+                centerDialog.setPosition(450, 500);
+                centerDialog.setWidth(500);
+                centerDialog.setHeight(120);
+                centerDialog.text("The center of mass of two or more bodies that orbit one another \n " +
+                        "and it is the point about which the bodies orbit.");
                 centerDialog.button("Close", true);
                 stage.addActor(centerDialog);
             }
