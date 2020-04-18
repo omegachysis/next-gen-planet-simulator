@@ -17,7 +17,7 @@ public class SidePanelDialog {
         sideDialog.button("Close", true);
 
         var modifyButton = new TextButton("Modify", skin);
-        modifyButton.setPosition(100, 180);
+        modifyButton.setPosition(100, 150);
         modifyButton.addListener(e -> {
             if (modifyButton.isPressed()) {
                 Dialog modified = new Dialog("", skin);
@@ -60,11 +60,25 @@ public class SidePanelDialog {
             return true;
         });
 
+        CheckBox pp5 = new CheckBox("Radius(m):", skin);
+        pp1.setPosition(7,280);
+        TextField Tpp5 = new TextField("",skin);
+        Tpp5.setPosition(160,280);
+        Tpp5.setWidth(100);
+        Tpp5.setHeight(20);
+        pp5.addListener(e -> {
+            if (pp5.isChecked()){
+                Tpp5.setVisible(true);
+            } else{
+                Tpp5.setVisible(false);
+            }
+            return true;
+        });
 
-        CheckBox pp2 = new CheckBox("Position(x,y,z):", skin);
-        pp2.setPosition(7,280);
+        CheckBox pp2 = new CheckBox("Position:", skin);
+        pp2.setPosition(7,250);
         TextField Tpp2 = new TextField("",skin);
-        Tpp2.setPosition(160,280);
+        Tpp2.setPosition(160,250);
         Tpp2.setWidth(100);
         Tpp2.setHeight(20);
         pp2.addListener(e -> {
@@ -77,9 +91,9 @@ public class SidePanelDialog {
         });
 
         CheckBox pp3 = new CheckBox("Velocity (km/s):",skin);
-        pp3.setPosition(7, 250);
+        pp3.setPosition(7, 220);
         TextField Tpp3 = new TextField("",skin);
-        Tpp3.setPosition(160,250);
+        Tpp3.setPosition(160,220);
         Tpp3.setWidth(100);
         Tpp3.setHeight(20);
         pp1.addListener(e -> {
@@ -91,25 +105,25 @@ public class SidePanelDialog {
             return true;
         });
 
-        CheckBox pp4 = new CheckBox("Spin (x,y,z):",skin);
-        pp4.setPosition(7, 220);
+        CheckBox pp4 = new CheckBox("Spin:",skin);
+        pp4.setPosition(7, 190);
 
         Label xSpin = new Label("x: ", skin);
-        xSpin.setPosition(150, 220);
+        xSpin.setPosition(150, 190);
         TextField spinXField = new TextField("",skin);
-        spinXField.setPosition(170,220);
+        spinXField.setPosition(170,190);
         spinXField.setSize(60, 20);
 
         var ySpin = new Label("y: ", skin);
-        ySpin.setPosition(250, 220);
+        ySpin.setPosition(250, 190);
         var spinYField = new TextField("", skin);
-        spinYField.setPosition(270, 220);
+        spinYField.setPosition(270, 190);
         spinYField.setSize(60, 20);
 
         var zSpin = new Label("z: ", skin);
-        zSpin.setPosition(350, 220);
+        zSpin.setPosition(350, 190);
         var spinZField = new TextField("",  skin);
-        spinZField.setPosition(370, 220);
+        spinZField.setPosition(370, 190);
         spinZField.setSize(60, 20);
 
         pp1.addListener(e -> {
@@ -137,6 +151,7 @@ public class SidePanelDialog {
         table.add(pp2);
         table.add(pp3);
         table.add(pp4);
+        table.add(pp5);
         table.add(Tpp1);
         table.add(Tpp2);
         table.add(Tpp3);
@@ -152,6 +167,7 @@ public class SidePanelDialog {
         sideDialog.addActor(pp2);
         sideDialog.addActor(pp3);
         sideDialog.addActor(pp4);
+        sideDialog.addActor(pp5);
         sideDialog.addActor(Tpp1);
         sideDialog.addActor(Tpp2);
         sideDialog.addActor(Tpp3);
