@@ -35,6 +35,7 @@ public class AppUi {
     private TextButton inputButton;
     private TextButton.TextButtonStyle textButtonStyle;
     private Slider zoomSlider;
+    private TextButton center_button;
     BitmapFont font;
 
     public AppUi(final Stage stage, AppState appState) {
@@ -321,6 +322,10 @@ public class AppUi {
         stage.addActor(viewSelect);
         stage.addActor(inspectSelect);
 
+        center_button = new TextButton("Barycenter", skin, "default");
+        center_button.setSize(90, 35);
+        center_button.setPosition(25, 630);
+        stage.addActor(center_button);
     }
 
     private Table cbTable(){
@@ -333,7 +338,6 @@ public class AppUi {
             var newButton = new TextButton(nextCB.name, skin);
             newButton.setSize(110, 30);
             buttonTable.add(newButton);
-
         }
         return buttonTable;
     }
