@@ -156,7 +156,7 @@ public class AppUi {
         });
 
         final SelectBox<String> inspectSelect= new SelectBox<>(skin);
-        inspectSelect.setItems("Inspection Mode", "Climate", "Thermodynamics", "Magnetism", "Van Allen Belt","Greenhouse Effect");
+        inspectSelect.setItems("Inspection Mode", "Climate", "Thermodynamics", "Magnetism", "Van Allen Belt","Greenhouse Effect","Aerosols","Volcanoes");
         inspectSelect.setPosition(260, 680);
         inspectSelect.setWidth(150);
         inspectSelect.addListener(new ClickListener() {
@@ -240,6 +240,38 @@ public class AppUi {
                                 "known as greenhouse gases, water vapor has the largest effect.");
                         greenhouseDialog.button("Close", true);
                         stage.addActor(greenhouseDialog);
+                        inspectSelect.setSelectedIndex(0);
+                        break;
+
+                    case "Aerosols":
+                        Dialog aerosolsDialog = new Dialog("Aerosols", skin);
+                        aerosolsDialog.setMovable(true);
+                        aerosolsDialog.setResizable(false);
+                        aerosolsDialog.setPosition(400, 500);
+                        aerosolsDialog.setWidth(565);
+                        aerosolsDialog.setHeight(160);
+                        aerosolsDialog.text("There are some aerosols that cause cooling while others cause warming. \n" +
+                                "Aerosols come from volcanoes, dust storms, fires, vegetation, sea spray, \n" +
+                                "burning of fossil fuels and land use. Warming aerosols include black carbon \n" +
+                                "and dark soot. Cooling aerosols include dust, sulfate particles and sea spray.\n");
+                        aerosolsDialog.button("Close", true);
+                        stage.addActor(aerosolsDialog);
+                        inspectSelect.setSelectedIndex(0);
+                        break;
+
+                    case "Volcanoes":
+                        Dialog volcanoesDialog = new Dialog("Volcanoes", skin);
+                        volcanoesDialog .setMovable(true);
+                        volcanoesDialog .setResizable(false);
+                        volcanoesDialog .setPosition(400, 500);
+                        volcanoesDialog .setWidth(550);
+                        volcanoesDialog .setHeight(160);
+                        volcanoesDialog .text("Volcanoes erupt because of density and pressure. The lower density of \n" +
+                                              "the magma relative to the surrounding rocks causes it to rise. It will \n" +
+                                              "rise to the surface or to a depth that is determined by the density of \n" +
+                                              "the magma and the weight of the rocks above it.");
+                        volcanoesDialog .button("Close", true);
+                        stage.addActor(volcanoesDialog );
                         inspectSelect.setSelectedIndex(0);
                         break;
                 }
