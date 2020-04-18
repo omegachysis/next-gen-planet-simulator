@@ -184,16 +184,21 @@ public class AppUi {
                         break;
 
                     case "Thermodynamics":
-                        Dialog thermoDialog = new Dialog("Inspection Mode: Thermodynamics", skin);
+                        Dialog thermoDialog = new Dialog("Thermodynamics", skin);
                         thermoDialog.setMovable(true);
-                        thermoDialog.setResizable(true);
-                        thermoDialog.setPosition(500, 500);
-                        thermoDialog.setWidth(250);
-                        thermoDialog.text("Thermodynamics description here...");
+                        thermoDialog.setResizable(false);
+                        thermoDialog.setPosition(400, 500);
+                        thermoDialog.setWidth(545);
+                        thermoDialog.setHeight(160);
+                        thermoDialog.text("Atmospheric thermodynamics describes the effect of buoyant forces that \n" +
+                                "cause the rise of less dense (warmer) air, the descent of more dense air,\n" +
+                                "and the transformation of water from liquid to vapor (evaporation) and \n" +
+                                "its condensation.");
                         thermoDialog.button("Close", true);
                         stage.addActor(thermoDialog);
                         inspectSelect.setSelectedIndex(0);
                         break;
+
                     case "Magnetism":
                         Dialog magDialog = new Dialog("Inspection Mode: Magnetism", skin);
                         magDialog.setMovable(true);
