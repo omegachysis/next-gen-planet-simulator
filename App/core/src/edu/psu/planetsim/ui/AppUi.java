@@ -156,7 +156,7 @@ public class AppUi {
         });
 
         final SelectBox<String> inspectSelect= new SelectBox<>(skin);
-        inspectSelect.setItems("Inspection Mode", "Climate", "Thermodynamics", "Magnetism");
+        inspectSelect.setItems("Inspection Mode", "Climate", "Thermodynamics", "Magnetism", "Van Allen Belt","Greenhouse Effect");
         inspectSelect.setPosition(260, 680);
         inspectSelect.setWidth(150);
         inspectSelect.addListener(new ClickListener() {
@@ -208,6 +208,38 @@ public class AppUi {
                         magDialog.text("Magnetism description here...");
                         magDialog.button("Close", true);
                         stage.addActor(magDialog);
+                        inspectSelect.setSelectedIndex(0);
+                        break;
+
+                    case "Van Allen Belt":
+                        Dialog allenBeltDialog = new Dialog("Van Allen Belt", skin);
+                        allenBeltDialog.setMovable(true);
+                        allenBeltDialog.setResizable(false);
+                        allenBeltDialog.setPosition(400, 500);
+                        allenBeltDialog.setWidth(520);
+                        allenBeltDialog.setHeight(150);
+                        allenBeltDialog.text("A Van Allen radiation belt is a zone of energetic charged particles, \n" +
+                                "most of which originate from the solar wind, that are captured by \n" +
+                                "and held around a planet by that planet's magnetic field. Earth has \n" +
+                                "two such belts and sometimes others may be temporarily created.");
+                        allenBeltDialog.button("Close", true);
+                        stage.addActor(allenBeltDialog);
+                        inspectSelect.setSelectedIndex(0);
+                        break;
+
+                    case "Greenhouse Effect":
+                        Dialog greenhouseDialog = new Dialog("Greenhouse Effect", skin);
+                        greenhouseDialog.setMovable(true);
+                        greenhouseDialog.setResizable(false);
+                        greenhouseDialog.setPosition(400, 500);
+                        greenhouseDialog.setWidth(565);
+                        greenhouseDialog.setHeight(150);
+                        greenhouseDialog.text("Greenhouse effect, a warming of Earth's surface and troposphere \n" +
+                                "(the lowest layer of the atmosphere) caused by the presence of water vapor,\n " +
+                                "carbon dioxide, methane, and certain other gases in the air. Of those gases,\n " +
+                                "known as greenhouse gases, water vapor has the largest effect.");
+                        greenhouseDialog.button("Close", true);
+                        stage.addActor(greenhouseDialog);
                         inspectSelect.setSelectedIndex(0);
                         break;
                 }
