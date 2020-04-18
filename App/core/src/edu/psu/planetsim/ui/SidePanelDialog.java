@@ -11,7 +11,7 @@ public class SidePanelDialog {
         sideDialog.setMovable(true);
         sideDialog.setResizable(true);
         sideDialog.setPosition(10, 200);
-        sideDialog.setWidth(280);
+        sideDialog.setWidth(450);
         sideDialog.setHeight(400);
         sideDialog.button("Done", true);
         sideDialog.button("Close", true);
@@ -93,19 +93,43 @@ public class SidePanelDialog {
 
         CheckBox pp4 = new CheckBox("Spin (x,y,z):",skin);
         pp4.setPosition(7, 220);
-        TextField Tpp4 = new TextField("",skin);
-        Tpp4.setPosition(160,220);
-        Tpp4.setWidth(100);
-        Tpp4.setHeight(20);
+
+        Label xSpin = new Label("x: ", skin);
+        xSpin.setPosition(150, 220);
+        TextField spinXField = new TextField("",skin);
+        spinXField.setPosition(170,220);
+        spinXField.setSize(60, 20);
+
+        var ySpin = new Label("y: ", skin);
+        ySpin.setPosition(250, 220);
+        var spinYField = new TextField("", skin);
+        spinYField.setPosition(270, 220);
+        spinYField.setSize(60, 20);
+
+        var zSpin = new Label("z: ", skin);
+        zSpin.setPosition(350, 220);
+        var spinZField = new TextField("",  skin);
+        spinZField.setPosition(370, 220);
+        spinZField.setSize(60, 20);
+        
         pp1.addListener(e -> {
             if (pp4.isChecked()){
-                Tpp4.setVisible(true);
+                xSpin.setVisible(true);
+                ySpin.setVisible(true);
+                zSpin.setVisible(true);
+                spinXField.setVisible(true);
+                spinYField.setVisible(true);
+                spinZField.setVisible(true);
             } else{
-                Tpp4.setVisible(false);
+                xSpin.setVisible(false);
+                ySpin.setVisible(false);
+                zSpin.setVisible(false);
+                spinXField.setVisible(false);
+                spinYField.setVisible(false);
+                spinZField.setVisible(false);
             }
             return true;
         });
-
 
         Table table = new Table(skin);
         table.add(nameLabel1);
@@ -116,7 +140,12 @@ public class SidePanelDialog {
         table.add(Tpp1);
         table.add(Tpp2);
         table.add(Tpp3);
-        table.add(Tpp4);
+        table.add(xSpin);
+        table.add(ySpin);
+        table.add(zSpin);
+        table.add(spinXField);
+        table.add(spinYField);
+        table.add(spinZField);
 
         sideDialog.addActor(nameLabel1);
         sideDialog.addActor(pp1);
@@ -126,7 +155,12 @@ public class SidePanelDialog {
         sideDialog.addActor(Tpp1);
         sideDialog.addActor(Tpp2);
         sideDialog.addActor(Tpp3);
-        sideDialog.addActor(Tpp4);
+        sideDialog.addActor(xSpin);
+        sideDialog.addActor(ySpin);
+        sideDialog.addActor(zSpin);
+        sideDialog.addActor(spinXField);
+        sideDialog.addActor(spinYField);
+        sideDialog.addActor(spinZField);
         sideDialog.addActor(table);
         stage.addActor(sideDialog);
         viewSelect.setSelectedIndex(0);
