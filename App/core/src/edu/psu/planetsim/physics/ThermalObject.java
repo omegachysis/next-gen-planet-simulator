@@ -106,17 +106,17 @@ public class ThermalObject
                     // to spherical coordinates on the elevation map
                     // assuming we are on the surface of the unit sphere.
                     var lat = Math.acos(-dz / dist);
-                    var lon = Math.atan2(dy, dx);
+                    var lon = Math.atan2(dy, dx) + Math.PI;
                     var latIndex = (int)(lat * elevMapLen / Math.PI);
                     var lonIndex = (int)(lon * elevMapLen / Math.PI / 2);
-                    if (lonIndex < 0) lonIndex = 0;
+                    if (lonIndex >= elevMapLen) lonIndex = 0;
 
                     // Find the elevation at this point above the unit sphere.
                     var elev = elevationMap[latIndex * elevMapLen + lonIndex];
                     elev /= maxElev; // Convert elevations to unit sphere space.
                     
                     // Find out whether this is interior, exterior, or boundary.
-                    var boundaryThickness = 0.01f;
+                    var boundaryThickness = 0.025f;
 
                     if (dist <= elev) 
                         // Interior
