@@ -112,11 +112,26 @@ public class AddCBDialog {
                 try {
                     String name = nameField.getText();
                     double mass = Double.parseDouble(massField.getText());
-                    double position = Double.parseDouble(positionXField.getText());
-                    double velocity = Double.parseDouble(velocityXField.getText());
-                    double spin = Double.parseDouble(spinXField.getText());
+                    double radius = Double.parseDouble(radiusField.getText());
 
-                    addCB(_appState, name, mass, position);
+                    double xpos = Double.parseDouble(positionXField.getText());
+                    double ypos = Double.parseDouble(positionYField.getText());
+                    double zpos = Double.parseDouble(positionZField.getText());
+                    Vector3 position = new Vector3((float)xpos, (float)ypos, (float)zpos);
+
+                    double xvel = Double.parseDouble(velocityXField.getText());
+                    double yvel = Double.parseDouble(velocityYField.getText());
+                    double zvel = Double.parseDouble(velocityZField.getText());
+                    Vector3 velocity = new Vector3((float) xvel, (float) yvel, (float)zvel);
+                    //double velocity = Double.parseDouble(velocityXField.getText());
+
+                    double xspin = Double.parseDouble(spinXField.getText());
+                    double yspin = Double.parseDouble(spinYField.getText());
+                    double zspin = Double.parseDouble(spinZField.getText());
+                    Vector3 spin = new Vector3((float) xspin, (float)yspin, (float)zspin);
+                    //double spin = Double.parseDouble(spinXField.getText());
+
+                    addCB(_appState, name, mass, radius, position, velocity, spin);
                 } catch (NumberFormatException n) {
                     stage.addActor(wrong);
                     Timer.schedule(new Timer.Task() {
@@ -219,19 +234,24 @@ public class AddCBDialog {
         editSelect.setSelectedIndex(0);
     }
 
-    private void addCB(AppState _appState, String name, double mass, double position) {
+    private void addCB(AppState _appState, String name, double mass, double radius,
+                       Vector3 position, Vector3 velocity, Vector3 spin) {
         final var newCB = new AppState.CelestialBody();
         newCB.id = UUID.randomUUID();
         newCB.name = name;
         newCB.mass = Metrics.kg(mass);
         newCB.position = new Vector3();
         newCB.velocity = new Vector3();
-        newCB.spin = new Vector3();
+        newCB.spin = spin;
+//        newCB.spin = new Vector3();
         newCB.orientation = new Quaternion().setFromCross(Vector3.Y, newCB.spin);
-        newCB.positionRelativeToSun = new Vector3(Metrics.m(position), 0, 0); // 1 AU
-        newCB.velocityRelativeToSun = new Vector3();
-        var radius = Metrics.m(1e6);
-        newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
+        newCB.positionRelativeToSun = position;
+        newCB.velocityRelativeToSun = velocity;
+//        newCB.positionRelativeToSun = new Vector3(Metrics.m(position), 0, 0); // 1 AU
+//        newCB.velocityRelativeToSun = new Vector3();
+//        var radius = Metrics.m(1e6);
+//        newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
+        newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.m(radius));
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
         _appState.needsRefresh = true;

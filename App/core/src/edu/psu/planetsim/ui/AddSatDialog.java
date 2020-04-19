@@ -114,11 +114,29 @@ public class AddSatDialog {
                 try {
                     String name = field1.getText();
                     double mass = Double.parseDouble(massField.getText());
-                    double position = Double.parseDouble(positionXField.getText());
-                    double velocity = Double.parseDouble(velocityXField.getText());
-                    double spin = Double.parseDouble(spinXField.getText());
+                    double radius = Double.parseDouble(radiusField.getText());
 
-                    addSat(_appState, name, mass, position);
+                    double xpos = Double.parseDouble(positionXField.getText());
+                    double ypos = Double.parseDouble(positionYField.getText());
+                    double zpos = Double.parseDouble(positionZField.getText());
+                    Vector3 position = new Vector3((float)xpos, (float)ypos, (float)zpos);
+
+                    double xvel = Double.parseDouble(velocityXField.getText());
+                    double yvel = Double.parseDouble(velocityYField.getText());
+                    double zvel = Double.parseDouble(velocityZField.getText());
+                    Vector3 velocity = new Vector3((float) xvel, (float) yvel, (float)zvel);
+                    //double velocity = Double.parseDouble(velocityXField.getText());
+
+                    double xspin = Double.parseDouble(spinXField.getText());
+                    double yspin = Double.parseDouble(spinYField.getText());
+                    double zspin = Double.parseDouble(spinZField.getText());
+                    Vector3 spin = new Vector3((float) xspin, (float)yspin, (float)zspin);
+
+//                    double position = Double.parseDouble(positionXField.getText());
+//                    double velocity = Double.parseDouble(velocityXField.getText());
+//                    double spin = Double.parseDouble(spinXField.getText());
+
+                    addSat(_appState, name, mass, radius, position, velocity, spin);
                 } catch (NumberFormatException n) {
                     stage.addActor(wrong);
                     Timer.schedule(new Timer.Task() {
@@ -220,20 +238,24 @@ public class AddSatDialog {
         editSelect.setSelectedIndex(0);
     }
 
-    private void addSat(AppState _appState, String name,double mass, double position){
+    private void addSat(AppState _appState, String name, double mass, double radius,
+                        Vector3 position, Vector3 velocity, Vector3 spin){
         final var newSat = new AppState.CelestialBody();
         newSat.id = UUID.randomUUID();
         newSat.name = name;
         newSat.isSatellite = true;
         newSat.mass = Metrics.kg(mass);
-        newSat.position = new Vector3(Metrics.m(position), 0, 0);
-        newSat.velocity = new Vector3();
-        newSat.spin = new Vector3();
+//        newSat.position = new Vector3(Metrics.m(position), 0, 0);
+//        newSat.velocity = new Vector3();
+//        newSat.spin = new Vector3();
+        newSat.position = position;
+        newSat.velocity = velocity;
+        newSat.spin = spin;
         newSat.orientation = new Quaternion().setFromCross(Vector3.Y, newSat.spin);
         newSat.positionRelativeToSun = new Vector3(); // 1 AU
         newSat.velocityRelativeToSun = new Vector3();
-        var radius = Metrics.m(1e6);
-        newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
+//        var radius = Metrics.m(1e6);
+        newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.m(radius));
         _appState.bodies.put(newSat.id, newSat);
         _appState.getCurrentCelestialBody().satellites.add(newSat.id);
         _appState.needsRefresh = true;
