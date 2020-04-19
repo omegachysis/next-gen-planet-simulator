@@ -117,6 +117,7 @@ public class ThermalObject
                     
                     // Find out whether this is interior, exterior, or boundary.
                     var boundaryThickness = 0.01f;
+
                     if (dist <= elev) 
                         // Interior
                         pix.setColor(1f, 1f, 1f, 1f);
@@ -127,7 +128,7 @@ public class ThermalObject
                         // Exterior
                         pix.setColor(0f, 0f, 0f, 1f);
 
-                    pix.drawPixel(x + z * _resolution * _resolution, y);
+                    pix.drawPixel(x + z * _resolution, y);
                 }
             }
         }
