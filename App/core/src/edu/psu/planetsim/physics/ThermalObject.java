@@ -31,7 +31,7 @@ public class ThermalObject
     private final Mesh _quadMesh;
     private final int _resolution;
 
-    public ThermalObject(int resolution)
+    public ThermalObject(int resolution, float[] elevationMap)
     {
         _resolution = resolution;
 
@@ -61,7 +61,6 @@ public class ThermalObject
         _spriteBatch = new SpriteBatch();
 
         // Generate a temperature profile from the input data.
-        // TODO
         var pix = new Pixmap(_resolution * _resolution, _resolution, Format.RGB888);
         pix.setFilter(Filter.NearestNeighbour);
         pix.setColor(0f, 0f, 0f, 1f);
@@ -70,12 +69,37 @@ public class ThermalObject
         _temperature.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
         _temperature.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
-        // Generate a diffusivity texture from the input data.
-        // TODO
+        // Determine the maximum elevation value to pick the boundary values 
+        // for the tempature simulation volume.
+        var maxElevation = 0f;
+        for (var val : elevationMap)
+            maxElevation = Math.max(maxElevation, val);
+
+        // Generate a diffusivity texture from the elevation data,
+        // making areas above the elevation have zero diffusivity, 
+        // while areas in the interior have non-zero diffusivity.
         pix = new Pixmap(_resolution * _resolution, _resolution, Format.RGB888);
         pix.setFilter(Filter.NearestNeighbour);
-        pix.setColor(0f, 0f, 0f, 1f);
-        pix.fill();
+        
+        // Loop through every pixel of the diffusivity texture and 
+        // terminate whether the point it represents is an interior point,
+        // a boundary point, or an exterior point.
+        for (int z = 0; z < _resolution; z++)
+        {
+            for (int y = 0; y < _resolution; y++)
+            {
+                for (int x = 0; x < _resolution; x++)
+                {
+                    // Convert the cartesian x,y,z coordinates 
+                    // to spherical coordinates on the elevation map.
+                    // TODO
+                    pix.setColor(0f, 0f, 0f, 1f);
+                    pix.drawPixel(x + z * _resolution * _resolution, y);
+                }
+            }
+        }
+
+        // Copy the data into the diffusivity texture resource.
         _diffusivity = new Texture(pix);
         _diffusivity.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
         _diffusivity.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
