@@ -22,6 +22,7 @@ import edu.psu.planetsim.graphics.TerrainBuilder;
 
 public class CelestialBody extends KinematicObject 
 {
+    private final ThermalObject _temperature;
     private final Model _modelBase;
     private final float _radius;
 
@@ -37,10 +38,13 @@ public class CelestialBody extends KinematicObject
         _radius = radius;
         mass = (float)dto.mass;
         resetUnderlyingPhysics(dto.position, dto.velocity, dto.spin, dto.orientation);
+
+        // Initialize the thermal object.
+        _temperature = new ThermalObject(90, dto.elevationMap);
     }
 
     public void resetUnderlyingPhysics(final Vector3 position, 
-    final Vector3 velocity, final Vector3 spin, final Quaternion orientation) 
+        final Vector3 velocity, final Vector3 spin, final Quaternion orientation) 
     {
         model.transform.set(position, orientation);
 

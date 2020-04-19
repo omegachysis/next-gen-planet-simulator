@@ -2,9 +2,11 @@ package edu.psu.planetsim.physics;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.Pixmap.Filter;
@@ -80,39 +82,58 @@ public class ThermalObject
         // terminate whether the point it represents is an interior point,
         // a boundary point, or an exterior point.
         var elevMapLen = (int)Math.sqrt(elevationMap.length);
+        var maxElev = 0f;
+        for (var elev : elevationMap)
+            maxElev = Math.max(maxElev, elev);
+
         for (int z = 0; z < _resolution; z++)
         {
             for (int y = 0; y < _resolution; y++)
             {
                 for (int x = 0; x < _resolution; x++)
                 {
+
+                    // Convert the cartesian texture coordinates x,y,z
+                    // into unit sphere cartesian coordinates.
+                    var dx = x * 2.0 / _resolution - 1.0;
+                    var dy = y * 2.0 / _resolution - 1.0;
+                    var dz = z * 2.0 / _resolution - 1.0;
+
+                    // Find the distance we are from the center.
+                    var dist = new Vector3((float)dx, (float)dy, (float)dz).len();
+
                     // Convert the cartesian x,y,z coordinates 
                     // to spherical coordinates on the elevation map
                     // assuming we are on the surface of the unit sphere.
-                    var lat = Math.acos(z * Math.PI * 2 / _resolution);
-                    var lon = Math.atan((double)y / x);
+                    var lat = Math.acos(-dz / dist);
+                    var lon = Math.atan2(dy, dx);
                     var latIndex = (int)(lat * elevMapLen / Math.PI);
                     var lonIndex = (int)(lon * elevMapLen / Math.PI / 2);
-
-                    // Find the distance we are from the center.
-                    var dist = new Vector3(x, y, z).len();
+                    if (lonIndex < 0) lonIndex = 0;
 
                     // Find the elevation at this point above the unit sphere.
                     var elev = elevationMap[latIndex * elevMapLen + lonIndex];
+                    elev /= maxElev; // Convert elevations to unit sphere space.
                     
                     // Find out whether this is interior, exterior, or boundary.
                     var boundaryThickness = 0.01f;
-                    if (dist <= elev) // Interior
-                        pix.setColor(0f, 0f, 0f, 1f);
-                    else if (dist - elev <= boundaryThickness)
+                    if (dist <= elev) 
+                        // Interior
                         pix.setColor(1f, 1f, 1f, 1f);
+                    else if (dist - elev <= boundaryThickness)
+                        // Boundary
+                        pix.setColor(0.5f, 0.5f, 0.5f, 1f);
                     else
+                        // Exterior
                         pix.setColor(0f, 0f, 0f, 1f);
 
                     pix.drawPixel(x + z * _resolution * _resolution, y);
                 }
             }
         }
+
+        // TODO: remove this
+        PixmapIO.writePNG(new FileHandle("test.png"), pix);
 
         // Copy the data into the diffusivity texture resource.
         _diffusivity = new Texture(pix);
