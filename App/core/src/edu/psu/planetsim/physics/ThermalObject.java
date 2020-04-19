@@ -75,8 +75,15 @@ public class ThermalObject
         // Generate a diffusivity texture from the elevation data,
         // making areas above the elevation have zero diffusivity, 
         // while areas in the interior have non-zero diffusivity.
-        pix = new Pixmap(_resolution * _resolution, _resolution, Format.RGB888);
-        pix.setFilter(Filter.NearestNeighbour);
+        var diffusivity = new Pixmap(
+            _resolution * _resolution, _resolution, Format.RGB888);
+        diffusivity.setFilter(Filter.NearestNeighbour);
+
+        // Also generate a radiation texture that is blue in places 
+        // where the terrain faces the cold abyss of space.
+        var radiation = new Pixmap(
+            _resolution * _resolution, _resolution, Format.RGB888);
+        radiation.setFilter(Filter.NearestNeighbour);
 
         // Loop through every pixel of the diffusivity texture and 
         // terminate whether the point it represents is an interior point,
@@ -92,7 +99,6 @@ public class ThermalObject
             {
                 for (int x = 0; x < _resolution; x++)
                 {
-
                     // Convert the cartesian texture coordinates x,y,z
                     // into unit sphere cartesian coordinates.
                     var dx = x * 2.0 / _resolution - 1.0;
@@ -119,35 +125,41 @@ public class ThermalObject
                     var boundaryThickness = 0.025f;
 
                     if (dist <= elev) 
+                    {
                         // Interior
-                        pix.setColor(1f, 1f, 1f, 1f);
+                        diffusivity.setColor(1f, 1f, 1f, 1f);
+                        radiation.setColor(0f, 0f, 0f, 1f);
+                    }
                     else if (dist - elev <= boundaryThickness)
+                    {
                         // Boundary
-                        pix.setColor(0.5f, 0.5f, 0.5f, 1f);
+                        diffusivity.setColor(0.5f, 0.5f, 0.5f, 1f);
+                        radiation.setColor(0f, 0f, 1f, 1f);
+                    }
                     else
+                    {
                         // Exterior
-                        pix.setColor(0f, 0f, 0f, 1f);
+                        diffusivity.setColor(0f, 0f, 0f, 1f);
+                        radiation.setColor(0f, 0f, 0f, 1f);
+                    }
 
-                    pix.drawPixel(x + z * _resolution, y);
+                    diffusivity.drawPixel(x + z * _resolution, y);
+                    radiation.drawPixel(x + z * _resolution, y);
                 }
             }
         }
 
         // TODO: remove this
-        PixmapIO.writePNG(new FileHandle("test.png"), pix);
+        PixmapIO.writePNG(new FileHandle("diffusivity.png"), diffusivity);
+        PixmapIO.writePNG(new FileHandle("radiation.png"), radiation);
 
         // Copy the data into the diffusivity texture resource.
-        _diffusivity = new Texture(pix);
+        _diffusivity = new Texture(diffusivity);
         _diffusivity.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
         _diffusivity.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
         // Generate a radiation profile from the input data.
-        // TODO
-        pix = new Pixmap(_resolution * _resolution, _resolution, Format.RGB888);
-        pix.setFilter(Filter.NearestNeighbour);
-        pix.setColor(0f, 0f, 0f, 1f);
-        pix.fill();
-        _radiation = new Texture(pix);
+        _radiation = new Texture(radiation);
         _radiation.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
         _radiation.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
