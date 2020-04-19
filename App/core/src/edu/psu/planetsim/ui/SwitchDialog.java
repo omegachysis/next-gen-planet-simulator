@@ -14,13 +14,13 @@ import com.badlogic.gdx.utils.Select;
 import com.badlogic.gdx.utils.Timer;
 
 import edu.psu.planetsim.AppState;
+import edu.psu.planetsim.AppState.CelestialBody;
 import edu.psu.planetsim.Metrics;
 import edu.psu.planetsim.graphics.TerrainBuilder;
 
 import org.w3c.dom.Text;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class SwitchDialog {
     SwitchDialog (AppState _appState, Stage stage, Skin skin, SelectBox<String> viewSelect){
@@ -84,10 +84,31 @@ public class SwitchDialog {
                 if (_appState.bodies.isEmpty()){
                     switchSelect.showList();
                 }else {
-                    Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
-                    AppState.CelestialBody newPlanet = entries.getValue();
+//                    Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
+//                    AppState.CelestialBody newPlanet = entries.getValue();
+//
+//                    switchSelect.setItems("Select", newPlanet.name);
 
-                    switchSelect.setItems("Select", newPlanet.name);
+                    Collection<CelestialBody> allCBs = _appState.bodies.values();
+                    var arrayCBs = allCBs.toArray();
+
+                    var cbNames = new ArrayList<String>();
+                    for(int i = 0; i < allCBs.size(); i++){
+                        AppState.CelestialBody current = (AppState.CelestialBody) arrayCBs[i];
+                        if (!current.isSatellite){
+                            String currentName = current.name;
+                            cbNames.add(currentName);
+                        }
+                    }
+
+//                    String[] allNames = new String[cbNames.size()];
+//                    int i = 0;
+//                    for (Object value : cbNames){
+//                        allNames[i] = (String) value;
+//                        i++;
+//                    }
+
+                    switchSelect.setItems("Select", cbNames);
                     switchSelect.showList();
                 }
             }

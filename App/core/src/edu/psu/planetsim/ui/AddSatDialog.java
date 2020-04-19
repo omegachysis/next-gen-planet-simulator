@@ -116,9 +116,9 @@ public class AddSatDialog {
                     double mass = Double.parseDouble(massField.getText());
                     double radius = Double.parseDouble(radiusField.getText());
 
-                    double xpos = Double.parseDouble(positionXField.getText());
-                    double ypos = Double.parseDouble(positionYField.getText());
-                    double zpos = Double.parseDouble(positionZField.getText());
+                    double xpos = Metrics.m(Double.parseDouble(positionXField.getText()));
+                    double ypos = Metrics.m(Double.parseDouble(positionYField.getText()));
+                    double zpos = Metrics.m(Double.parseDouble(positionZField.getText()));
                     Vector3 position = new Vector3((float)xpos, (float)ypos, (float)zpos);
 
                     double xvel = Double.parseDouble(velocityXField.getText());
