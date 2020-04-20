@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -180,6 +181,11 @@ public class PlanetRenderTest implements ApplicationListener {
                 new Material(ColorAttribute.createDiffuse(Color.BLUE)),
                 Usage.Position | Usage.Normal | Usage.TextureCoordinates | Usage.ColorUnpacked);
         
+        // planet atmosphere
+        model2 = modelBuilder.createSphere(highestElev, highestElev, highestElev, longitudes - 1, latitudes - 1,
+                new Material(ColorAttribute.createDiffuse(0.5f, 0.8f, 0.9f, 0.1f)),
+                Usage.Position | Usage.Normal | Usage.TextureCoordinates | Usage.ColorUnpacked);
+
         // We won't need to use this seam-matching stuff for now since 
         // the fact that we access the 3D noise in spherical coordinates 
         // takes care of that for us, but we will probably need this again soon.
@@ -260,8 +266,11 @@ public class PlanetRenderTest implements ApplicationListener {
         mesh1.setVertices(verticesHolder);
         instance1 = new ModelInstance(model1, 0f, 0f, 0f);
         instance = new ModelInstance(model, 0f, 0f, 0f);
+        instance2 = new ModelInstance(model2, 0f, 0f, 0f);
         // var tempMaterial = instance1.materials.get(0);
         // tempMaterial.set(textureAttribute1);
+        
+        instance2.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));;
         
     }
     
@@ -269,7 +278,8 @@ public class PlanetRenderTest implements ApplicationListener {
     public void render () {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         
 
 
@@ -279,7 +289,10 @@ public class PlanetRenderTest implements ApplicationListener {
         modelBatch.begin(cam);
         modelBatch.render(instance1, environment);
         modelBatch.render(instance, environment);
+        modelBatch.render(instance2, environment);
         modelBatch.end();
+        
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     @Override
