@@ -39,6 +39,7 @@ public class PlanetRenderTest implements ApplicationListener {
     public ModelBatch modelBatch;
     public Environment environment;
     public Mesh mesh1;
+    public Mesh mesh2;
     public Texture texture1;
 
     @Override
@@ -185,6 +186,22 @@ public class PlanetRenderTest implements ApplicationListener {
         model2 = modelBuilder.createSphere(highestElev, highestElev, highestElev, longitudes - 1, latitudes - 1,
                 new Material(ColorAttribute.createDiffuse(0.5f, 0.8f, 0.9f, 0.1f)),
                 Usage.Position | Usage.Normal | Usage.TextureCoordinates | Usage.ColorUnpacked);
+        
+        mesh2 = model2.meshes.first();
+
+        float[] atmoHolder = new float[mesh2.getNumVertices() * 12];
+        mesh2.getVertices(atmoHolder);
+        
+        for (int i = 0; i < mesh2.getNumVertices(); i++)
+        {
+        	float colorSeed = (float)rand.nextDouble();
+        	atmoHolder[i * 12 + 3] += (0.5f * colorSeed);
+            atmoHolder[i * 12 + 4] += (0.2f * colorSeed);
+            atmoHolder[i * 12 + 5] += (0.1f * colorSeed);
+            atmoHolder[i * 12 + 6] += (0.9f * colorSeed);
+        }
+        
+        mesh2.setVertices(atmoHolder);
 
         // We won't need to use this seam-matching stuff for now since 
         // the fact that we access the 3D noise in spherical coordinates 
@@ -270,8 +287,7 @@ public class PlanetRenderTest implements ApplicationListener {
         // var tempMaterial = instance1.materials.get(0);
         // tempMaterial.set(textureAttribute1);
         
-        instance2.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));;
-        
+        instance2.materials.get(0).set(new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA));
     }
     
     @Override
