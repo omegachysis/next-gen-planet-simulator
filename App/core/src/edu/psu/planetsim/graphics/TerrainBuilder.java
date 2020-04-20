@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 
@@ -21,8 +22,14 @@ public class TerrainBuilder
         // dimension from that.
         var dim = (int)Math.sqrt(elevationMap.length);
 
+        var material = new Material(
+            ColorAttribute.createDiffuse(new Color(0.05f, 0.4f, 0.1f, 1f)),
+            ColorAttribute.createSpecular(new Color(0.4f, 0.4f, 0.4f, 1f)),
+            FloatAttribute.createShininess(1f)
+        );
+
         var res = new ModelBuilder().createSphere(1f, 1f, 1f, 
-            dim - 1, dim - 1, new Material(ColorAttribute.createDiffuse(Color.WHITE)),
+            dim - 1, dim - 1, material,
             Usage.Position | Usage.Normal);
 
         var mesh = res.meshes.first();
@@ -93,10 +100,16 @@ public class TerrainBuilder
         float seaLevel, Color oceanColor, Model terrainModel)
     {
         var dim = (int)Math.sqrt(elevationMap.length);
+
+        var material = new Material(
+            ColorAttribute.createDiffuse(new Color(0.15f, 0.25f, 0.8f, 1f)),
+            ColorAttribute.createSpecular(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            FloatAttribute.createShininess(24f)
+        );
+
         return new ModelBuilder().createSphere(
             seaLevel, seaLevel, seaLevel, dim - 1, dim - 1,
-            new Material(ColorAttribute.createDiffuse(oceanColor)),
-            Usage.Position | Usage.Normal);
+            material, Usage.Position | Usage.Normal);
     }
 
     public static float[] MakeRandomElevationMap(int dim, double radius)
