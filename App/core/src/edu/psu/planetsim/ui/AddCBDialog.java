@@ -244,7 +244,7 @@ public class AddCBDialog {
         newCB.position = new Vector3();
         newCB.velocity = new Vector3();
         newCB.spin = spin;
-        newCB.orientation = new Quaternion().setFromCross(Vector3.X, newCB.spin);
+        newCB.orientation = new Quaternion().setFromCross(Vector3.Z, newCB.spin);
         newCB.positionRelativeToSun = position;
         newCB.velocityRelativeToSun = velocity;
         newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.m(radius));
