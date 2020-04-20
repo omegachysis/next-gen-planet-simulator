@@ -29,12 +29,12 @@ public class PlanetRenderTest implements ApplicationListener {
 
     public PerspectiveCamera cam;
     public CameraInputController camController;
-    // public Model model;
+    public Model model;
     public Model model1;
-    // public Model model2;
-    // public ModelInstance instance;
+    public Model model2;
+    public ModelInstance instance;
     public ModelInstance instance1;
-    // public ModelInstance instance2;
+    public ModelInstance instance2;
     public ModelBatch modelBatch;
     public Environment environment;
     public Mesh mesh1;
@@ -62,7 +62,8 @@ public class PlanetRenderTest implements ApplicationListener {
 
         int latitudes = 180;
         int longitudes = 180;
-
+        
+        // planet terrain
         model1 = modelBuilder.createSphere(5f, 5f, 5f, longitudes - 1, latitudes - 1,
                 new Material(ColorAttribute.createDiffuse(Color.WHITE)),
                 Usage.Position | Usage.Normal | Usage.TextureCoordinates | Usage.ColorUnpacked);
@@ -116,7 +117,7 @@ public class PlanetRenderTest implements ApplicationListener {
             var noise = lumps + mountains * 0.2f;
             
             var elev = noise + 2f;
-            elevationMap[i] = elev;
+            elevationMap[i] = 5f * elev;
             verticesHolder[i * 12 + 0] *= elev;
             verticesHolder[i * 12 + 1] *= elev;
             verticesHolder[i * 12 + 2] *= elev;
@@ -133,7 +134,6 @@ public class PlanetRenderTest implements ApplicationListener {
         // These values are needed for the topography map to provide reasonable color
         // variety, as topography maps are dependent on the difference between maximum elevation
         // and maximum depth, though sometimes sea level is used. 
-        // For our purposes, I am assuming the planet has no water and thus no sea level.
         float highestElev = 0f;
         float lowestElev = 999f;
         for (int i = 0; i < elevationMap.length; i++)
@@ -174,7 +174,12 @@ public class PlanetRenderTest implements ApplicationListener {
                 verticesHolder[i * 12 + 5] = 0.25f + colorModifier;
             }
         }
-
+        
+        // planet sea
+        model = modelBuilder.createSphere(medianElev, medianElev, medianElev, longitudes - 1, latitudes - 1,
+                new Material(ColorAttribute.createDiffuse(Color.BLUE)),
+                Usage.Position | Usage.Normal | Usage.TextureCoordinates | Usage.ColorUnpacked);
+        
         // We won't need to use this seam-matching stuff for now since 
         // the fact that we access the 3D noise in spherical coordinates 
         // takes care of that for us, but we will probably need this again soon.
@@ -254,8 +259,10 @@ public class PlanetRenderTest implements ApplicationListener {
         */
         mesh1.setVertices(verticesHolder);
         instance1 = new ModelInstance(model1, 0f, 0f, 0f);
+        instance = new ModelInstance(model, 0f, 0f, 0f);
         // var tempMaterial = instance1.materials.get(0);
         // tempMaterial.set(textureAttribute1);
+        
     }
     
     @Override
@@ -263,10 +270,15 @@ public class PlanetRenderTest implements ApplicationListener {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         
+        
+
+
+        
         camController.update();
 
         modelBatch.begin(cam);
         modelBatch.render(instance1, environment);
+        modelBatch.render(instance, environment);
         modelBatch.end();
     }
 
