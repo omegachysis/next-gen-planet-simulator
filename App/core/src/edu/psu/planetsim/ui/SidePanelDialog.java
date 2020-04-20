@@ -1,5 +1,6 @@
 package edu.psu.planetsim.ui;
 
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -16,31 +17,6 @@ public class SidePanelDialog {
         sideDialog.setHeight(400);
         sideDialog.button("Done", true);
         sideDialog.button("Close", true);
-
-        var modifyButton = new TextButton("Modify", skin);
-        modifyButton.setPosition(200, 150);
-        modifyButton.addListener(e -> {
-            if (modifyButton.isPressed()) {
-                Dialog modified = new Dialog("", skin);
-                modified.setMovable(true);
-                modified.text("Physical Properties Modified");
-                modified.setPosition(600, 600);
-                modified.setWidth(250);
-                modified.setHeight(60);
-
-                stage.addActor(modified);
-
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        modified.hide();
-                    }
-                }, 1);
-            }
-            return true;
-        });
-
-        sideDialog.addActor(modifyButton);
 
         Label nameLabel1 = new Label("Modify Physical Properties:", skin);
         nameLabel1.setPosition(5, 350);
@@ -212,6 +188,73 @@ public class SidePanelDialog {
                 }
                 return true;
         });
+
+        var modifyButton = new TextButton("Modify", skin);
+        modifyButton.setPosition(200, 150);
+        modifyButton.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Dialog wrong = new Dialog("Incorrect entry", skin);
+                wrong.text("One or more of your values is invalid. \n Please try again.");
+                wrong.setPosition(500, 500);
+                wrong.setWidth(400);
+                wrong.setHeight(100);
+
+                try {
+
+                    double mass = Double.parseDouble(Tpp1.getText());
+                    double radius = Double.parseDouble(Tpp5.getText());
+
+                    double xPos = Double.parseDouble(posXField.getText());
+                    double yPos = Double.parseDouble(posYField.getText());
+                    double zPos = Double.parseDouble(posZField.getText());
+                    Vector3 position = new Vector3((float) xPos, (float) yPos, (float) zPos);
+
+                    double xVel = Double.parseDouble(velXField.getText());
+                    double yVel = Double.parseDouble(velYField.getText());
+                    double zVel = Double.parseDouble(velZField.getText());
+                    Vector3 velocity = new Vector3((float) xVel, (float) yVel, (float) zVel);
+                    //double velocity = Double.parseDouble(velocityXField.getText());
+
+                    double xSpin = Double.parseDouble(spinXField.getText());
+                    double ySpin = Double.parseDouble(spinYField.getText());
+                    double zSpin = Double.parseDouble(spinZField.getText());
+                    Vector3 spin = new Vector3((float) xSpin, (float) ySpin, (float) zSpin);
+                    //double spin = Double.parseDouble(spinXField.getText());
+
+                    //addCB(_appState, mass, radius, position, velocity, spin);
+                } catch (NumberFormatException n) {
+                    stage.addActor(wrong);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            wrong.hide();
+                        }
+                    }, 1);
+
+                    return;
+                }
+
+                Dialog success = new Dialog("Correct entry", skin);
+                success.setPosition(500, 500);
+                success.setWidth(400);
+                success.setHeight(100);
+                success.text("Selected physical properties has been modified!");
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        success.hide();
+                    }
+                }, 2);
+
+                stage.addActor(success);
+                sideDialog.hide();
+
+            }
+    });
+
+        sideDialog.addActor(modifyButton);
 
         Table table = new Table(skin);
         table.add(nameLabel1);
