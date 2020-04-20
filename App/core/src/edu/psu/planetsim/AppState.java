@@ -2,6 +2,7 @@ package edu.psu.planetsim;
 
 import java.util.*;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 
@@ -49,6 +50,8 @@ public class AppState
         public ArrayList<UUID> satellites = new ArrayList<>();
         public Vector3 positionRelativeToSun;
         public Vector3 velocityRelativeToSun;
+        public float seaLevel;
+        public Color oceanColor;
     }
 
     public CelestialBody getCurrentCelestialBody()

@@ -1,5 +1,6 @@
 package edu.psu.planetsim.ui;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
@@ -243,15 +244,12 @@ public class AddCBDialog {
         newCB.position = new Vector3();
         newCB.velocity = new Vector3();
         newCB.spin = spin;
-//        newCB.spin = new Vector3();
         newCB.orientation = new Quaternion().setFromCross(Vector3.Y, newCB.spin);
         newCB.positionRelativeToSun = position;
         newCB.velocityRelativeToSun = velocity;
-//        newCB.positionRelativeToSun = new Vector3(Metrics.m(position), 0, 0); // 1 AU
-//        newCB.velocityRelativeToSun = new Vector3();
-//        var radius = Metrics.m(1e6);
-//        newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, radius);
         newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.m(radius));
+        newCB.seaLevel = Metrics.m(radius);
+        newCB.oceanColor = Color.BLUE;
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
         _appState.needsRefresh = true;

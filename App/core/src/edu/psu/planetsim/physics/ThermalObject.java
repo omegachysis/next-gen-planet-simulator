@@ -150,8 +150,8 @@ public class ThermalObject
         }
 
         // TODO: remove this
-        PixmapIO.writePNG(new FileHandle("diffusivity.png"), diffusivity);
-        PixmapIO.writePNG(new FileHandle("radiation.png"), radiation);
+        //PixmapIO.writePNG(new FileHandle("diffusivity.png"), diffusivity);
+        //PixmapIO.writePNG(new FileHandle("radiation.png"), radiation);
 
         // Copy the data into the diffusivity texture resource.
         _diffusivity = new Texture(diffusivity);

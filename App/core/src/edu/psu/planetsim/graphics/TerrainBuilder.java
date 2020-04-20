@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector3;
 
 import edu.psu.planetsim.FastNoise;
 import edu.psu.planetsim.FastNoise.FractalType;
@@ -73,8 +74,29 @@ public class TerrainBuilder
         // then the vertex in the float array is as follows; p p p r g b a n n n t t
         // The vertex is now 12 values long
         mesh.setVertices(verticesHolder);
+
+        // Re-center the mesh around its geometric center.
+        var bounds = mesh.calculateBoundingBox();
+        var median = new Vector3();
+        bounds.getCenter(median);
+        for (int i = 0; i < elevationMap.length; i++)
+        {
+            verticesHolder[i * 6 + 0] -= median.x;
+            verticesHolder[i * 6 + 1] -= median.y;
+            verticesHolder[i * 6 + 2] -= median.z;
+        }
         
         return res;
+    }
+
+    public static Model BuildOceanModel(float[] elevationMap, 
+        float seaLevel, Color oceanColor, Model terrainModel)
+    {
+        var dim = (int)Math.sqrt(elevationMap.length);
+        return new ModelBuilder().createSphere(
+            seaLevel, seaLevel, seaLevel, dim - 1, dim - 1,
+            new Material(ColorAttribute.createDiffuse(oceanColor)),
+            Usage.Position | Usage.Normal);
     }
 
     public static float[] MakeRandomElevationMap(int dim, double radius)
@@ -88,7 +110,7 @@ public class TerrainBuilder
         // Fractal brownian motion for nice lumps and things:
         lumpsGen.SetFractalType(FractalType.FBM);
         lumpsGen.SetFractalOctaves(6);
-        lumpsGen.SetFrequency(0.2f);
+        lumpsGen.SetFrequency(0.4f);
 
         var mountainGen = new FastNoise(planetSeed);
         mountainGen.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
@@ -109,9 +131,9 @@ public class TerrainBuilder
                 var y = (float)(Math.sin(theta) * Math.sin(phi));
                 var z = (float)(Math.cos(theta));
 
-                var lumps = (lumpsGen.GetNoise(x, y, z) + 1f) * 0.5f;
-                var mountains = (mountainGen.GetNoise(x, y, z) + 1f) * 0.5f;
-                var noise = lumps + mountains * 0.2f;
+                var lumps = lumpsGen.GetNoise(x, y, z);
+                var mountains = mountainGen.GetNoise(x, y, z);
+                var noise = lumps * 0.1f + mountains * 0.1f;
                 res[lat * dim + lon] = (float)radius + noise * (float)radius;
             }
         }

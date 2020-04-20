@@ -3,15 +3,9 @@ package edu.psu.planetsim.physics;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.bullet.linearmath.*;
@@ -23,7 +17,8 @@ import edu.psu.planetsim.graphics.TerrainBuilder;
 public class CelestialBody extends KinematicObject 
 {
     private final ThermalObject _temperature;
-    private final Model _modelBase;
+    private final ModelInstance _terrainModel;
+    private final ModelInstance _oceanModel;
     private final float _radius;
 
     public CelestialBody(final AppState.CelestialBody dto)
@@ -31,8 +26,24 @@ public class CelestialBody extends KinematicObject
         final var radius = Metrics.m(1.0e6);
 
         // Build the model.
-        _modelBase = TerrainBuilder.BuildTerrainModel(dto.elevationMap);
-        model = new ModelInstance(_modelBase);
+        _terrainModel = new ModelInstance(
+            TerrainBuilder.BuildTerrainModel(dto.elevationMap));
+
+        // Attach the inner model.
+        transform = _terrainModel.transform;
+
+        // Build the ocean layer.
+        if (dto.seaLevel > 0f)
+        {
+            _oceanModel = new ModelInstance(
+                TerrainBuilder.BuildOceanModel(
+                    dto.elevationMap,dto.seaLevel, dto.oceanColor, _terrainModel.model));
+
+            // Parent the ocean to the terrain model:
+            _oceanModel.transform = transform;
+        }
+        else
+        _oceanModel = null;
 
         // Initialize physics.
         _radius = radius;
@@ -46,12 +57,12 @@ public class CelestialBody extends KinematicObject
     public void resetUnderlyingPhysics(final Vector3 position, 
         final Vector3 velocity, final Vector3 spin, final Quaternion orientation) 
     {
-        model.transform.set(position, orientation);
+        transform.set(position, orientation);
 
         final var shape = new btSphereShape(_radius);
         final var inertia = new Vector3();
         shape.calculateLocalInertia(mass, inertia);
-        body = new btRigidBody(mass, new MotionState(model.transform), shape, inertia);
+        body = new btRigidBody(mass, new MotionState(transform), shape, inertia);
         body.applyCentralImpulse(velocity.cpy().scl(mass));
 
         final var moment = 2 * mass * _radius * _radius / 5;
@@ -80,12 +91,16 @@ public class CelestialBody extends KinematicObject
 
     public void render(final ModelBatch batch, final Environment env) 
     {
-        batch.render(model, env);
+        // This renders the terrain:
+        batch.render(_terrainModel, env);
+
+        // Render all other parts:
+        if (_oceanModel != null)
+            batch.render(_oceanModel, env);
     }
 
     public void dispose() 
     {
-        _modelBase.dispose();
         body.dispose();
     }
 

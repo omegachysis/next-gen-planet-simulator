@@ -1,12 +1,12 @@
 package edu.psu.planetsim.physics;
 
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 public class KinematicObject implements IMass 
 {
-    public ModelInstance model;
+    public Matrix4 transform;
     public btRigidBody body;
     public float mass;
 
@@ -18,7 +18,7 @@ public class KinematicObject implements IMass
     public Vector3 getPosition() 
     {
         final var res = new Vector3();
-        model.transform.getTranslation(res);
+        transform.getTranslation(res);
         return res;
     }
 

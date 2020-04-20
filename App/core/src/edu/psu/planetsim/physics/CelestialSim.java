@@ -45,8 +45,8 @@ public class CelestialSim
         _cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         _cam.position.set(new Vector3(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
         _cam.lookAt(Vector3.Zero);
-        _cam.near = Metrics.m(1e3);
-        _cam.far = Metrics.m(10e9);
+        _cam.near = Metrics.m(1e5);
+        _cam.far = Metrics.m(1e9);
 
         _fakeCam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         _fakeCam.position.set(new Vector3(0f, Metrics.m(-6e8), Metrics.m(-4e8)));
