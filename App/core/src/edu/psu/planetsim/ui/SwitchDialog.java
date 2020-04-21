@@ -89,12 +89,10 @@ public class SwitchDialog {
 //
 //                    switchSelect.setItems("Select", newPlanet.name);
 
-                    Collection<CelestialBody> allCBs = _appState.bodies.values();
-                    var arrayCBs = allCBs.toArray();
-
+                    var allCBs = new ArrayList<CelestialBody>(_appState.bodies.values());
                     var cbNames = new ArrayList<String>();
                     for(int i = 0; i < allCBs.size(); i++){
-                        AppState.CelestialBody current = (AppState.CelestialBody) arrayCBs[i];
+                        var current = allCBs.get(i);
                         if (!current.isSatellite){
                             String currentName = current.name;
                             cbNames.add(currentName);
@@ -108,7 +106,11 @@ public class SwitchDialog {
 //                        i++;
 //                    }
 
-                    switchSelect.setItems("Select", cbNames);
+                    // Make sure the select box displays
+                    // this placeholder text.
+                    cbNames.add(0, "Select");
+
+                    switchSelect.setItems(cbNames.toArray());
                     switchSelect.showList();
                 }
             }
