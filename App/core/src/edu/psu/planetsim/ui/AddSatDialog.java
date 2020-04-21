@@ -125,16 +125,11 @@ public class AddSatDialog {
                     double yvel = Double.parseDouble(velocityYField.getText());
                     double zvel = Double.parseDouble(velocityZField.getText());
                     Vector3 velocity = new Vector3((float) xvel, (float) yvel, (float)zvel);
-                    //double velocity = Double.parseDouble(velocityXField.getText());
 
                     double xspin = Double.parseDouble(spinXField.getText());
                     double yspin = Double.parseDouble(spinYField.getText());
                     double zspin = Double.parseDouble(spinZField.getText());
                     Vector3 spin = new Vector3((float) xspin, (float)yspin, (float)zspin);
-
-//                    double position = Double.parseDouble(positionXField.getText());
-//                    double velocity = Double.parseDouble(velocityXField.getText());
-//                    double spin = Double.parseDouble(spinXField.getText());
 
                     addSat(_appState, name, mass, radius, position, velocity, spin);
                 } catch (NumberFormatException n) {

@@ -17,6 +17,7 @@ import edu.psu.planetsim.AppState;
 import edu.psu.planetsim.Metrics;
 import edu.psu.planetsim.graphics.TerrainBuilder;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 
@@ -35,16 +36,28 @@ public class DeleteDialog {
         deleteDialog.addActor(deleteSelect);
 
         deleteSelect.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y){
-                        if (_appState.bodies.isEmpty()){
-                            deleteSelect.showList();
-                        }else {
-                            Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
-                            AppState.CelestialBody newPlanet = entries.getValue();
-                            deleteSelect.setItems("Select", newPlanet.name);
-                            deleteSelect.showList();
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                if (_appState.bodies.isEmpty()){
+                    deleteSelect.showList();
+                }else {
+                    var allCBs = new ArrayList<AppState.CelestialBody>(_appState.bodies.values());
+                    var cbNames = new ArrayList<String>();
+                    for (int i = 0; i < allCBs.size(); i++) {
+                        var current = allCBs.get(i);
+                        if (!current.isSatellite) {
+                            String currentName = current.name;
+                            cbNames.add(currentName);
                         }
+                    }
+
+                    // Make sure the select box displays
+                    // this placeholder text.
+                    cbNames.add(0, "Select");
+
+                    deleteSelect.setItems(cbNames.toArray());
+                    deleteSelect.showList();
+                }
             }
         });
 
@@ -54,7 +67,6 @@ public class DeleteDialog {
             if (deleteButton.isPressed()) {
                 var selected = deleteSelect.getSelected();
                 if (selected == "Select"){
-                    // deleteDialog.hide();
                     Dialog error = new Dialog ("Invalid entry", skin);
                     error.setPosition(530, 390);
                     error.setHeight(100);
@@ -68,7 +80,6 @@ public class DeleteDialog {
                         }
                     }, 1);
                 }else{
-
                     Dialog confirmDialog = new Dialog("Delete Celestial Body", skin);
                     confirmDialog.setResizable(true);
                     confirmDialog.setMovable(false);
@@ -82,7 +93,6 @@ public class DeleteDialog {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             if (yesButton.isPressed()) {
-
                                 confirmDialog.hide();
                                 deleteDialog.hide();
                             }

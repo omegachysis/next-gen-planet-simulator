@@ -74,7 +74,6 @@ public class AppUi {
                         save.setPosition(500, 500);
                         save.setWidth(250);
                         save.text("File Saved!" );
-                        //save.button("Ok",true);
                         stage.addActor(save);
 
                         Timer.schedule(new Timer.Task() {
@@ -97,7 +96,6 @@ public class AppUi {
         editSelect.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 editSelect.showList();
-                System.out.println(_appState.bodies.size());
             }
         });
         editSelect.addListener(new ChangeListener() {
@@ -154,7 +152,6 @@ public class AppUi {
                 }
             }
         });
-
 
         final SelectBox<String> inspectSelect= new SelectBox<>(skin);
         inspectSelect.setItems("Inspection Mode", "Climate", "Thermodynamics", "Magnetism", "Van Allen Belt","Greenhouse Effect","Aerosols","Volcanoes");
@@ -214,48 +211,18 @@ public class AppUi {
             }
         });
 
-
-//        Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
-//        UUID key = entries.getKey();
-//        AppState.CelestialBody newPlanet = entries.getValue();
-
-
         button4 = new TextButton("Add Planet", skin, "default");
         button4.setSize(110, 30);
         button4.setPosition(30, 635);
-        button4.addListener(e -> {
-            if (button4.isPressed()){
-                var currentBody = _appState.bodies.get(_appState.bodies.keySet().toArray()[0]);
-                button4.setText(currentBody.name);
-            }
-            return true;
-        });
 
         button5 = new TextButton("Add Satellite", skin, "default");
         button5.setSize(110, 30);
         button5.setPosition(30, 600);
-        button5.addListener(e -> {
-            if (_appState.bodies.size() == 2){
-                button5.isVisible();
-            }
-            if (button5.isPressed()){
-                var currentBody = _appState.bodies.get(_appState.bodies.keySet().toArray()[1]);
-                button5.setText(currentBody.name);
-            }
-            return true;
-        });
 
         var button6 = new TextButton(null, skin, "default");
         button6.setVisible(false);
         button6.setSize(80, 30);
         button6.setPosition(40, 535);
-        button6.addListener(e ->
-        {
-            if (_appState.bodies.size() == 3){
-                button6.isVisible();
-            }
-           return true;
-        });
 
         TextButton zoomText;
         zoomText = new TextButton("Zoom", textButtonStyle);
@@ -316,27 +283,6 @@ public class AppUi {
         }
         return buttonTable;
     }
-
-
-
-//    private void addPlanet(){
-//         final var planet1 = new AppState.CelestialBody();
-//         planet1.id = UUID.randomUUID();
-//         planet1.name = "Planet 1";
-//         planet1.mass = Metrics.kg(1.0e24);
-//         planet1.position = new Vector3(); // Only set the position for satellites,
-//         // we will interpret position for planets as referring to the
-//         // 'positionRelativeToSun' field down lower. For planets that get added,
-//         // this should always initialize to new Vector3().
-//         planet1.velocity = new Vector3(); // same for velocity, we'll set it relative
-//         // to the sun for planets.
-//         planet1.spin = new Vector3(0, 0, -7.292115e-5f).rotate(Vector3.Y, 23.5f);
-//         planet1.orientation = new Quaternion().setFromCross(Vector3.Y, planet1.spin);
-//         planet1.positionRelativeToSun = new Vector3(Metrics.m(1.496e11), 0, 0); // 1 AU
-//         planet1.velocityRelativeToSun = new Vector3();
-//         _appState.bodies.put(planet1.id, planet1);
-//         _appState.currentCelestialBodyId = planet1.id;
-//    }
 
     public int getSpeedFactor() 
     {

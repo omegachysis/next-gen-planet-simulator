@@ -47,7 +47,6 @@ public class SwitchDialog {
             if (change.isPressed()) {
                 var selected = switchSelect.getSelected();
                 if (selected == "Select"){
-
                     Dialog error = new Dialog ("Invalid entry", skin);
                     error.setPosition(530, 390);
                     error.setHeight(100);
@@ -84,11 +83,6 @@ public class SwitchDialog {
                 if (_appState.bodies.isEmpty()){
                     switchSelect.showList();
                 }else {
-//                    Map.Entry<UUID, AppState.CelestialBody> entries = _appState.bodies.entrySet().iterator().next();
-//                    AppState.CelestialBody newPlanet = entries.getValue();
-//
-//                    switchSelect.setItems("Select", newPlanet.name);
-
                     var allCBs = new ArrayList<CelestialBody>(_appState.bodies.values());
                     var cbNames = new ArrayList<String>();
                     for(int i = 0; i < allCBs.size(); i++){
@@ -98,13 +92,6 @@ public class SwitchDialog {
                             cbNames.add(currentName);
                         }
                     }
-
-//                    String[] allNames = new String[cbNames.size()];
-//                    int i = 0;
-//                    for (Object value : cbNames){
-//                        allNames[i] = (String) value;
-//                        i++;
-//                    }
 
                     // Make sure the select box displays
                     // this placeholder text.

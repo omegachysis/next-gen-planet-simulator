@@ -124,13 +124,11 @@ public class AddCBDialog {
                     double yvel = Double.parseDouble(velocityYField.getText());
                     double zvel = Double.parseDouble(velocityZField.getText());
                     Vector3 velocity = new Vector3((float) xvel, (float) yvel, (float)zvel);
-                    //double velocity = Double.parseDouble(velocityXField.getText());
 
                     double xspin = Double.parseDouble(spinXField.getText());
                     double yspin = Double.parseDouble(spinYField.getText());
                     double zspin = Double.parseDouble(spinZField.getText());
                     Vector3 spin = new Vector3((float) xspin, (float)yspin, (float)zspin);
-                    //double spin = Double.parseDouble(spinXField.getText());
 
                     addCB(_appState, name, mass, radius, position, velocity, spin);
                 } catch (NumberFormatException n) {
@@ -141,7 +139,6 @@ public class AddCBDialog {
                             wrong.hide();
                         }
                     }, 1);
-
                     return;
                 }
 

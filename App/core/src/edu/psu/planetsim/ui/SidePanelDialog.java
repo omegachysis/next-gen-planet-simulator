@@ -202,7 +202,6 @@ public class SidePanelDialog {
                 wrong.setHeight(100);
 
                 try {
-
                     double mass = Double.parseDouble(Tpp1.getText());
                     double radius = Double.parseDouble(Tpp5.getText());
 
@@ -215,15 +214,11 @@ public class SidePanelDialog {
                     double yVel = Double.parseDouble(velYField.getText());
                     double zVel = Double.parseDouble(velZField.getText());
                     Vector3 velocity = new Vector3((float) xVel, (float) yVel, (float) zVel);
-                    //double velocity = Double.parseDouble(velocityXField.getText());
 
                     double xSpin = Double.parseDouble(spinXField.getText());
                     double ySpin = Double.parseDouble(spinYField.getText());
                     double zSpin = Double.parseDouble(spinZField.getText());
                     Vector3 spin = new Vector3((float) xSpin, (float) ySpin, (float) zSpin);
-                    //double spin = Double.parseDouble(spinXField.getText());
-
-                    //addCB(_appState, mass, radius, position, velocity, spin);
                 } catch (NumberFormatException n) {
                     stage.addActor(wrong);
                     Timer.schedule(new Timer.Task() {
