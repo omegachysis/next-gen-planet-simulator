@@ -245,8 +245,8 @@ public class AddCBDialog {
         newCB.velocity = new Vector3();
         newCB.spin = spin;
         newCB.orientation = new Quaternion().setFromCross(Vector3.Z, newCB.spin);
-        newCB.positionRelativeToSun = position;
-        newCB.velocityRelativeToSun = velocity;
+        newCB.positionRelativeToSun = Metrics.m(position);
+        newCB.velocityRelativeToSun = Metrics.m(velocity);
         newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.m(radius));
         newCB.seaLevel = Metrics.m(radius);
         newCB.oceanColor = Color.BLUE;

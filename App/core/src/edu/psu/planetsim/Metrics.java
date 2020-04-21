@@ -1,5 +1,7 @@
 package edu.psu.planetsim;
 
+import com.badlogic.gdx.math.Vector3;
+
 public final class Metrics 
 {
     private static final float EARTH_MASS = 5.97e24f;
@@ -20,6 +22,14 @@ public final class Metrics
     {
         // Convert all lengths to AU.
         return (float)(m / M_PER_SOLAR_RADIUS);
+    }
+
+    /** Return naturalized length from meters. */
+    public static Vector3 m(final Vector3 m) 
+    {
+        return new Vector3(
+            Metrics.m(m.x), Metrics.m(m.y), Metrics.m(m.z)
+        );
     }
 
     /** Return meters from naturalized length. */

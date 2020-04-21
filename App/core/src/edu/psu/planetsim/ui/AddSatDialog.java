@@ -116,9 +116,9 @@ public class AddSatDialog {
                     double mass = Double.parseDouble(massField.getText());
                     double radius = Double.parseDouble(radiusField.getText());
 
-                    double xpos = Metrics.m(Double.parseDouble(positionXField.getText()));
-                    double ypos = Metrics.m(Double.parseDouble(positionYField.getText()));
-                    double zpos = Metrics.m(Double.parseDouble(positionZField.getText()));
+                    double xpos = Double.parseDouble(positionXField.getText());
+                    double ypos = Double.parseDouble(positionYField.getText());
+                    double zpos = Double.parseDouble(positionZField.getText());
                     Vector3 position = new Vector3((float)xpos, (float)ypos, (float)zpos);
 
                     double xvel = Double.parseDouble(velocityXField.getText());
@@ -245,16 +245,12 @@ public class AddSatDialog {
         newSat.name = name;
         newSat.isSatellite = true;
         newSat.mass = Metrics.kg(mass);
-//        newSat.position = new Vector3(Metrics.m(position), 0, 0);
-//        newSat.velocity = new Vector3();
-//        newSat.spin = new Vector3();
-        newSat.position = position;
-        newSat.velocity = velocity;
+        newSat.position = Metrics.m(position);
+        newSat.velocity = Metrics.m(velocity);
         newSat.spin = spin;
-        newSat.orientation = new Quaternion().setFromCross(Vector3.Y, newSat.spin);
-        newSat.positionRelativeToSun = new Vector3(); // 1 AU
+        newSat.orientation = new Quaternion().setFromCross(Vector3.Z, newSat.spin);
+        newSat.positionRelativeToSun = new Vector3();
         newSat.velocityRelativeToSun = new Vector3();
-//        var radius = Metrics.m(1e6);
         newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.m(radius));
         _appState.bodies.put(newSat.id, newSat);
         _appState.getCurrentCelestialBody().satellites.add(newSat.id);

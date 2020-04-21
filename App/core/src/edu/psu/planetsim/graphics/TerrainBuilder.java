@@ -28,7 +28,7 @@ public class TerrainBuilder
             FloatAttribute.createShininess(1f)
         );
 
-        var res = new ModelBuilder().createSphere(1f, 1f, 1f, 
+        var res = new ModelBuilder().createSphere(2f, 2f, 2f, 
             dim - 1, dim - 1, material,
             Usage.Position | Usage.Normal);
 
@@ -108,7 +108,7 @@ public class TerrainBuilder
         );
 
         return new ModelBuilder().createSphere(
-            seaLevel, seaLevel, seaLevel, dim - 1, dim - 1,
+            seaLevel * 2, seaLevel * 2, seaLevel * 2, dim - 1, dim - 1,
             material, Usage.Position | Usage.Normal);
     }
 
