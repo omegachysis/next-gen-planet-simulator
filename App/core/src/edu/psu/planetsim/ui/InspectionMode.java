@@ -117,6 +117,23 @@ public class InspectionMode {
                         stage.addActor(volcanoesDialog);
                         inspectSelect.setSelectedIndex(0);
                         break;
+
+                        case "Barycenter":
+                        Dialog BarycenterDialog = new Dialog("Barycenter", skin);
+                        BarycenterDialog.setMovable(true);
+                        BarycenterDialog.setResizable(false);
+                        BarycenterDialog.setPosition(400, 500);
+                        BarycenterDialog.setWidth(550);
+                        BarycenterDialog.setHeight(170);
+                        BarycenterDialog.text("The Barycenter is the center of mass of two or more bodies that orbit \n" +
+                                              "one another and is the point about which the bodies orbit. If one of \n" +
+                                              "the two orbiting bodies is much more massive than the other and the \n" +
+                                              "bodies are relatively close to one another, the barycenter will typically\n " +
+                                              "be located within the more massive object.");
+                        BarycenterDialog.button("Close", true);
+                        stage.addActor(BarycenterDialog);
+                        inspectSelect.setSelectedIndex(0);
+                        break;
                 }
             }
         });

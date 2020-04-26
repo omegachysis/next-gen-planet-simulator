@@ -159,7 +159,7 @@ public class AppUi {
         });
 
         final SelectBox<String> inspectSelect= new SelectBox<>(skin);
-        inspectSelect.setItems("Inspection Mode", "Climate", "Thermodynamics", "Magnetism", "Van Allen Belt","Greenhouse Effect","Aerosols","Volcanoes");
+        inspectSelect.setItems("Inspection Mode", "Climate", "Thermodynamics", "Magnetism", "Van Allen Belt","Greenhouse Effect","Aerosols","Volcanoes","Barycenter");
         inspectSelect.setPosition(260, 680);
         inspectSelect.setWidth(150);
         inspectSelect.addListener(new ClickListener() {
@@ -274,7 +274,6 @@ public class AppUi {
             // Add a button for the barycenter.
             _sideBar.top().row().expandX().fillX();
             var barycenter = new TextButton("Barycenter", skin, "default");
-            barycenter.addListener(new TextTooltip("What is Barycenter? \n" + "The center of mass of two or more bodies that orbit one another and it is the point about which the bodies orbit.", skin));
             barycenter.addListener(new ChangeListener() {
                 public void changed(ChangeEvent event, Actor actor) {
                     // Dialog centerDialog = new Dialog("What is Barycenter?", skin);
