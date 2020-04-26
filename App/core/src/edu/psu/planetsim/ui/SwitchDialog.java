@@ -42,13 +42,13 @@ public class SwitchDialog {
         switchDialog.addActor(switchSelect);
 
         var change = new TextButton("Change", skin);
-        change.setPosition(135, 3);
+        change.setPosition(80, 3);
         change.addListener(e -> {
             if (change.isPressed()) {
                 var selected = switchSelect.getSelected();
                 if (selected == "Select"){
                     Dialog error = new Dialog ("Invalid entry", skin);
-                    error.setPosition(530, 390);
+                    error.setPosition(550, 350);
                     error.setHeight(100);
                     error.setWidth(200);
                     error.text("Invalid Selection \n Please try again.");
@@ -67,8 +67,8 @@ public class SwitchDialog {
         });
         switchDialog.addActor(change);
 
-        var close = new TextButton("Close", skin);
-        close.setPosition(80, 3);
+        var close = new TextButton("Cancel", skin);
+        close.setPosition(160, 3);
         close.addListener(e -> {
             if (close.isPressed()){
                 switchDialog.hide();
