@@ -35,6 +35,8 @@ public class CelestialSim
     private final ArrayList<CelestialBody> _bodies = new ArrayList<>();
     private final AppState _appState;
     private boolean _needsRefresh = false;
+
+    public final ArrayList<Runnable> onUpdate = new ArrayList<>();
     
     public CelestialSim(final AppState appState, final InputMultiplexer multiplexer) 
     {
@@ -169,11 +171,15 @@ public class CelestialSim
             _cam.up.set(_fakeCam.up);
             _cam.update();
         }
+
+        for (var action : onUpdate)
+            action.run();
     }
 
     public Vector2 getPositionOnScreen(final Vector3 v)
     {
-        var vprime = _cam.project(v.cpy());
+        var vprime = _cam.project(v.cpy(), 0, 0, 
+            _cam.viewportWidth, _cam.viewportHeight);
         return new Vector2(vprime.x, vprime.y);
     }
 
