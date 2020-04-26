@@ -20,6 +20,7 @@ public class CelestialBody extends KinematicObject
     private final ModelInstance _terrainModel;
     private final ModelInstance _oceanModel;
     private final float _radius;
+    private final Vector3 _linkedPosition;
 
     public CelestialBody(final AppState.CelestialBody dto)
     {
@@ -48,6 +49,7 @@ public class CelestialBody extends KinematicObject
         // Initialize physics.
         _radius = radius;
         mass = (float)dto.mass;
+        _linkedPosition = dto.position;
         resetUnderlyingPhysics(dto.position, dto.velocity, dto.spin, dto.orientation);
 
         // Initialize the thermal object.
@@ -97,6 +99,11 @@ public class CelestialBody extends KinematicObject
         // Render all other parts:
         if (_oceanModel != null)
             batch.render(_oceanModel, env);
+    }
+
+    public void updateAppStateData()
+    {
+        transform.getTranslation(_linkedPosition);
     }
 
     public void dispose() 

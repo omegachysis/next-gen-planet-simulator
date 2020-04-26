@@ -141,6 +141,9 @@ public class CelestialSim
         {
             _gravitySim.applyGravityForces();
             _world.stepSimulation(Gdx.graphics.getDeltaTime() * _appState.speed);
+
+            for (final var body : _bodies)
+                body.updateAppStateData();
         }
 
         if (_bodies.size() > 0)

@@ -37,15 +37,16 @@ public class StatusBarController
             // Display kinematics information.
             if (_appState.viewingMode != ViewingMode.NaturalSatellite) {
                 text += "Solar Dist: ";
-                var dist = currBody.positionRelativeToSun.len();
-                text += new DecimalFormat("0.000E00").format(dist);
-                text += " m";
+                var dist = Metrics.length(currBody.positionRelativeToSun.len());
+                text += new DecimalFormat("0.00E00").format(dist / 1000).toLowerCase();
+                text += " km";
             }
             else {
+                var satellite = _appState.getCelestialBodyFocused();
                 text += "Orbit Dist: ";
-                var dist = Metrics.length(currBody.position.len());
-                text += new DecimalFormat("0.000E00").format(dist);
-                text += " m";
+                var dist = Metrics.length(satellite.position.len());
+                text += new DecimalFormat("0.00E00").format(dist / 1000).toLowerCase();
+                text += " km";
             }
         }
         else
