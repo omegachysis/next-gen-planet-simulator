@@ -171,6 +171,12 @@ public class CelestialSim
         }
     }
 
+    public Vector2 getPositionOnScreen(final Vector3 v)
+    {
+        var vprime = _cam.project(v.cpy());
+        return new Vector2(vprime.x, vprime.y);
+    }
+
     public void dispose() 
     {
         _modelBatch.dispose();

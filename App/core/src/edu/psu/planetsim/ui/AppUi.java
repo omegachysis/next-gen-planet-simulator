@@ -107,11 +107,13 @@ public class AppUi {
                 String currentSelection = editSelect.getSelected();
                 switch (currentSelection) {
                     case "Add Celestial Body":
-                        new AddCBDialog(_appState, stage, skin, editSelect, sim);
+                        new AddCBDialog(_appState, stage, skin, sim);
+                        editSelect.setSelectedIndex(0);
                         break;
 
                     case "Add Satellite":
-                        new AddSatDialog(_appState, stage, skin, editSelect);
+                        new AddSatDialog(_appState, stage, skin, sim);
+                        editSelect.setSelectedIndex(0);
                         break;
 
                     case "Delete Celestial Body":

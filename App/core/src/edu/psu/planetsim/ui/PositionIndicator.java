@@ -17,6 +17,10 @@ public class PositionIndicator
         _image = new Image(
             new Texture(Gdx.files.internal("indicator.png"))
         );
+
+        var screenPos = sim.getPositionOnScreen(position);
+        _image.setPosition(screenPos.x, screenPos.y);
+
         stage.addActor(_image);
     }
 
