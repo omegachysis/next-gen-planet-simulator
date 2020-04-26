@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import edu.psu.planetsim.inspection.StatusBarController;
 import edu.psu.planetsim.physics.CelestialSim;
 import edu.psu.planetsim.ui.AppUi;
 
@@ -19,6 +20,8 @@ public class MainApp extends ApplicationAdapter
 	private AppState _appState;
 	private Stage _stage;
 	private CelestialSim _sim;
+	private AppUi _ui;
+	private StatusBarController _statusBar;
 
 	public void create() 
 	{
@@ -30,7 +33,7 @@ public class MainApp extends ApplicationAdapter
 		final var multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(_stage);
 		Gdx.input.setInputProcessor(multiplexer);
-		new AppUi(_stage, _appState);
+		_ui = new AppUi(_stage, _appState);
 
 		// final var planet1 = new AppState.CelestialBody();
         // planet1.id = UUID.randomUUID();
@@ -72,6 +75,7 @@ public class MainApp extends ApplicationAdapter
         // add(luna);
 
 		_sim = new CelestialSim(_appState, multiplexer);
+		_statusBar = new StatusBarController(_appState, _ui);
 	}
 
 	public void resize(final int width, final int height)
@@ -85,6 +89,7 @@ public class MainApp extends ApplicationAdapter
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		
 		_sim.render();
+		_statusBar.update();
 
         _stage.act(Gdx.graphics.getDeltaTime());
         _stage.draw();

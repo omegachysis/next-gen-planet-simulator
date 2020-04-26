@@ -32,7 +32,7 @@ public class AppUi {
     private TextButton button4;
     private TextButton button5;
     private TextButton button7;
-    private TextButton inputButton;
+    private TextButton statusBarText;
     private TextButton.TextButtonStyle textButtonStyle;
     private Slider zoomSlider;
     private TextButton center_button;
@@ -184,16 +184,9 @@ public class AppUi {
         button2.setSize(150, 80);
         button2.setPosition(940, 655);
 
-        inputButton = new TextButton("Input text will be displayed here...", textButtonStyle);
-        inputButton.setSize(150, 60);
-        inputButton.setPosition(50, 0);
-        inputButton.setText(appState.inputtext);
-        inputButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                _appState.inputtext = inputButton.toString();
-            }
-         });
-
+        statusBarText = new TextButton("", textButtonStyle);
+        statusBarText.setSize(150, 60);
+        statusBarText.setPosition(50, 0);
 
         speedbutton = new TextField("",skin);
         speedbutton.setSize(110,35);
@@ -241,7 +234,7 @@ public class AppUi {
         stage.addActor(button1);
         stage.addActor(button2);
         stage.addActor(speedbutton);
-        stage.addActor(inputButton);
+        stage.addActor(statusBarText);
         stage.addActor(zoomText);
         stage.addActor(zoomSlider);
         stage.addActor(fileSelect);
@@ -268,6 +261,11 @@ public class AppUi {
             }
         });
         stage.addActor(center_button);
+    }
+
+    public void setStatusBarText(String text) 
+    {
+        statusBarText.setText(text);
     }
 
     private Table cbTable(){
@@ -299,12 +297,6 @@ public class AppUi {
     public float getZoom() 
     {
         return zoomSlider.getValue();
-    }
-
-    public String getText()
-    {
-        return inputButton.toString();
-
     }
 }
 

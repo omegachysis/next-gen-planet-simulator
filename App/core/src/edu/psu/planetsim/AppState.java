@@ -25,7 +25,6 @@ public class AppState
     public int satelliteFocusedIndex = 0;
 
     public float zoom = 0.6f;
-    public String inputtext = "Input text will be displayed here...";
 
     public boolean needsRefresh = false;
 
@@ -54,10 +53,27 @@ public class AppState
         public Color oceanColor;
     }
 
+    /** Returns the current celestial body at the top level. */
     public CelestialBody getCurrentCelestialBody()
     {
         if (currentCelestialBodyId == null)
             return null;
         return bodies.get(currentCelestialBodyId);
+    }
+
+    /** Returns the celestial body or natural satellite that 
+     * is being focused by the camera.
+     */
+    public CelestialBody getCelestialBodyFocused()
+    {
+        var body = getCurrentCelestialBody();
+        if (viewingMode == ViewingMode.CenterOfMass)
+            return null;
+        else if (viewingMode == ViewingMode.MainCelestialBody)
+            return body;
+        else if (viewingMode == ViewingMode.NaturalSatellite)
+            return bodies.get(body.satellites.get(satelliteFocusedIndex));
+        else
+            return null;
     }
 }
