@@ -79,7 +79,24 @@ public class DeleteDialog {
                             error.hide();
                         }
                     }, 1);
-                }else{
+                }else {
+
+                    Dialog delDailog = new Dialog("", skin);
+                    delDailog.setPosition(500, 500);
+                    delDailog.setWidth(300);
+                    delDailog.setHeight(100);
+                    delDailog.text("Your celestial body has been deleted.");
+                    deleteDialog.hide();
+
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            delDailog.hide();
+                        }
+                    }, 2);
+                    stage.addActor(delDailog);
+                }
+                    /*
                     Dialog confirmDialog = new Dialog("Delete Celestial Body", skin);
                     confirmDialog.setResizable(true);
                     confirmDialog.setMovable(false);
@@ -119,10 +136,13 @@ public class DeleteDialog {
                     confirmDialog.addActor(noButton);
                     confirmDialog.addActor(table4);
                     stage.addActor(confirmDialog);
-                }
+
+                     */
             }
             return true;
         });
+
+
         deleteDialog.addActor(deleteButton);
 
         var closeButton = new TextButton("Cancel", skin);
