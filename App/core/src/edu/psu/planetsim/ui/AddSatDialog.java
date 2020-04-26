@@ -240,13 +240,13 @@ public class AddSatDialog {
         newSat.name = name;
         newSat.isSatellite = true;
         newSat.mass = Metrics.kg(mass);
-        newSat.position = Metrics.m(position);
-        newSat.velocity = Metrics.m(velocity);
+        newSat.position = Metrics.km(position);
+        newSat.velocity = Metrics.km(velocity);
         newSat.spin = spin;
         newSat.orientation = new Quaternion().setFromCross(Vector3.Z, newSat.spin);
         newSat.positionRelativeToSun = new Vector3();
         newSat.velocityRelativeToSun = new Vector3();
-        newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.m(radius));
+        newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.km(radius));
         _appState.bodies.put(newSat.id, newSat);
         _appState.getCurrentCelestialBody().satellites.add(newSat.id);
         _appState.invokeChangeListeners(true);

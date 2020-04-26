@@ -32,6 +32,18 @@ public final class Metrics
         );
     }
 
+    /** Return naturalized length from meters. */
+    public static float km(final double km) 
+    {
+        return m(km * 1000);
+    }
+
+    /** Return naturalized length from meters. */
+    public static Vector3 km(final Vector3 km) 
+    {
+        return m(km.cpy().scl(1000));
+    }
+
     /** Return meters from naturalized length. */
     public static double length(final float x) 
     {

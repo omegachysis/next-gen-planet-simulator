@@ -40,12 +40,12 @@ public class AddCBDialog {
         TextField massField = new TextField("",skin);
         massField.setPosition(160,295);
 
-        Label radiusLabel = new Label("Radius (m): ", skin);
+        Label radiusLabel = new Label("Radius (km): ", skin);
         radiusLabel.setPosition(5, 250);
         var radiusField = new TextField("", skin);
         radiusField.setPosition(160, 250);
 
-        Label addLabel3 = new Label("Position (m):", skin);
+        Label addLabel3 = new Label("Position (km):", skin);
         addLabel3.setPosition(5,205);
         Label xPos = new Label("x: ", skin);
         xPos.setPosition(160, 205);
@@ -63,7 +63,7 @@ public class AddCBDialog {
         positionZField.setPosition(425, 205);
         positionZField.setSize(75, 30);
 
-        Label addLabel4 = new Label("Velocity (m/s):", skin);
+        Label addLabel4 = new Label("Velocity (km/s):", skin);
         addLabel4.setPosition(5,160);
         Label xVel = new Label("x: ", skin);
         xVel.setPosition(160, 160);
@@ -242,10 +242,10 @@ public class AddCBDialog {
         newCB.velocity = new Vector3();
         newCB.spin = spin;
         newCB.orientation = new Quaternion().setFromCross(Vector3.Z, newCB.spin);
-        newCB.positionRelativeToSun = Metrics.m(position);
-        newCB.velocityRelativeToSun = Metrics.m(velocity);
-        newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.m(radius));
-        newCB.seaLevel = Metrics.m(radius);
+        newCB.positionRelativeToSun = Metrics.km(position);
+        newCB.velocityRelativeToSun = Metrics.km(velocity);
+        newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.km(radius));
+        newCB.seaLevel = Metrics.km(radius);
         newCB.oceanColor = Color.BLUE;
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
