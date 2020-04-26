@@ -32,7 +32,7 @@ public class AppUi {
     private TextButton button4;
     private TextButton button5;
     private TextButton button7;
-    private TextButton statusBarText;
+    private Label statusBarText;
     private TextButton.TextButtonStyle textButtonStyle;
     private Slider zoomSlider;
     private TextButton center_button;
@@ -184,9 +184,9 @@ public class AppUi {
         button2.setSize(150, 80);
         button2.setPosition(940, 655);
 
-        statusBarText = new TextButton("", textButtonStyle);
+        statusBarText = new Label("", skin);
         statusBarText.setSize(150, 60);
-        statusBarText.setPosition(50, 0);
+        statusBarText.setPosition(570, 0);
 
         speedbutton = new TextField("",skin);
         speedbutton.setSize(110,35);
