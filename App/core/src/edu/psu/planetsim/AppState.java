@@ -12,6 +12,11 @@ import com.badlogic.gdx.math.Vector3;
  */
 public class AppState
 {
+    public interface ChangeListener
+    {
+        public void run(boolean cbsChanged);
+    }
+
     public HashMap<UUID, CelestialBody> bodies = new LinkedHashMap<>();
 
     public float speed = 1;
@@ -26,7 +31,8 @@ public class AppState
 
     public float zoom = 0.6f;
 
-    public boolean needsRefresh = false;
+    /** Bind runnables to invoke when the app state changes. */
+    public transient ArrayList<ChangeListener> whenChanged = new ArrayList<>();
 
     public static enum ViewingMode
     {
@@ -75,5 +81,11 @@ public class AppState
             return bodies.get(body.satellites.get(satelliteFocusedIndex));
         else
             return null;
+    }
+
+    public void invokeChangeListeners(boolean cbsChanged)
+    {
+        for (var listener : whenChanged)
+            listener.run(cbsChanged);
     }
 }

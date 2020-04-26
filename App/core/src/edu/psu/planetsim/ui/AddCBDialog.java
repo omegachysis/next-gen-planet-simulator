@@ -249,6 +249,6 @@ public class AddCBDialog {
         newCB.oceanColor = Color.BLUE;
         _appState.bodies.put(newCB.id, newCB);
         _appState.currentCelestialBodyId = newCB.id;
-        _appState.needsRefresh = true;
+        _appState.invokeChangeListeners(true);
     }
 }

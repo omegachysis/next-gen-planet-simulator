@@ -34,6 +34,7 @@ public class CelestialSim
     private final btSequentialImpulseConstraintSolver _solver;
     private final ArrayList<CelestialBody> _bodies = new ArrayList<>();
     private final AppState _appState;
+    private boolean _needsRefresh = false;
     
     public CelestialSim(final AppState appState, final InputMultiplexer multiplexer) 
     {
@@ -71,6 +72,12 @@ public class CelestialSim
         _world.setGravity(Vector3.Zero);
 
         _gravitySim = new GravitySimulation();
+
+        appState.whenChanged.add((cbsChanged) -> 
+        {
+            if (cbsChanged)
+                _needsRefresh = true;
+        });
     }
 
     private void updateCurrentCelestialBody(UUID value)
@@ -117,10 +124,10 @@ public class CelestialSim
 
     public void render() 
     {
-        if (_appState.needsRefresh)
+        if (_needsRefresh)
         {
             updateCurrentCelestialBody(_appState.currentCelestialBodyId);
-            _appState.needsRefresh = false;
+            _needsRefresh = false;
         }
 
         _modelBatch.begin(_cam);

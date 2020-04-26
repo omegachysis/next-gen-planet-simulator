@@ -249,6 +249,6 @@ public class AddSatDialog {
         newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.m(radius));
         _appState.bodies.put(newSat.id, newSat);
         _appState.getCurrentCelestialBody().satellites.add(newSat.id);
-        _appState.needsRefresh = true;
+        _appState.invokeChangeListeners(true);
     }
 }

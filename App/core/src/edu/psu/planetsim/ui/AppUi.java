@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Timer;
 
 import edu.psu.planetsim.AppState;
 import edu.psu.planetsim.Metrics;
+import edu.psu.planetsim.AppState.ViewingMode;
 import edu.psu.planetsim.graphics.TerrainBuilder;
 
 import org.w3c.dom.Text;
@@ -25,6 +26,7 @@ import java.util.UUID;
 public class AppUi {
     private final AppState _appState;
     private final Skin skin;
+    private final Stage _stage;
 
     private TextButton button1;
     private TextButton button2;
@@ -36,10 +38,13 @@ public class AppUi {
     private TextButton.TextButtonStyle textButtonStyle;
     private Slider zoomSlider;
     private TextButton center_button;
+    private Table _sideBar;
+    private ScrollPane _sideBarPane;
     BitmapFont font;
 
-    public AppUi(final Stage stage, AppState appState) {
-
+    public AppUi(final Stage stage, AppState appState) 
+    {
+        _stage = stage;
         _appState = appState;
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -242,25 +247,18 @@ public class AppUi {
         stage.addActor(viewSelect);
         stage.addActor(inspectSelect);
 
-        center_button = new TextButton("Barycenter", skin, "default");
-        center_button.setSize(90, 35);
-        center_button.setPosition(25, 640);
-        center_button.addListener(new TextTooltip("What is Barycenter? \n" + "The center of mass of two or more bodies that orbit one another and it is the point about which the bodies orbit.", skin));
-        center_button.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                //Dialog centerDialog = new Dialog("What is Barycenter?", skin);
-                //centerDialog.setMovable(true);
-                //centerDialog.setResizable(true);
-                //centerDialog.setPosition(450, 500);
-                //centerDialog.setWidth(500);
-                //centerDialog.setHeight(120);
-                //centerDialog.text("The center of mass of two or more bodies that orbit one another \n " +
-                       // "and it is the point about which the bodies orbit.");
-                //centerDialog.button("Close", true);
-                //stage.addActor(centerDialog);
-            }
+        _sideBar = new Table();
+        _rebuildSideBar();
+        _sideBarPane = new ScrollPane(_sideBar, skin, "default");
+        _sideBarPane.setPosition(10, 50);
+        _sideBarPane.setSize(200, 600);
+        stage.addActor(_sideBarPane);
+
+        appState.whenChanged.add((cbsChanged) ->
+        {
+            if (cbsChanged)
+                _rebuildSideBar();
         });
-        stage.addActor(center_button);
     }
 
     public void setStatusBarText(String text) 
@@ -268,18 +266,74 @@ public class AppUi {
         statusBarText.setText(text);
     }
 
-    private Table cbTable(){
-        Table buttonTable = new Table();
-        buttonTable.setPosition(110, 635);
-        buttonTable.setSize(300, 300);
-        for (int i = 0; i < _appState.bodies.size(); i++){
-            AppState.CelestialBody nextCB = _appState.bodies.get(_appState.bodies.keySet().toArray()[i]);
-            AppState.CelestialBody nextSat = _appState.bodies.get(_appState.bodies.keySet().toArray()[i]);
-            var newButton = new TextButton(nextCB.name, skin);
-            newButton.setSize(110, 30);
-            buttonTable.add(newButton);
+    private void _rebuildSideBar() 
+    {
+        _sideBar.clear();
+
+        if (_appState.currentCelestialBodyId != null) {
+            // Add a button for the barycenter.
+            _sideBar.top().row().expandX().fillX();
+            var barycenter = new TextButton("Barycenter", skin, "default");
+            barycenter.addListener(new ChangeListener() {
+                public void changed(ChangeEvent event, Actor actor) {
+                    // Dialog centerDialog = new Dialog("What is Barycenter?", skin);
+                    // centerDialog.setMovable(true);
+                    // centerDialog.setResizable(true);
+                    // centerDialog.setPosition(450, 500);
+                    // centerDialog.setWidth(500);
+                    // centerDialog.setHeight(120);
+                    // centerDialog.text("The center of mass of two or more bodies that orbit one another \n and it is the point about which the bodies orbit.");
+                    // centerDialog.button("Close", true);
+                    // _stage.addActor(centerDialog);
+                    _appState.viewingMode = ViewingMode.CenterOfMass;
+                    _appState.invokeChangeListeners(false);
+                }
+            });
+            _sideBar.add(barycenter);
+
+            // Add a button for the actual CB.
+            var body = _appState.getCurrentCelestialBody();
+            _sideBar.top().row().expandX().fillX();
+            var cbButton = new TextButton(body.name, skin, "default");
+            cbButton.addListener(new ChangeListener() {
+                public void changed(ChangeEvent event, Actor actor) {
+                    _appState.viewingMode = ViewingMode.MainCelestialBody;
+                    _appState.invokeChangeListeners(false);
+                }
+            });
+            _sideBar.add(cbButton);
+
+            // Add buttons for the natural satellites.
+            for (int i = 0; i < body.satellites.size(); i++) {
+                var satellite = _appState.bodies.get(
+                    body.satellites.get(i)
+                );
+
+                _sideBar.top().row().expandX().fillX();
+                var satelliteButton = new TextButton(satellite.name, skin, "default");
+
+                final var _i = i;
+                satelliteButton.addListener(new ChangeListener() {
+                    public void changed(ChangeEvent event, Actor actor) {
+                        _appState.viewingMode = ViewingMode.NaturalSatellite;
+                        _appState.satelliteFocusedIndex = _i;
+                        _appState.invokeChangeListeners(false);
+                    }
+                });
+
+                _sideBar.add(satelliteButton);
+            }
         }
-        return buttonTable;
+
+        // for (var body : _appState) {
+        //     AppState.CelestialBody nextCB = 
+        //         _appState.bodies.get(_appState.bodies.keySet().toArray()[i]);
+        //     AppState.CelestialBody nextSat = 
+        //         _appState.bodies.get(_appState.bodies.keySet().toArray()[i]);
+        //     var newButton = new TextButton(nextCB.name, skin);
+        //     newButton.setSize(110, 30);
+        //     _sideBar.add(newButton);
+        // }
     }
 
     public int getSpeedFactor() 
