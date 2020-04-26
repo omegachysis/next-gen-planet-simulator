@@ -155,6 +155,7 @@ public abstract class BaseAddCbDialog
 
                 displaySuccessDialog();
                 addDialog.hide();
+                onClose();
             }
 
             private void displayError(Stage stage, Dialog wrong) {
@@ -173,6 +174,7 @@ public abstract class BaseAddCbDialog
         cancelButton.addListener(e -> {
             if (cancelButton.isPressed()) {
                 addDialog.hide();
+                onClose();
             }
             return true;
         });
@@ -256,6 +258,8 @@ public abstract class BaseAddCbDialog
             return null;
         }
     }
+
+    protected abstract void onClose();
 
     protected abstract void onPositionEnteredChanged();
 

@@ -59,5 +59,7 @@ public class AddCBDialog extends BaseAddCbDialog
         stage.addActor(success);
     }
 
+    protected void onClose() {}
+
     protected void onPositionEnteredChanged() {}
 }

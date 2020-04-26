@@ -59,7 +59,8 @@ public class AddSatDialog extends BaseAddCbDialog
         stage.addActor(success);
     }
 
-    protected void onPositionEnteredChanged() {
+    protected void onPositionEnteredChanged() 
+    {
         if (_positionIndicator != null)
             _positionIndicator.dispose();
 
@@ -68,5 +69,10 @@ public class AddSatDialog extends BaseAddCbDialog
             _positionIndicator = new PositionIndicator(
                 stage, sim, pos
             );
+    }
+
+    protected void onClose()
+    {
+        _positionIndicator.dispose();
     }
 }
