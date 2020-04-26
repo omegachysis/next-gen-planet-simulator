@@ -190,8 +190,8 @@ public class AppUi {
         button2.setPosition(940, 655);
 
         statusBarText = new Label("", skin);
-        statusBarText.setSize(150, 60);
-        statusBarText.setPosition(570, 0);
+        statusBarText.setSize(1000, 60);
+        statusBarText.setPosition(10, 0);
 
         speedbutton = new TextField("",skin);
         speedbutton.setSize(110,35);
