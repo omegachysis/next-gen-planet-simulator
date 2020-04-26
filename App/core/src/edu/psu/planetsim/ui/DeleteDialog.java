@@ -125,7 +125,7 @@ public class DeleteDialog {
         });
         deleteDialog.addActor(deleteButton);
 
-        var closeButton = new TextButton("Close", skin);
+        var closeButton = new TextButton("Cancel", skin);
         closeButton.setPosition(170, 3);
         closeButton.addListener(e -> {
             if (closeButton.isPressed()) {
