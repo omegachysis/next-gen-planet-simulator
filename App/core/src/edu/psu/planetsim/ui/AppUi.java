@@ -17,6 +17,7 @@ import edu.psu.planetsim.AppState;
 import edu.psu.planetsim.Metrics;
 import edu.psu.planetsim.AppState.ViewingMode;
 import edu.psu.planetsim.graphics.TerrainBuilder;
+import edu.psu.planetsim.physics.CelestialSim;
 
 import org.w3c.dom.Text;
 
@@ -26,7 +27,6 @@ import java.util.UUID;
 public class AppUi {
     private final AppState _appState;
     private final Skin skin;
-    private final Stage _stage;
 
     private TextButton button1;
     private TextButton button2;
@@ -37,14 +37,12 @@ public class AppUi {
     private Label statusBarText;
     private TextButton.TextButtonStyle textButtonStyle;
     private Slider zoomSlider;
-    private TextButton center_button;
     private Table _sideBar;
     private ScrollPane _sideBarPane;
     BitmapFont font;
 
-    public AppUi(final Stage stage, AppState appState) 
+    public AppUi(final Stage stage, AppState appState, final CelestialSim sim) 
     {
-        _stage = stage;
         _appState = appState;
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -109,7 +107,7 @@ public class AppUi {
                 String currentSelection = editSelect.getSelected();
                 switch (currentSelection) {
                     case "Add Celestial Body":
-                        new AddCBDialog(_appState, stage, skin, editSelect);
+                        new AddCBDialog(_appState, stage, skin, editSelect, sim);
                         break;
 
                     case "Add Satellite":

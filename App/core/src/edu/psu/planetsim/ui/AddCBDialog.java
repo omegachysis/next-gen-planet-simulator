@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Select;
 import com.badlogic.gdx.utils.Timer;
@@ -17,13 +18,23 @@ import com.badlogic.gdx.utils.Timer;
 import edu.psu.planetsim.AppState;
 import edu.psu.planetsim.Metrics;
 import edu.psu.planetsim.graphics.TerrainBuilder;
+import edu.psu.planetsim.physics.CelestialSim;
 
 import org.w3c.dom.Text;
 
 import java.util.UUID;
 
-public class AddCBDialog {
-    AddCBDialog(AppState _appState, Stage stage, Skin skin, SelectBox<String> editSelect){
+public class AddCBDialog 
+{
+    private PositionIndicator _positionIndicator;
+
+    private TextField _posXField;
+    private TextField _posYField;
+    private TextField _posZField;
+
+    AddCBDialog(AppState _appState, Stage stage, Skin skin, SelectBox<String> editSelect,
+        CelestialSim sim)
+    {
         Dialog addDialog = new Dialog("Add Celestial Body", skin);
         addDialog.setMovable(true);
         addDialog.setPosition(10, 200);
@@ -49,19 +60,36 @@ public class AddCBDialog {
         addLabel3.setPosition(5,205);
         Label xPos = new Label("x: ", skin);
         xPos.setPosition(160, 205);
-        TextField positionXField = new TextField("0",skin);
-        positionXField.setPosition(185,205);
-        positionXField.setSize(75, 30);
+        _posXField = new TextField("0",skin);
+        _posXField.setPosition(185,205);
+        _posXField.setSize(75, 30);
         var yPos = new Label("y: ", skin);
         yPos.setPosition(280, 205);
-        var positionYField = new TextField("0", skin);
-        positionYField.setPosition(305, 205);
-        positionYField.setSize(75, 30);
+        _posYField = new TextField("0", skin);
+        _posYField.setPosition(305, 205);
+        _posYField.setSize(75, 30);
         var zPos = new Label("z: ", skin);
         zPos.setPosition(400, 205);
-        var positionZField = new TextField("0", skin);
-        positionZField.setPosition(425, 205);
-        positionZField.setSize(75, 30);
+        _posZField = new TextField("0", skin);
+        _posZField.setPosition(425, 205);
+        _posZField.setSize(75, 30);
+
+        final var positionChanged = new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                if (_positionIndicator != null)
+                    _positionIndicator.dispose();
+
+                var pos = _getEnteredPosition();
+                if (pos != null)
+                    _positionIndicator = new PositionIndicator(
+                        stage, sim, pos
+                    );
+            }
+        };
+        _posXField.addListener(positionChanged);
+        _posYField.addListener(positionChanged);
+        _posZField.addListener(positionChanged);
+        positionChanged.changed(null, null);
 
         Label addLabel4 = new Label("Velocity (km/s):", skin);
         addLabel4.setPosition(5,160);
@@ -115,15 +143,14 @@ public class AddCBDialog {
                     double mass = Double.parseDouble(massField.getText());
                     double radius = Double.parseDouble(radiusField.getText());
 
-                    double xpos = Double.parseDouble(positionXField.getText());
-                    double ypos = Double.parseDouble(positionYField.getText());
-                    double zpos = Double.parseDouble(positionZField.getText());
-                    Vector3 position = new Vector3((float)xpos, (float)ypos, (float)zpos);
-
                     double xvel = Double.parseDouble(velocityXField.getText());
                     double yvel = Double.parseDouble(velocityYField.getText());
                     double zvel = Double.parseDouble(velocityZField.getText());
                     Vector3 velocity = new Vector3((float) xvel, (float) yvel, (float)zvel);
+
+                    var position = _getEnteredPosition();
+                    if (position == null)
+                        displayError(stage, wrong);
 
                     double xspin = Double.parseDouble(spinXField.getText());
                     double yspin = Double.parseDouble(spinYField.getText());
@@ -132,13 +159,7 @@ public class AddCBDialog {
 
                     addCB(_appState, name, mass, radius, position, velocity, spin);
                 } catch (NumberFormatException n) {
-                    stage.addActor(wrong);
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            wrong.hide();
-                        }
-                    }, 1);
+                    displayError(stage, wrong);
                     return;
                 }
 
@@ -156,6 +177,16 @@ public class AddCBDialog {
 
                 stage.addActor(success);
                 addDialog.hide();
+            }
+
+            private void displayError(Stage stage, Dialog wrong) {
+                stage.addActor(wrong);
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        wrong.hide();
+                    }
+                }, 1);
             }
         });
 
@@ -177,11 +208,11 @@ public class AddCBDialog {
         table.add(radiusLabel);
         table.add(radiusField);
         table.add(xPos);
-        table.add(positionXField);
+        table.add(_posXField);
         table.add(yPos);
-        table.add(positionYField);
+        table.add(_posYField);
         table.add(zPos);
-        table.add(positionZField);
+        table.add(_posZField);
         table.add(addLabel4);
         table.add(xVel);
         table.add(velocityXField);
@@ -207,11 +238,11 @@ public class AddCBDialog {
         addDialog.addActor(radiusLabel);
         addDialog.addActor(radiusField);
         addDialog.addActor(xPos);
-        addDialog.addActor(positionXField);
+        addDialog.addActor(_posXField);
         addDialog.addActor(yPos);
-        addDialog.addActor(positionYField);
+        addDialog.addActor(_posYField);
         addDialog.addActor(zPos);
-        addDialog.addActor(positionZField);
+        addDialog.addActor(_posZField);
         addDialog.addActor(addLabel4);
         addDialog.addActor(xVel);
         addDialog.addActor(velocityXField);
@@ -232,8 +263,23 @@ public class AddCBDialog {
         editSelect.setSelectedIndex(0);
     }
 
+    private Vector3 _getEnteredPosition()
+    {
+        try
+        {
+            double xpos = Double.parseDouble(_posXField.getText());
+            double ypos = Double.parseDouble(_posYField.getText());
+            double zpos = Double.parseDouble(_posZField.getText());
+            return Metrics.km(new Vector3((float)xpos, (float)ypos, (float)zpos));
+        }
+        catch (NumberFormatException n) 
+        {
+            return null;
+        }
+    }
+
     private void addCB(AppState _appState, String name, double mass, double radius,
-                       Vector3 position, Vector3 velocity, Vector3 spin) {
+        Vector3 position, Vector3 velocity, Vector3 spin) {
         final var newCB = new AppState.CelestialBody();
         newCB.id = UUID.randomUUID();
         newCB.name = name;
@@ -242,7 +288,7 @@ public class AddCBDialog {
         newCB.velocity = new Vector3();
         newCB.spin = spin;
         newCB.orientation = new Quaternion().setFromCross(Vector3.Z, newCB.spin);
-        newCB.positionRelativeToSun = Metrics.km(position);
+        newCB.positionRelativeToSun = position;
         newCB.velocityRelativeToSun = Metrics.km(velocity);
         newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.km(radius));
         newCB.seaLevel = Metrics.km(radius);

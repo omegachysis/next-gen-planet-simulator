@@ -7,6 +7,7 @@ import edu.psu.planetsim.Metrics;
 import edu.psu.planetsim.AppState.ViewingMode;
 import edu.psu.planetsim.ui.AppUi;
 
+/** Controls the text of the status bar. */
 public class StatusBarController 
 {
     private final AppState _appState;

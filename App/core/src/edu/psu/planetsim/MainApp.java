@@ -33,7 +33,10 @@ public class MainApp extends ApplicationAdapter
 		final var multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(_stage);
 		Gdx.input.setInputProcessor(multiplexer);
-		_ui = new AppUi(_stage, _appState);
+
+		_sim = new CelestialSim(_appState, multiplexer);
+		_ui = new AppUi(_stage, _appState, _sim);
+		_statusBar = new StatusBarController(_appState, _ui);
 
 		// final var planet1 = new AppState.CelestialBody();
         // planet1.id = UUID.randomUUID();
@@ -73,9 +76,6 @@ public class MainApp extends ApplicationAdapter
         //     new Vector3(0, 0, 2.6617e-6f).rotate(Vector3.Y, 1.5f), // spin
         //     "luna.jpg");
         // add(luna);
-
-		_sim = new CelestialSim(_appState, multiplexer);
-		_statusBar = new StatusBarController(_appState, _ui);
 	}
 
 	public void resize(final int width, final int height)
