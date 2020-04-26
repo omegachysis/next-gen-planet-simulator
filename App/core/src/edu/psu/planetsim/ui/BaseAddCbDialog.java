@@ -37,6 +37,7 @@ public abstract class BaseAddCbDialog
         addDialog.setPosition(10, 200);
         addDialog.setWidth(520);
         addDialog.setHeight(400);
+        addDialog.setModal(false);
 
         Label addLabel1 = new Label("Name:", skin);
         addLabel1.setPosition(5,340);
