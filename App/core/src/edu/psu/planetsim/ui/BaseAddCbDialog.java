@@ -25,7 +25,8 @@ public abstract class BaseAddCbDialog
     private TextField _posZField;
 
     BaseAddCbDialog(AppState appState, Stage stage, Skin skin,
-        CelestialSim sim, String title)
+        CelestialSim sim, String title,
+        String defaultRadius, String defaultX)
     {
         this.appState = appState;
         this.stage = stage;
@@ -51,14 +52,14 @@ public abstract class BaseAddCbDialog
 
         Label radiusLabel = new Label("Radius (km): ", skin);
         radiusLabel.setPosition(5, 250);
-        var radiusField = new TextField("", skin);
+        var radiusField = new TextField(defaultRadius, skin);
         radiusField.setPosition(160, 250);
 
         Label addLabel3 = new Label("Position (km):", skin);
         addLabel3.setPosition(5,205);
         Label xPos = new Label("x: ", skin);
         xPos.setPosition(160, 205);
-        _posXField = new TextField("0",skin);
+        _posXField = new TextField(defaultX,skin);
         _posXField.setPosition(185,205);
         _posXField.setSize(75, 30);
         var yPos = new Label("y: ", skin);

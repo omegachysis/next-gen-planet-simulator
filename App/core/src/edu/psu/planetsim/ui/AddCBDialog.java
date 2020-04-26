@@ -19,7 +19,7 @@ public class AddCBDialog extends BaseAddCbDialog
     AddCBDialog(AppState appState, Stage stage, Skin skin,
     CelestialSim sim)
     {
-        super(appState, stage, skin, sim, "Add Celestial Body");
+        super(appState, stage, skin, sim, "Add Celestial Body", "1e3", "1e10");
     }
 
     protected void onConfirm(String name, double mass, double radius,

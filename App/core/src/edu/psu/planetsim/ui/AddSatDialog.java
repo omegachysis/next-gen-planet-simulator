@@ -20,7 +20,7 @@ public class AddSatDialog extends BaseAddCbDialog
     AddSatDialog(AppState appState, Stage stage, Skin skin,
     CelestialSim sim)
     {
-        super(appState, stage, skin, sim, "Add Natural Satellite");
+        super(appState, stage, skin, sim, "Add Natural Satellite", "3e2", "1e4");
     }
 
     protected void onConfirm(String name, double mass, double radius,
@@ -30,7 +30,7 @@ public class AddSatDialog extends BaseAddCbDialog
         newSat.name = name;
         newSat.isSatellite = true;
         newSat.mass = Metrics.kg(mass);
-        newSat.position = Metrics.km(position);
+        newSat.position = position;
         newSat.velocity = Metrics.km(velocity);
         newSat.spin = spin;
         newSat.orientation = new Quaternion().setFromCross(Vector3.Z, newSat.spin);
