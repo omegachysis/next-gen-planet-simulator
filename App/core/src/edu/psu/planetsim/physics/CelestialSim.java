@@ -144,7 +144,7 @@ public class CelestialSim
             for (final var body : _bodies)
             {
                 body.updateAppStateData();
-                body._temperature.update();
+                body._temperature.update(_appState);
             }
         }
 

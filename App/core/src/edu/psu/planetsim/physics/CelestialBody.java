@@ -30,13 +30,13 @@ public class CelestialBody extends KinematicObject
         final var radius = Metrics.m(1.0e6);
 
         // Initialize the thermal object.
-        _temperature = new ThermalObject(60, dto);
+        _temperature = new ThermalObject(50, dto);
 
         // Build the model.
         _terrainModel = new ModelInstance(
             TerrainBuilder.BuildTerrainModel(100, dto));
         _thermometers = new ModelInstance(
-            TerrainBuilder.BuildThermometerField(40, dto,
+            TerrainBuilder.BuildThermometerField(50, dto,
             _temperature.temperature.getColorBufferTexture()));
 
         // Attach the inner model.

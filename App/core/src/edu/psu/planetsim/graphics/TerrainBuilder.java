@@ -101,11 +101,12 @@ public class TerrainBuilder
                     // Find the elevation at this point above the unit sphere.
                     var elev = elevationMap[latIndex * dim + lonIndex] / dto.radius;
 
-                    if (r.len() <= elev)
+                    if (r.len() < elev * 0.95f)
                     {
                         // Interior point.
                         var builder = new MeshBuilder();
-                        builder.begin(Usage.Position | Usage.TextureCoordinates, GL20.GL_TRIANGLES);
+                        builder.begin(
+                            Usage.Position | Usage.TextureCoordinates, GL20.GL_TRIANGLES);
 
                         BoxShapeBuilder.build(builder, 
                             (float)x / dim * 2f * dto.radius - 
@@ -120,16 +121,16 @@ public class TerrainBuilder
                         var verts = new float[mesh.getNumVertices() * mesh.getVertexSize() / 4];
                         mesh.getVertices(verts);
                         for (int i = 0; i < mesh.getNumVertices(); i++) {
-                            var px = (float)x / dim;
-                            var py = (float)y / dim;
-                            var pz = (float)z / dim;
-                            var tx = px * (h - 1);
-                            var ty = py * (h - 1);
-                            var tz = h * (int)(pz * (h - 1));
+                            var px = (float)x / (dim - 1);
+                            var py = (float)y / (dim - 1);
+                            var pz = (float)z / (dim - 1);
+                            var tx = px * h;
+                            var ty = py * h;
+                            var tz = h * (int)(pz * h);
 
                             // Set new texture coordinates that map to the heat texture.
                             verts[i * 5 + 3] = (tx + tz) / (h * h);
-                            verts[i * 5 + 4] = ty / h;
+                            verts[i * 5 + 4] = 1 - ty / h;
                         }
                         mesh.setVertices(verts);
     

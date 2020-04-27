@@ -114,7 +114,7 @@ public class ThermalObject
                     elev /= dto.radius; // Convert elevations to unit sphere space.
                     
                     // Find out whether this is interior, exterior, or boundary.
-                    var boundaryThickness = 0.1f;
+                    var boundaryThickness = 0.2f;
 
                     if (r.len() <= elev) 
                     {
@@ -140,6 +140,10 @@ public class ThermalObject
                         radiation.setColor(0f, 0f, 0f, 1f);
                         heat.setColor(0f, 0f, 0f, 1f);
                     }
+
+                    // heat.setColor((elev - 0.5f) * 2f, 0f, 0f, 1f);
+                    // diffusivity.setColor(0f, 0f, 0f, 1f);
+                    // radiation.setColor(0f, 0f, 0f, 1f);
 
                     diffusivity.drawPixel(x + z * resolution, y);
                     radiation.drawPixel(x + z * resolution, y);
@@ -174,7 +178,7 @@ public class ThermalObject
         temperatureTexture.dispose();
     }
 
-    public void update() 
+    public void update(AppState appState) 
     {
         temperature.begin();
         _shader.begin();
@@ -192,7 +196,7 @@ public class ThermalObject
         _shader.setUniformi("u_radiation", 2);
 
         // Bind uniforms for discrete time evolution and sizes.
-        _shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime() * 1f);
+        _shader.setUniformf("u_dt", Gdx.graphics.getDeltaTime() * appState.speed);
         _shader.setUniformf("u_dx", 1f / temperature.getWidth());
         _shader.setUniformf("u_dy", 1f / temperature.getHeight());
         _shader.setUniformf("u_len", resolution);

@@ -52,14 +52,14 @@ void main()
     float laplacian = (w + e + n + s + u + d) / 6.0 - c;
 
     // Estimate the discrete time evolution of the heat equation.
-    c += diffuse * laplacian * u_dt;
+    c += 0.00001 * diffuse * laplacian * u_dt;
 
     // Add radiant energy input (from sources like the sun).
-    c += 0.001 * heating * 256.0 * 256.0 * 256.0 * u_dt;
+    c += 0.00001 * heating * 256.0 * 256.0 * 256.0 * u_dt;
 
     // Apply radiant cooling to locations that are on the surface.
     // Use the Stefan-Boltzmann law for radiant cooling.
-    const float stefanBoltzmannConst = 0.000005;
+    const float stefanBoltzmannConst = 0.0000001;
     c -= cooling * pow(stefanBoltzmannConst * c, 4.0) * u_dt;
 
     gl_FragColor = vec4(getColor(c), 1);
