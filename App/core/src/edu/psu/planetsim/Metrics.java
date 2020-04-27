@@ -1,5 +1,6 @@
 package edu.psu.planetsim;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public final class Metrics 
@@ -54,5 +55,31 @@ public final class Metrics
     public static double mass(final float x) 
     {
         return x * EARTH_MASS;
+    }
+
+    public static Vector2 toSphericalCoords(final Vector3 v)
+    {
+        var vnorm = v.cpy().nor();
+
+        // Convert the cartesian x,y,z coordinates 
+        // to spherical coordinates on the elevation map
+        // assuming we are on the surface of the unit sphere.
+        var lat = Math.acos(-vnorm.z);
+        var lon = Math.atan2(vnorm.y, vnorm.x) + Math.PI;
+        return new Vector2((float)(lat / Math.PI), (float)(lon / Math.PI / 2));
+    }
+
+    public static Vector3 toCartesianCoords(float lat, float lon)
+    {
+        // Normalize to unit spherical coordinates.
+        var theta = lat * Math.PI;
+        var phi = lon * Math.PI * 2;
+
+        // Then use that to convert to cartesian 3D coordinates:
+        var x = (float)(Math.sin(theta) * Math.cos(phi));
+        var y = (float)(Math.sin(theta) * Math.sin(phi));
+        var z = (float)(Math.cos(theta));
+
+        return new Vector3(x, y, z);
     }
 }

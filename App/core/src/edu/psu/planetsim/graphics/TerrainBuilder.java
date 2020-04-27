@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 
 import edu.psu.planetsim.FastNoise;
+import edu.psu.planetsim.Metrics;
 import edu.psu.planetsim.FastNoise.FractalType;
 
 public class TerrainBuilder 
@@ -30,46 +31,47 @@ public class TerrainBuilder
 
         var res = new ModelBuilder().createSphere(2f, 2f, 2f, 
             dim - 1, dim - 1, material,
-            Usage.Position | Usage.Normal);
+            Usage.Position | Usage.Normal | Usage.TextureCoordinates
+        );
 
         var mesh = res.meshes.first();
-        float[] verticesHolder = new float[mesh.getNumVertices() * 6];
+        float[] verticesHolder = new float[mesh.getNumVertices() * 8];
         mesh.getVertices(verticesHolder);
 
         for (int i = 0; i < elevationMap.length; i++)
         {
             var elev = elevationMap[i];
-            verticesHolder[i * 6 + 0] *= elev;
-            verticesHolder[i * 6 + 1] *= elev;
-            verticesHolder[i * 6 + 2] *= elev;
+            verticesHolder[i * 8 + 0] *= elev;
+            verticesHolder[i * 8 + 1] *= elev;
+            verticesHolder[i * 8 + 2] *= elev;
         }
         
         // for terrain smoothing and seam-fixing.
-        for (int i = 0; i < verticesHolder.length / 6; i++)
+        for (int i = 0; i < verticesHolder.length / 8; i++)
         {
             // This condition connects the last longitude with the first longitude 
             // to share the same vertex per latitude.
         	if ((i+1) % (dim) == 0 && i != 0)
         	{
-        		verticesHolder[i * 6 + 0] = verticesHolder[(i - dim + 1) * 6 + 0];
-                verticesHolder[i * 6 + 1] = verticesHolder[(i - dim + 1) * 6 + 1];
-                verticesHolder[i * 6 + 2] = verticesHolder[(i - dim + 1) * 6 + 2];
+        		verticesHolder[i * 8 + 0] = verticesHolder[(i - dim + 1) * 8 + 0];
+                verticesHolder[i * 8 + 1] = verticesHolder[(i - dim + 1) * 8 + 1];
+                verticesHolder[i * 8 + 2] = verticesHolder[(i - dim + 1) * 8 + 2];
         	}
         	
         	// This condition forces north pole vertices to share the same coordinate.
         	else if (i <= dim && i != 0)
         	{
-        		verticesHolder[i * 6 + 0] = verticesHolder[0 * 6 + 0];
-                verticesHolder[i * 6 + 1] = verticesHolder[0 * 6 + 1];
-                verticesHolder[i * 6 + 2] = verticesHolder[0 * 6 + 2];
+        		verticesHolder[i * 8 + 0] = verticesHolder[0 * 8 + 0];
+                verticesHolder[i * 8 + 1] = verticesHolder[0 * 8 + 1];
+                verticesHolder[i * 8 + 2] = verticesHolder[0 * 8 + 2];
         	}
         	
         	// This condition forces south pole vertices to share the same coordinate.
         	else if (i > (dim * (dim + 1)))
         	{
-        		verticesHolder[i * 6 + 0] = verticesHolder[(dim * (dim + 1)) * 6 + 0];
-                verticesHolder[i * 6 + 1] = verticesHolder[(dim * (dim + 1)) * 6 + 1];
-                verticesHolder[i * 6 + 2] = verticesHolder[(dim * (dim + 1)) * 6 + 2];
+        		verticesHolder[i * 8 + 0] = verticesHolder[(dim * (dim + 1)) * 8 + 0];
+                verticesHolder[i * 8 + 1] = verticesHolder[(dim * (dim + 1)) * 8 + 1];
+                verticesHolder[i * 8 + 2] = verticesHolder[(dim * (dim + 1)) * 8 + 2];
         	}
         }
         
@@ -88,9 +90,9 @@ public class TerrainBuilder
         bounds.getCenter(median);
         for (int i = 0; i < elevationMap.length; i++)
         {
-            verticesHolder[i * 6 + 0] -= median.x;
-            verticesHolder[i * 6 + 1] -= median.y;
-            verticesHolder[i * 6 + 2] -= median.z;
+            verticesHolder[i * 8 + 0] -= median.x;
+            verticesHolder[i * 8 + 1] -= median.y;
+            verticesHolder[i * 8 + 2] -= median.z;
         }
         
         return res;
@@ -122,7 +124,7 @@ public class TerrainBuilder
         lumpsGen.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
         // Fractal brownian motion for nice lumps and things:
         lumpsGen.SetFractalType(FractalType.FBM);
-        lumpsGen.SetFractalOctaves(6);
+        lumpsGen.SetFractalOctaves(8);
         lumpsGen.SetFrequency(0.4f);
 
         var mountainGen = new FastNoise(planetSeed);
@@ -137,15 +139,10 @@ public class TerrainBuilder
         {
             for (int lon = 0; lon < dim; lon++)
             {
-                // Convert to spherical coordinates.
-                var theta = lat * Math.PI / dim;
-                var phi = lon * Math.PI * 2 / dim;
-                var x = (float)(Math.sin(theta) * Math.cos(phi));
-                var y = (float)(Math.sin(theta) * Math.sin(phi));
-                var z = (float)(Math.cos(theta));
+                var v = Metrics.toCartesianCoords((float)lat / dim, (float)lon / dim);
 
-                var lumps = lumpsGen.GetNoise(x, y, z);
-                var mountains = mountainGen.GetNoise(x, y, z);
+                var lumps = lumpsGen.GetNoise(v.x, v.y, v.z);
+                var mountains = mountainGen.GetNoise(v.x, v.y, v.z);
                 var noise = lumps * 0.1f + mountains * 0.1f;
                 res[lat * dim + lon] = (float)radius + noise * (float)radius;
             }

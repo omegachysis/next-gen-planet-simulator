@@ -99,6 +99,8 @@ public class CelestialBody extends KinematicObject
         // Render all other parts:
         if (_oceanModel != null)
             batch.render(_oceanModel, env);
+
+        _temperature.update();
     }
 
     public void updateAppStateData()

@@ -20,6 +20,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
+import edu.psu.planetsim.Metrics;
+
 /** Describes a thermal profile and a diffusivity profile 
  * for a celestial body.
  */
@@ -88,7 +90,7 @@ public class ThermalObject
         // Loop through every pixel of the diffusivity texture and 
         // terminate whether the point it represents is an interior point,
         // a boundary point, or an exterior point.
-        var elevMapLen = (int)Math.sqrt(elevationMap.length);
+        var dim = (int)Math.sqrt(elevationMap.length);
         var maxElev = 0f;
         for (var elev : elevationMap)
             maxElev = Math.max(maxElev, elev);
@@ -106,31 +108,30 @@ public class ThermalObject
                     var dz = z * 2.0 / _resolution - 1.0;
 
                     // Find the distance we are from the center.
-                    var dist = new Vector3((float)dx, (float)dy, (float)dz).len();
+                    var dist = new Vector3((float)dx, (float)dy, (float)dz);
 
                     // Convert the cartesian x,y,z coordinates 
                     // to spherical coordinates on the elevation map
                     // assuming we are on the surface of the unit sphere.
-                    var lat = Math.acos(-dz / dist);
-                    var lon = Math.atan2(dy, dx) + Math.PI;
-                    var latIndex = (int)(lat * elevMapLen / Math.PI);
-                    var lonIndex = (int)(lon * elevMapLen / Math.PI / 2);
-                    if (lonIndex >= elevMapLen) lonIndex = 0;
+                    var latlon = Metrics.toSphericalCoords(dist);
+                    var latIndex = (int)(latlon.x * (dim - 1));
+                    var lonIndex = (int)(latlon.y * (dim - 1));
+                    if (lonIndex >= dim) lonIndex = 0;
 
                     // Find the elevation at this point above the unit sphere.
-                    var elev = elevationMap[latIndex * elevMapLen + lonIndex];
+                    var elev = elevationMap[latIndex * dim + lonIndex];
                     elev /= maxElev; // Convert elevations to unit sphere space.
                     
                     // Find out whether this is interior, exterior, or boundary.
                     var boundaryThickness = 0.025f;
 
-                    if (dist <= elev) 
+                    if (latlon.len() <= elev) 
                     {
                         // Interior
                         diffusivity.setColor(1f, 1f, 1f, 1f);
                         radiation.setColor(0f, 0f, 0f, 1f);
                     }
-                    else if (dist - elev <= boundaryThickness)
+                    else if (latlon.len() - elev <= boundaryThickness)
                     {
                         // Boundary
                         diffusivity.setColor(0.5f, 0.5f, 0.5f, 1f);
