@@ -18,7 +18,6 @@ public class CelestialBody extends KinematicObject
 {
     private final ThermalObject _temperature;
     private final ModelInstance _terrainModel;
-    private final ModelInstance _oceanModel;
     private final float _radius;
     private final Vector3 _linkedPosition;
 
@@ -33,18 +32,6 @@ public class CelestialBody extends KinematicObject
         // Attach the inner model.
         transform = _terrainModel.transform;
 
-        // Build the ocean layer.
-        if (dto.seaLevel > 0f)
-        {
-            _oceanModel = new ModelInstance(
-                TerrainBuilder.BuildOceanModel(50, dto, _terrainModel.model));
-
-            // Parent the ocean to the terrain model:
-            _oceanModel.transform = transform;
-        }
-        else
-        _oceanModel = null;
-
         // Initialize physics.
         _radius = radius;
         mass = (float)dto.mass;
@@ -52,7 +39,7 @@ public class CelestialBody extends KinematicObject
         resetUnderlyingPhysics(dto.position, dto.velocity, dto.spin, dto.orientation);
 
         // Initialize the thermal object.
-        var elevMap = TerrainBuilder.GenerateElevationMap(90, dto);
+        var elevMap = TerrainBuilder.BuildElevationMap(90, dto);
         _temperature = new ThermalObject(90, elevMap);
     }
 
@@ -93,13 +80,7 @@ public class CelestialBody extends KinematicObject
 
     public void render(final ModelBatch batch, final Environment env) 
     {
-        // This renders the terrain:
         batch.render(_terrainModel, env);
-
-        // Render all other parts:
-        if (_oceanModel != null)
-            batch.render(_oceanModel, env);
-
         _temperature.update();
     }
 

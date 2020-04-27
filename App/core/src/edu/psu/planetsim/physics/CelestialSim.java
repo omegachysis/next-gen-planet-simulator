@@ -63,7 +63,7 @@ public class CelestialSim
 
         _environment = new Environment();
         _solarLight = new DirectionalLight();
-        _solarLight.color.set(Color.WHITE);
+        _solarLight.color.set(new Color(1f, 1f, 1f, 1f));
         _environment.add(_solarLight);
 
         _config = new btDefaultCollisionConfiguration();
