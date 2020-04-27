@@ -219,6 +219,7 @@ public class TerrainBuilder
                     var g2 = rand.nextFloat() * .1f - .05f + 0.8f;
                     var b2 = rand.nextFloat() * .1f - .05f + 0.4f;
                     var alpha = (elev - dto.seaLevel) / dto.radius / 0.1f; 
+                    alpha = MathUtils.clamp(alpha, 0, 1);
                     pix.setColor(
                         r2 * alpha + r1 * (1 - alpha), 
                         g2 * alpha + g1 * (1 - alpha), 
