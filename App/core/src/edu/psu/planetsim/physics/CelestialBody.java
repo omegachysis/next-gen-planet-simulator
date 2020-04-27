@@ -16,8 +16,9 @@ import edu.psu.planetsim.graphics.TerrainBuilder;
 
 public class CelestialBody extends KinematicObject 
 {
-    private final ThermalObject _temperature;
+    public final ThermalObject _temperature;
     private final ModelInstance _terrainModel;
+    private final ModelInstance _thermometers;
     private final float _radius;
     private final Vector3 _linkedPosition;
 
@@ -25,9 +26,15 @@ public class CelestialBody extends KinematicObject
     {
         final var radius = Metrics.m(1.0e6);
 
+        // Initialize the thermal object.
+        _temperature = new ThermalObject(60, dto);
+
         // Build the model.
         _terrainModel = new ModelInstance(
             TerrainBuilder.BuildTerrainModel(100, dto));
+        _thermometers = new ModelInstance(
+            TerrainBuilder.BuildThermometerField(20, dto,
+            _temperature.temperature.getColorBufferTexture()));
 
         // Attach the inner model.
         transform = _terrainModel.transform;
@@ -37,10 +44,6 @@ public class CelestialBody extends KinematicObject
         mass = (float)dto.mass;
         _linkedPosition = dto.position;
         resetUnderlyingPhysics(dto.position, dto.velocity, dto.spin, dto.orientation);
-
-        // Initialize the thermal object.
-        var elevMap = TerrainBuilder.BuildElevationMap(90, dto);
-        _temperature = new ThermalObject(90, elevMap);
     }
 
     public void resetUnderlyingPhysics(final Vector3 position, 
@@ -80,8 +83,9 @@ public class CelestialBody extends KinematicObject
 
     public void render(final ModelBatch batch, final Environment env) 
     {
+        _thermometers.transform = _terrainModel.transform;
         batch.render(_terrainModel, env);
-        _temperature.update();
+        batch.render(_thermometers, env);
     }
 
     public void updateAppStateData()

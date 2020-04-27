@@ -55,7 +55,7 @@ void main()
     c += diffuse * laplacian * u_dt;
 
     // Add radiant energy input (from sources like the sun).
-    c += heating * 256.0 * 256.0 * 256.0 * u_dt;
+    c += 0.001 * heating * 256.0 * 256.0 * 256.0 * u_dt;
 
     // Apply radiant cooling to locations that are on the surface.
     // Use the Stefan-Boltzmann law for radiant cooling.

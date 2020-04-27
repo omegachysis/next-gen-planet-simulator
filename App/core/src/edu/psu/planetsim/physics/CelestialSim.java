@@ -6,8 +6,10 @@ import java.util.UUID;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.*;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.bullet.Bullet;
@@ -43,12 +45,13 @@ public class CelestialSim
         Bullet.init();
 
         _appState = appState;
+
         _modelBatch = new ModelBatch();
 
         _cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         _cam.position.set(new Vector3(0f, Metrics.m(-6e8), Metrics.m(4e8)));
         _cam.lookAt(Vector3.Zero);
-        _cam.near = Metrics.m(1e5);
+        _cam.near = Metrics.m(1e6);
         _cam.far = Metrics.m(1e9);
 
         _fakeCam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -124,7 +127,7 @@ public class CelestialSim
         _bodies.clear();
     }
 
-    public void render() 
+    public void render()
     {
         if (_needsRefresh)
         {
@@ -132,20 +135,16 @@ public class CelestialSim
             _needsRefresh = false;
         }
 
-        _modelBatch.begin(_cam);
-        for (final var body : _bodies) 
-        {
-            body.render(_modelBatch, _environment);
-        }
-        _modelBatch.end();
-
         if (!_appState.paused)
         {
             _gravitySim.applyGravityForces();
             _world.stepSimulation(Gdx.graphics.getDeltaTime() * _appState.speed);
 
             for (final var body : _bodies)
+            {
                 body.updateAppStateData();
+                body._temperature.update();
+            }
         }
 
         if (_bodies.size() > 0)
@@ -165,7 +164,7 @@ public class CelestialSim
             _camControl.update();
             
             final var interp = Interpolation.pow4Out;
-            final var camDist = interp.apply(Metrics.m(1e9), Metrics.m(1e3), _appState.zoom);
+            final var camDist = interp.apply(Metrics.m(1e8), Metrics.m(1e3), _appState.zoom);
             _cam.position.set(_fakeCam.position.cpy().nor().scl(camDist).add(target));
             _cam.direction.set(_fakeCam.direction);
             _cam.up.set(_fakeCam.up);
@@ -174,6 +173,13 @@ public class CelestialSim
 
         for (var action : onUpdate)
             action.run();
+
+        _modelBatch.begin(_cam);
+        for (final var body : _bodies) 
+        {
+            body.render(_modelBatch, _environment);
+        }
+        _modelBatch.end();
     }
 
     public Vector2 getPositionOnScreen(final Vector3 v)
