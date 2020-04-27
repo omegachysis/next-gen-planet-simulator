@@ -51,7 +51,8 @@ public class AppState
         public Vector3 velocity;
         public Vector3 spin;
         public Quaternion orientation;
-        public float[] elevationMap;
+        public int seed;
+        public float radius;
         public ArrayList<UUID> satellites = new ArrayList<>();
         public Vector3 positionRelativeToSun;
         public Vector3 velocityRelativeToSun;

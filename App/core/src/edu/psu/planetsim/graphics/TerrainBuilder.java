@@ -11,17 +11,16 @@ import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 
+import edu.psu.planetsim.AppState;
 import edu.psu.planetsim.FastNoise;
 import edu.psu.planetsim.Metrics;
 import edu.psu.planetsim.FastNoise.FractalType;
 
 public class TerrainBuilder 
 {
-    public static Model BuildTerrainModel(float[] elevationMap)
+    public static Model BuildTerrainModel(int dim, AppState.CelestialBody dto)
     {
-        // Elevation maps will always be square arrays, so we can find the 
-        // dimension from that.
-        var dim = (int)Math.sqrt(elevationMap.length);
+        var elevationMap = GenerateElevationMap(dim, dto);
 
         var material = new Material(
             ColorAttribute.createDiffuse(new Color(0.05f, 0.4f, 0.1f, 1f)),
@@ -98,11 +97,8 @@ public class TerrainBuilder
         return res;
     }
 
-    public static Model BuildOceanModel(float[] elevationMap, 
-        float seaLevel, Color oceanColor, Model terrainModel)
+    public static Model BuildOceanModel(int dim, AppState.CelestialBody dto, Model terrainModel)
     {
-        var dim = (int)Math.sqrt(elevationMap.length);
-
         var material = new Material(
             ColorAttribute.createDiffuse(new Color(0.15f, 0.25f, 0.8f, 1f)),
             ColorAttribute.createSpecular(new Color(0.8f, 0.8f, 0.8f, 1f)),
@@ -110,24 +106,23 @@ public class TerrainBuilder
         );
 
         return new ModelBuilder().createSphere(
-            seaLevel * 2, seaLevel * 2, seaLevel * 2, dim - 1, dim - 1,
+            dto.seaLevel * 2, dto.seaLevel * 2, dto.seaLevel * 2, dim - 1, dim - 1,
             material, Usage.Position | Usage.Normal);
     }
 
-    public static float[] MakeRandomElevationMap(int dim, double radius)
+    public static float[] GenerateElevationMap(int dim, AppState.CelestialBody dto)
     {
-        var planetSeed = (int)(System.currentTimeMillis() % (Integer.MAX_VALUE + 1));
         var res = new float[dim * dim];
 
         // Create noise generation modules.
-        var lumpsGen = new FastNoise(planetSeed);
+        var lumpsGen = new FastNoise(dto.seed);
         lumpsGen.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
         // Fractal brownian motion for nice lumps and things:
         lumpsGen.SetFractalType(FractalType.FBM);
         lumpsGen.SetFractalOctaves(8);
         lumpsGen.SetFrequency(0.4f);
 
-        var mountainGen = new FastNoise(planetSeed);
+        var mountainGen = new FastNoise(dto.seed);
         mountainGen.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
         // Ridged multi-fractals for mountains and valleys:
         mountainGen.SetFractalType(FractalType.RigidMulti);
@@ -144,7 +139,7 @@ public class TerrainBuilder
                 var lumps = lumpsGen.GetNoise(v.x, v.y, v.z);
                 var mountains = mountainGen.GetNoise(v.x, v.y, v.z);
                 var noise = lumps * 0.1f + mountains * 0.1f;
-                res[lat * dim + lon] = (float)radius + noise * (float)radius;
+                res[lat * dim + lon] = (float)dto.radius + noise * (float)dto.radius;
             }
         }
 

@@ -1,5 +1,6 @@
 package edu.psu.planetsim.ui;
 
+import java.util.Random;
 import java.util.UUID;
 
 import com.badlogic.gdx.graphics.Color;
@@ -34,7 +35,8 @@ public class AddCBDialog extends BaseAddCbDialog
         newCB.orientation = new Quaternion().setFromCross(Vector3.Z, newCB.spin);
         newCB.positionRelativeToSun = position;
         newCB.velocityRelativeToSun = Metrics.km(velocity);
-        newCB.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.km(radius));
+        newCB.radius = Metrics.km(radius);
+        newCB.seed = new Random().nextInt(Integer.MAX_VALUE);
         newCB.seaLevel = Metrics.km(radius);
         newCB.oceanColor = Color.BLUE;
         appState.bodies.put(newCB.id, newCB);

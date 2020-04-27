@@ -1,5 +1,6 @@
 package edu.psu.planetsim.ui;
 
+import java.util.Random;
 import java.util.UUID;
 
 import com.badlogic.gdx.math.Quaternion;
@@ -36,7 +37,8 @@ public class AddSatDialog extends BaseAddCbDialog
         newSat.orientation = new Quaternion().setFromCross(Vector3.Z, newSat.spin);
         newSat.positionRelativeToSun = new Vector3();
         newSat.velocityRelativeToSun = new Vector3();
-        newSat.elevationMap = TerrainBuilder.MakeRandomElevationMap(100, Metrics.km(radius));
+        newSat.radius = Metrics.km(radius);
+        newSat.seed = new Random().nextInt(Integer.MAX_VALUE);
         appState.bodies.put(newSat.id, newSat);
         appState.getCurrentCelestialBody().satellites.add(newSat.id);
         appState.invokeChangeListeners(true);
