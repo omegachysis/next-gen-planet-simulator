@@ -37,7 +37,7 @@ public class AddCBDialog extends BaseAddCbDialog
         newCB.velocityRelativeToSun = Metrics.km(velocity);
         newCB.radius = Metrics.km(radius);
         newCB.seed = new Random().nextInt(Integer.MAX_VALUE);
-        newCB.seaLevel = Metrics.km(radius);
+        newCB.seaLevel = Metrics.km(radius * 0.83f);
         newCB.oceanColor = Color.BLUE;
         appState.bodies.put(newCB.id, newCB);
         appState.currentCelestialBodyId = newCB.id;

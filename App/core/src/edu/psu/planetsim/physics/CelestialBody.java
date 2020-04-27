@@ -12,10 +12,12 @@ import com.badlogic.gdx.physics.bullet.linearmath.*;
 
 import edu.psu.planetsim.AppState;
 import edu.psu.planetsim.Metrics;
+import edu.psu.planetsim.AppState.InspectionMode;
 import edu.psu.planetsim.graphics.TerrainBuilder;
 
 public class CelestialBody extends KinematicObject 
 {
+    public final AppState.CelestialBody dto;
     public final ThermalObject _temperature;
     private final ModelInstance _terrainModel;
     private final ModelInstance _thermometers;
@@ -24,6 +26,7 @@ public class CelestialBody extends KinematicObject
 
     public CelestialBody(final AppState.CelestialBody dto)
     {
+        this.dto = dto;
         final var radius = Metrics.m(1.0e6);
 
         // Initialize the thermal object.
@@ -33,7 +36,7 @@ public class CelestialBody extends KinematicObject
         _terrainModel = new ModelInstance(
             TerrainBuilder.BuildTerrainModel(100, dto));
         _thermometers = new ModelInstance(
-            TerrainBuilder.BuildThermometerField(20, dto,
+            TerrainBuilder.BuildThermometerField(40, dto,
             _temperature.temperature.getColorBufferTexture()));
 
         // Attach the inner model.
@@ -81,11 +84,14 @@ public class CelestialBody extends KinematicObject
         sim.removeMass(this);
     }
 
-    public void render(final ModelBatch batch, final Environment env) 
+    public void render(final ModelBatch batch, final Environment env,
+    InspectionMode mode) 
     {
         _thermometers.transform = _terrainModel.transform;
-        batch.render(_terrainModel, env);
-        batch.render(_thermometers, env);
+        if (mode == InspectionMode.None)
+            batch.render(_terrainModel, env);
+        else if (mode == InspectionMode.Thermodynamics)
+            batch.render(_thermometers, env);
     }
 
     public void updateAppStateData()

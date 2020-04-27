@@ -25,6 +25,7 @@ public class AppState
     /** The current PARENT celestial body, do not put satellites in here! */
     public UUID currentCelestialBodyId = null;
     public ViewingMode viewingMode = ViewingMode.MainCelestialBody;
+    public InspectionMode inspectionMode = InspectionMode.None;
 
     /** Set the index of the satellite to zoom to, if in satellite mode. */
     public int satelliteFocusedIndex = 0;
@@ -39,6 +40,12 @@ public class AppState
         CenterOfMass,
         MainCelestialBody,
         NaturalSatellite
+    }
+
+    public static enum InspectionMode
+    {
+        None,
+        Thermodynamics
     }
 
     public static class CelestialBody

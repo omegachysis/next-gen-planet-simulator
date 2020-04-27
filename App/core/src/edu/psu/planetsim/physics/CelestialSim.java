@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.*;
 
 import edu.psu.planetsim.AppState;
 import edu.psu.planetsim.Metrics;
+import edu.psu.planetsim.AppState.InspectionMode;
 
 public class CelestialSim 
 {
@@ -177,7 +178,11 @@ public class CelestialSim
         _modelBatch.begin(_cam);
         for (final var body : _bodies) 
         {
-            body.render(_modelBatch, _environment);
+            var mode = InspectionMode.None;
+            if (body.dto == _appState.getCelestialBodyFocused())
+                mode = _appState.inspectionMode;
+
+            body.render(_modelBatch, _environment, mode);
         }
         _modelBatch.end();
     }
