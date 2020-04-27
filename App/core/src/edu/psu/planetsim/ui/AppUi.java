@@ -167,7 +167,7 @@ public class AppUi {
                 inspectSelect.showList();
             }
         });
-        new InspectionMode(skin, stage, inspectSelect);
+        new InspectionMode(skin, stage, inspectSelect, appState);
 
         //Created new class
 

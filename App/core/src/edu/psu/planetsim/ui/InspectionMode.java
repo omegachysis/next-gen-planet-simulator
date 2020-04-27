@@ -5,8 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import edu.psu.planetsim.AppState;
+
 public class InspectionMode {
-    public InspectionMode(Skin skin, Stage stage, SelectBox<String> inspectSelect) {
+    public InspectionMode(Skin skin, Stage stage, SelectBox<String> inspectSelect,
+        AppState appState) {
 
         inspectSelect.addListener(new ChangeListener() {
             @Override
@@ -40,6 +43,10 @@ public class InspectionMode {
                         thermoDialog.button("Close", true);
                         stage.addActor(thermoDialog);
                         inspectSelect.setSelectedIndex(0);
+                        if (appState.inspectionMode == AppState.InspectionMode.None)
+                            appState.inspectionMode = AppState.InspectionMode.Thermodynamics;
+                        else
+                        appState.inspectionMode = AppState.InspectionMode.None;
                         break;
 
                     case "Magnetism":

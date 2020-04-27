@@ -149,7 +149,6 @@ public class ThermalObject
         }
 
         // Copy the temperature data.
-        PixmapIO.writePNG(new FileHandle("test.png"), heat);
         var temperatureTexture = new Texture(heat);
         temperatureTexture.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
         temperatureTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
