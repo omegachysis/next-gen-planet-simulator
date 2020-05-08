@@ -23,7 +23,9 @@ public class InspectionMode {
                         dialog.setResizable(true);
                         dialog.setPosition(500, 500);
                         dialog.setWidth(250);
-                        dialog.text("Climate description here...");
+                        dialog.text("Climate is commonly considered to be the weather averaged over a long period of \n" +
+                                    " time. The different parts of the weather include: temperature, pressure, \n" +
+                                    "precipitation and humidity.");
                         dialog.button("Close", true);
                         stage.addActor(dialog);
                         inspectSelect.setSelectedIndex(0);
@@ -55,7 +57,9 @@ public class InspectionMode {
                         magDialog.setResizable(true);
                         magDialog.setPosition(500, 500);
                         magDialog.setWidth(250);
-                        magDialog.text("Magnetism description here...");
+                        magDialog.text("Magnetism, along with gravity and electricity, is a universal force of nature.\n " +
+                                       "Earth’s magnetic field has a north and south pole, and these poles happen to \n" +
+                                        "roughly line up with geographic north and south.");
                         magDialog.button("Close", true);
                         stage.addActor(magDialog);
                         inspectSelect.setSelectedIndex(0);
